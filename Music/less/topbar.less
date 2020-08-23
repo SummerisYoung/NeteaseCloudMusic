@@ -1,0 +1,137 @@
+#topbar {
+    height: 65px;
+    line-height: 65px;
+    display: flex;
+    margin-left: auto;
+    color: #fff;
+    background: @red;
+
+    .logo {
+        margin-left: 20px;
+        width: 220px;
+
+        h2 {
+            font-size: 20px;
+        }
+
+        i {
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            line-height: 26px;
+            text-align: center;
+            background: #fff;
+            color: @red;
+            font-size: 20px;
+            border-radius: 50%;
+        }
+    }
+
+    .topbar-middle {
+        i {
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+            width: 30px;
+            font-size: 20px;
+            vertical-align: -2px;
+            font-weight: 900;
+            color: @red-grey;
+            text-align: center;
+            border: 1px solid rgb(168,40,40); 
+            cursor: pointer;
+        }
+        i:nth-child(1) {
+            border-right: transparent;
+        }
+
+        .search {
+            position: relative;
+            display: inline-block;
+            input {
+                margin-left: 10px;
+                width: 280px;
+                height: 25px;
+                border-radius: 20px;
+                text-indent: 10px;
+                background:rgb(168,40,40);
+                border:none;
+                outline:none;  
+            }
+
+            input::placeholder {
+                color: @red-grey;
+            }
+
+            input:focus {
+                color: #fff;
+            }
+
+            input:focus + i{
+                color: rgb(220,170,170);
+            }
+
+            i {
+                position: absolute;
+                right: 10px;
+                top: 22px;
+                border: none;
+                font-size: 16px;
+            }
+        }
+        
+    }
+
+    .menu {
+        float: right;
+        display: flex;
+        margin-left: auto;
+
+        .action {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            color: rgb(238,193,193);
+
+            i {
+                font-size:18px;
+                margin: 0 10px;
+            }
+        }
+
+        #menu-left{
+            margin-right: 5px;
+
+            i:nth-child(1) {
+                height: 26px;
+                width: 26px;
+                line-height: 26px;
+                border-radius: 50%;
+                text-align: center;
+                color: #fff;
+                background: rgb(225,227,228);
+            }
+
+            span {
+                font-size: 14px;
+            }
+        }
+
+        #menu-middle {
+            i:nth-child(2) {
+                font-size: 22px;
+            }
+        }
+
+        #gun {
+            color: rgb(168,40,40);
+        }
+
+        #menu-right {
+            i:nth-child(1) {
+                font-size: 22px;
+                transform: translateY(-6px) rotate(180deg);
+            }
+        }
+    }
+}

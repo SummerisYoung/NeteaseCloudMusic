@@ -1,0 +1,48 @@
+#sidebar {
+    flex: 0 1 240px;
+    height: calc(100vh - 130px);
+    background: rgb(245,245,247);
+    border-right: @border;
+    overflow: hidden;
+
+    .sidebar-item {
+        font-size: 14px;
+        color: grey;
+        p {
+            margin: 10px;
+        }
+
+        ul li{
+            padding: 8px 20px;
+        }
+
+        i {
+            margin-right: 10px;
+        }
+
+        .active {
+            padding: 8px 17px;
+            color: #000;
+            background: rgb(230,231,234);
+            border-left: 3px solid @red;
+        }
+
+        .customize {
+            display: flex;
+            justify-content: space-between;
+            p {
+                display: inline-block;
+
+                i {
+                    margin: 0;
+                    color: rgb(207,207,209);
+                }
+            }
+        }
+
+        .icon-B {
+            margin-right: -10px;
+            float: right;
+        }
+    }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>网易云音乐</title>
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_2019206_obwmkxoc9vm.css">
+    <link rel="stylesheet/less" href="./less/index.less">
+    <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.3/less.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/backend.js"></script>
+    <script src="js/index.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <div id="topbar"></div>
+
+    <div class="middle">
+        <!-- 侧边栏 -->
+        <div id="sidebar"></div>
+
+        <!-- 主体 -->
+        <div id="main">
+            <ul>
+                <li class="active">个性推荐</li>
+                <li>歌单</li>
+                <li>主播电台</li>
+                <li>排行榜</li>
+                <li>歌手</li>
+                <li>最新音乐</li>
+            </ul>
+        </div>
+    </div>
+    
+
+    <!-- 底部 -->
+    <div id="footer"></div>
+</body>
+<script>
+    // 导入公共模板
+    $(function(){
+        $("#topbar").load("public/header.html");
+        $("#sidebar").load("public/sidebar.html");
+        $('#footer').load("public/footer.html");
+    });
+</script>
+</html>
