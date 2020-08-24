@@ -17,7 +17,6 @@ $(async function() {
     let block = '',item = '';
 
     res.data.blocks.forEach(r => {
-        console.log(r);
         //每个循环清空之前的item
         item = '';
         if(r.creatives != undefined) {
