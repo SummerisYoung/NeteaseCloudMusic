@@ -5,15 +5,20 @@
 //侧边栏
 @import "./sidebar.less";
 //主体
-@import "./main.less";
+@import "./index-main.less";
 //底部
 @import "./footer.less";
+
+//歌曲列表
+@import "./songList.less";
 
 //页面色
 @red: rgb(198,47,47);
 @red-grey: rgb(209,88,88);
 //边框
 @border: 1px solid rgb(225,225,226);
+//li hover色
+@lihover: rgb(230,231,234);
 //最小宽度
 body {
     position: relative;
@@ -26,4 +31,8 @@ body {
 //中部内容
 .middle {
     display: flex;
+}
+//搜索关键词高亮
+.search-keyword {
+    color: steelblue;
 }

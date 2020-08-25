@@ -101,11 +101,12 @@
                 background: #fff;
                 color: #000;
                 border: @border;
+                box-shadow: 0 10px 20px rgba(0,0,0,.1);
 
                 .suggest-order {
-                    padding: 10px;
                     font-size: 12px;
                     background: rgb(245,245,247);
+                    cursor: pointer;
                     i {
                         position: relative;
                         right: 0;
@@ -115,8 +116,9 @@
                 .suggest-li {
                     padding: 5px 30px;
                     font-size: 12px;
+                    cursor: pointer;
                     &:hover {
-                        background: rgb(230,231,234);
+                        background: @lihover;
                     }
                 }
 
@@ -130,6 +132,11 @@
                     display: flex;
                     align-items: center;
                     padding: 10px 0;
+                    cursor: pointer;
+
+                    &:hover {
+                        background: @lihover;
+                    }
 
                     .search-li-text {
                         margin-left: 25px;

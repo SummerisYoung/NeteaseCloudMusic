@@ -1,0 +1,87 @@
+#songList {
+    height: calc(100vh - 130px);
+    flex: 1;
+
+    p:first-child {
+        padding: 30px 30px;
+        font-size: 12px;
+    }
+
+    .best-match {
+        padding: 8px 30px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    ul {
+        display: flex;
+        justify-content: space-around;
+        height: 30px;
+        border-bottom: @border;
+
+        li {
+            height: 100%;
+            line-height: 100%;
+            box-sizing: content-box;
+        }
+
+        .active {
+            color: @red;
+            border-bottom: 5px solid @red;
+            box-sizing: border-box;
+        }
+    }
+
+    table {
+        width: 100%;
+        color: #666;
+        font-size: 12px;
+        table-layout: fixed;
+        thead {
+            th {
+                padding: 8px;
+                font-weight: normal;
+                border: @border;
+                border-left: none;
+
+                &:last-child {
+                    border-right: none;
+                }
+            } 
+        }
+        
+        tbody {
+            tr > td:first-child {
+                vertical-align: top;
+                text-align: right;
+                color: #999;
+            }
+
+            tr > td:nth-child(2) {
+                display: flex;
+                justify-content: space-evenly;
+                color: #ccc;
+            }
+
+            tr > td:nth-child(3) {
+                color: #333;
+            }
+
+            tr > td:nth-child(n + 6) {
+                color: #999;
+            }
+
+            td {
+                padding: 5px;
+            }
+
+            tr:nth-child(even) {
+                background: rgb(245,245,247);
+            }
+
+            tr:hover {
+                background: rgb(235,236,237);
+            }
+        }
+    }
+}

@@ -14,11 +14,10 @@ const POST = function (url, data) {
         }) 
     })
 }
-const GET = function(url, data) {
+const GET = function(url) {
     return new Promise((r,j) => {
         $.ajax({
              url: url,
-             data,
              methods:'get',
              dataType:'json',
              success(res) {

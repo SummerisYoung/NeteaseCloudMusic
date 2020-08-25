@@ -1,6 +1,6 @@
 $(async function() {
     let res = await GET('http://localhost:3000/homepage/block/page')
-    let main = document.getElementById('main')
+    let main = document.getElementById('index')
         // <div class="block">
         //         <div class="block-header">
         //             <h2>推荐歌单</h2>

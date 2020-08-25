@@ -11,12 +11,10 @@
     <script>
         // 导入公共模板
         $(function(){
-            $("#topbar").load("public/header.html");
+            $("#topbar").load("public/topbar.html");
             $("#sidebar").load("public/sidebar.html");
             $('#footer').load("public/footer.html");
-            
         });
-        
     </script>
     <script src="js/backend.js"></script>
     <script src="js/index.js"></script>
@@ -31,7 +29,7 @@
         <div id="sidebar"></div>
 
         <!-- 主体 -->
-        <div id="main">
+        <div id="index">
             <ul>
                 <li class="active">个性推荐</li>
                 <li>歌单</li>
@@ -43,10 +41,7 @@
         </div>
     </div>
     
-
     <!-- 底部 -->
     <div id="footer"></div>
-    
 </body>
-
 </html>
