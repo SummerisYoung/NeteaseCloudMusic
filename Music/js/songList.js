@@ -31,7 +31,7 @@ async function searchValue(value) {
         duration = (Math.floor(s.duration / 1000 / 60) + '').padStart(2,'0') + ':' + (Math.floor(s.duration / 1000 % 60) + '').padStart(2,'0')
         //再布置内容
         str += `
-            <tr onclick="changeColor(this)">
+            <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${s.id}">
                 <td>${(i + 1 + '').padStart(2,'0')}</td>
                 <td><i class="iconfont icon-favority"></i><i class="iconfont icon-download"></i></td>
                 <td class="text-ellipsis">${s.name.indexOf(keyword) != -1 ? s.name.replace(keyword,keyword_dom) : s.name}${s.alias.length ? '<p style="padding:15px 0 0 0;color:#999">' + s.alias + '</p>' : ''}</td>
@@ -55,9 +55,8 @@ function changeColor(that) {
     //先把之前点击的每一项的颜色去掉
     let tbody = [...document.getElementById('tbody').children]
     tbody.forEach(t => {
-        t.style.background = ''
+        t.className = ''
     })
     //当前点击的变色
-    that.style.background = 'rgb(227,227,229)';
-    that.style.color = '#000'
+    that.className = 'deep-color'
 }

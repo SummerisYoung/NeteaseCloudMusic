@@ -3,7 +3,7 @@ const POST = function (url, data) {
        $.ajax({
             url: url + '?_=' + Date.now(),
             data,
-            methods:'post',
+            method:'post',
             dataType:'json',
             success(res) {
                 r(res)
@@ -18,7 +18,7 @@ const GET = function(url) {
     return new Promise((r,j) => {
         $.ajax({
              url: url,
-             methods:'get',
+             method:'get',
              dataType:'json',
              success(res) {
                  r(res)
