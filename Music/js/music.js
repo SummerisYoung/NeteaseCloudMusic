@@ -3,18 +3,28 @@ async function getSongUrl(that) {
     //拿到audio标签
     let audio = document.getElementsByTagName('audio')[0]
     let pause_play = document.querySelector('#footer .footer-left i:nth-child(2)')
-    let volume = document.getElementsByClassName('volumn')
-    //请求歌曲详细信息
+    let volume = document.getElementsByClassName('volume')[0]
+    let footer_song = document.getElementsByClassName('footer-song')[0]
+    //请求歌曲url
     let res = await POST('http://localhost:3000/song/url', {id:that.dataset.id}).then(r => r.data[0])
+    //请求歌曲详细信息
+    let det = await POST('http://localhost:3000/song/detail',{ids:that.dataset.id})
+    let song = det.songs[0]
     //音乐url
     audio.src = res.url
-    //播放
-    audio.play()
     //初始化一下音量
     audio.volumn = volume.children[1].offsetLeft / volume.offsetWidth
+    //播放
+    audio.play()
     //更改图标
     pause_play.classList.remove('icon-play')
     pause_play.classList.add('icon-pause')
+    //更改左下角歌曲信息
+    footer_song.children[0].src = song.al.picUrl
+    footer_song.children[1].innerHTML = `
+        <p class="text-ellipsis">${song.name}${song.alia != [] ? '<span style="color:#999"> (' + song.alia + ' )<span>' : ''}</p>
+        <p class="text-ellipsis">${author(song.ar)}</p>
+    `
 }
 
 $(function () {
@@ -131,7 +141,6 @@ function dragVolumn(audio) {
 
             //计算音量
             audio.volume = x2 / (this.parentElement.offsetWidth - this.offsetWidth / 2)
-            console.log(audio.volume);
         }
 
         //鼠标抬起

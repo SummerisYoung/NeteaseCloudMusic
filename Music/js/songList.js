@@ -11,22 +11,12 @@ async function searchValue(value) {
     let tbody = document.getElementById('tbody')
     let search_prompt = document.getElementsByClassName('search-prompt')[0]
     //取到关键词和歌曲总数
-    let keyword = decodeURI(window.location.href).match(/[\u4E00-\u9FA5]+/)[0]
-    let keyword_dom = `<span class="search-keyword">${keyword}</span>`
-    search_prompt.innerHTML = `搜索"${keyword_dom}"，找到${res.songCount}首单曲>`
+    let keyword = value.substring(value.indexOf('=') + 1,value.indexOf('&'))
+    search_prompt.innerHTML = `搜索"${highlight('',keyword)}"，找到${res.songCount}首单曲>`
     //布局页面
     let str = ''
-    let song_articles = ''
     let duration = 0
     res.songs.forEach((s,i) => {
-        //先遍历取到全部作者
-        song_articles = ''
-        s.artists.forEach((b,i) => {
-            song_articles += b.name
-            if(i < s.artists.length - 1) {
-                song_articles += ' / '
-            }
-        })
         //计算歌曲时长
         duration = (Math.floor(s.duration / 1000 / 60) + '').padStart(2,'0') + ':' + (Math.floor(s.duration / 1000 % 60) + '').padStart(2,'0')
         //再布置内容
@@ -34,9 +24,9 @@ async function searchValue(value) {
             <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${s.id}">
                 <td>${(i + 1 + '').padStart(2,'0')}</td>
                 <td><i class="iconfont icon-favority"></i><i class="iconfont icon-download"></i></td>
-                <td class="text-ellipsis">${s.name.indexOf(keyword) != -1 ? s.name.replace(keyword,keyword_dom) : s.name}${s.alias.length ? '<p style="padding:15px 0 0 0;color:#999">' + s.alias + '</p>' : ''}</td>
-                <td class="text-ellipsis">${song_articles}</td>
-                <td class="text-ellipsis">${s.album.name.indexOf(keyword) != -1 ? s.album.name.replace(keyword,keyword_dom) : s.album.name}</td>
+                <td class="text-ellipsis">${highlight(s.name,keyword)}${s.alias.length ? '<p style="padding:15px 0 0 0;color:#999">' + s.alias + '</p>' : ''}</td>
+                <td class="text-ellipsis">${highlight(author(s.artists),keyword)}</td>
+                <td class="text-ellipsis">${highlight(s.album.name,keyword)}</td>
                 <td>${duration}</td>
                 <td>热度</td>
             </tr>
