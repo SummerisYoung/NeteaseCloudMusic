@@ -8,10 +8,10 @@
 @import "./index-main.less";
 //底部
 @import "./footer.less";
-
 //歌曲列表
 @import "./songList.less";
-
+//歌曲详情
+@import "./song-detail.less";
 //页面色
 @red: rgb(198,47,47);
 @red-grey: rgb(209,88,88);
@@ -43,4 +43,8 @@ body {
     white-space:nowrap;
     overflow: hidden;
     text-overflow:ellipsis;
+}
+//中间的内容高度100%
+.middle {
+    height: calc(100vh - 130px);
 }

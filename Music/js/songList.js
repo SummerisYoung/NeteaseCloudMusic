@@ -23,7 +23,7 @@ async function searchValue(value) {
         str += `
             <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${s.id}">
                 <td>${(i + 1 + '').padStart(2,'0')}</td>
-                <td><i class="iconfont icon-favority"></i><i class="iconfont icon-download"></i></td>
+                <td><i class="iconfont icon-love"></i><i class="iconfont icon-download"></i></td>
                 <td class="text-ellipsis">${highlight(s.name,keyword)}${s.alias.length ? '<p style="padding:15px 0 0 0;color:#999">' + s.alias + '</p>' : ''}</td>
                 <td class="text-ellipsis">${highlight(author(s.artists),keyword)}</td>
                 <td class="text-ellipsis">${highlight(s.album.name,keyword)}</td>

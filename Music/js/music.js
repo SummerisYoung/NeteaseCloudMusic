@@ -19,15 +19,20 @@ async function getSongUrl(that) {
     //更改图标
     pause_play.classList.remove('icon-play')
     pause_play.classList.add('icon-pause')
-    //更改左下角歌曲信息
-    footer_song.children[0].src = song.al.picUrl
+    //左下角图片url
+    footer_song.children[0].children[0].src = song.al.picUrl
+    //左下角歌曲名和歌手
     footer_song.children[1].innerHTML = `
-        <p class="text-ellipsis">${song.name}${song.alia != [] ? '<span style="color:#999"> (' + song.alia + ' )<span>' : ''}</p>
+        <p class="text-ellipsis">${song.name}${song.alia.length ? '<span style="color:#999"> (' + song.alia + ') <span>' : ''}</p>
         <p class="text-ellipsis">${author(song.ar)}</p>
     `
+    footer_song.style.opacity = '1'
+    //左下角音乐图片点击事件
+    footer_song.children[0].onclick = getSongDetail(song)
 }
 
 $(function () {
+    $('#song-detail').load('public/songDetail.html')
     //获取滚动条
     let music_bar = document.getElementsByClassName('music-bar')[0]
     //获取音频标签

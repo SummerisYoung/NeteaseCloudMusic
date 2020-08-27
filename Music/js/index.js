@@ -1,19 +1,6 @@
 $(async function() {
     let res = await GET('http://localhost:3000/homepage/block/page')
     let main = document.getElementById('index')
-        // <div class="block">
-        //         <div class="block-header">
-        //             <h2>推荐歌单</h2>
-        //             <span>更多></span>
-        //         </div>
-
-        //         <div class="block-list">
-        //             <div class="block-item">
-        //                 <img width="190" height="190" src="" alt="">
-        //                 <p></p>
-        //             </div>
-        //         </div>
-        //     </div>
     let block = '',item = '';
 
     res.data.blocks.forEach(r => {
@@ -77,6 +64,10 @@ $(async function() {
             </div>
         `
         main.innerHTML = block
-        
     });
+    $('#index').niceScroll({
+        cursorcolor:"#ddd",     //滚动条的颜色值
+        cursorwidth:8,         //滚动条的宽度值
+        autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
+    })
 })
