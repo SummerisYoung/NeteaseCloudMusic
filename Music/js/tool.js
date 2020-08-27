@@ -59,3 +59,14 @@ function author(artists) {
 
     return song_articles
 }
+
+//一个标签上同一事件绑定不同函数
+function bind(obj,eventName,fn) {
+    if(obj.addEventListener) {
+        obj.addEventListener(eventName, fn);
+    }else {
+        obj.attachEvent('on' + eventName, function() {
+            fn.call(obj)
+        })
+    }
+}

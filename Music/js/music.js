@@ -32,6 +32,7 @@ async function getSongUrl(that) {
 }
 
 $(function () {
+    //把歌曲详情加载到页面
     $('#song-detail').load('public/songDetail.html')
     //获取滚动条
     let music_bar = document.getElementsByClassName('music-bar')[0]
