@@ -1,5 +1,7 @@
 //请求音乐url
 async function getSongUrl(that) {
+    //把歌曲详情加载到页面
+    $('#song-detail').load('public/songDetail.html')
     //拿到audio标签
     let audio = document.getElementsByTagName('audio')[0]
     let pause_play = document.querySelector('#footer .footer-left i:nth-child(2)')
@@ -32,8 +34,6 @@ async function getSongUrl(that) {
 }
 
 $(function () {
-    //把歌曲详情加载到页面
-    $('#song-detail').load('public/songDetail.html')
     //获取滚动条
     let music_bar = document.getElementsByClassName('music-bar')[0]
     //获取音频标签

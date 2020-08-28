@@ -35,11 +35,11 @@ const GET = function(url) {
 
 //关键词高亮
 function highlight(str,keyword) {
-    if(str == '') return `<span class="search-keyword">${keyword}</span>`
+    if(str == '') return `<span class="keyword-highlight">${keyword}</span>`
     let index = str.toLowerCase().indexOf(keyword.toLowerCase())
     if(index != -1){
         let rep = str.substring(index,index + keyword.length)
-        return str.replace(rep, `<span class="search-keyword">${rep}</span>`)
+        return str.replace(rep, `<span class="keyword-highlight">${rep}</span>`)
     }else {
         return str
     }
