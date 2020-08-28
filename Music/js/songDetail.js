@@ -1,6 +1,5 @@
 function getSongDetail(song) {
     return async function() {
-        let lyrics = await POST('http://localhost:3000/lyric',{id:song.id}).then(r => r.lrc.lyric)
         //页面标签
         let detail = document.getElementById('song-detail')
         //背景图标签
@@ -10,18 +9,20 @@ function getSongDetail(song) {
             left = top.children[0],
             right = top.children[1]
         //歌词标签
-        let lyricDom = document.getElementsByClassName('lyric')[0]
+        let lyricDom = right.children[2].children[0]
         //歌曲图片标签
         let songImg = document.getElementsByClassName('song-image')[0]
         //audio标签
         let audio = document.getElementsByTagName('audio')[0]
         //页面中取到的所有dom元素放进一个对象传给后面需要的函数
         let dom = {detail,bgimg,top,left,right,lyricDom,songImg,audio}
+
+
         //页面宽高
         detail.style.width = '100vw'
         detail.style.height = '100%'
         //上层背景图
-        bgimg.style.cssText = `background:url(${song.al.picUrl});`
+        bgimg.style.cssText = `background-image: url(${song.al.picUrl});`
         //音乐封面
         left.children[0].children[0].src = song.al.picUrl
         //歌曲名
@@ -30,8 +31,10 @@ function getSongDetail(song) {
         right.children[1].children[0].children[0].innerText = song.al.name
         //歌手
         right.children[1].children[1].children[0].innerText = author(song.ar)
+
+
         //歌词处理
-        let lyricTime = makeLyric(lyrics,dom)
+        let lyricTime = await makeLyric(song.id,dom)
         //比较歌词项
         let num = 0
         //高亮歌词项
@@ -40,12 +43,20 @@ function getSongDetail(song) {
         let rotate = 0
         //歌词滚动
         bind(audio,'timeupdate',lyricScroll(lyricTime,dom,num,highlight,rotate))
-        
+        //获取评论
+        getComment(song.id)
+        //关闭详情页
+        top.children[2].onclick = () => {
+            detail.style.width = '0'
+            detail.style.height = '0'
+        }
     }
 }
 
 //歌词处理
-function makeLyric(lyrics,dom) {
+async function makeLyric(id,dom) {
+    //获取歌词
+    let lyrics = await POST('http://localhost:3000/lyric',{id}).then(r => r.lrc.lyric)
     //用一个数组保存歌词时间
     let lyricTime = []
     //布局页面
@@ -73,8 +84,7 @@ function makeLyric(lyrics,dom) {
             cursorcolor:"rgb(189,191,193)",     //滚动条的颜色值
             cursorwidth:8,         //滚动条的宽度值
             autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
-            cursorborder:'none',
-            preservenativescrolling:false
+            cursorborder:'none',    //边框设置
         })
     }, 500);
     //处理一下时间数组,主要针对歌词最后存在一些混音编曲之类的作者的,这些的时间相同的情况,手动延迟一点时间
@@ -84,7 +94,6 @@ function makeLyric(lyrics,dom) {
             lyricTime[i] = lyricTime[i - 1] + 0.5
         }
     }
-    console.log(lyricTime);
     return lyricTime
 }
 
@@ -108,7 +117,7 @@ function lyricScroll(lyricTime,dom,num,highlight,rotate) {
                     //歌词滚动
                     dom.lyricDom.style.top = -lis[0].offsetHeight*(num-5) + 'px'
                     //滚动条滚动
-                    document.querySelector('.song-top .nicescroll-cursors').style.top = (num - 5) / lyricTime.length * document.querySelector('.song-top #ascrail2001').offsetHeight + 'px'
+                    document.querySelector('.nicescroll-cursors').style.top = (num - 5) / lyricTime.length * document.querySelector('#ascrail2001').offsetHeight + 'px'
                 }
                 //这一项加上高亮
                 lis[num - 1].classList.add('lyric-highlight')
@@ -125,4 +134,48 @@ function lyricScroll(lyricTime,dom,num,highlight,rotate) {
             lis[highlight].className = ''
         }
     }
+}
+
+//获取评论
+async function getComment(id) {
+    let res = await POST('http://localhost:3000/comment/music',{id})
+    //精彩评论
+    let hotComments = res.hotComments
+    //最新评论
+    let comments = res.comments
+    //获取页面标签
+    let commentDom = document.getElementsByClassName('comment')[0],
+        cleft = commentDom.children[0],
+        cright = commentDom.children[1],
+        chead = cleft.children[0],
+        cinput = cleft.children[1],
+        cmiddle = cleft.children[2];
+
+    //填入评论总数
+    chead.innerHTML += `<span>(已有${res.total}条评论)</span>`
+    //填入精彩评论
+    let hotUl = '<ul>'
+    res.hotComments.forEach(h => {
+        hotUl += `
+            <li>
+                <img src="${h.user.avatarUrl}" alt="">
+                <div class="comment-content">
+                    <p><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</p>
+                    <div class="comment-other">
+                        <p>${stampToTime(h.time)}</p>
+                        <div class="comment-operate">
+                            <p>
+                                <i class="iconfont icon-like"></i>
+                                <span>(${h.likedCount})</span>
+                            </p>
+                            <p>分享</p>
+                            <p>回复</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `
+    })
+    hotUl += '</ul>'
+    cmiddle.innerHTML += hotUl
 }

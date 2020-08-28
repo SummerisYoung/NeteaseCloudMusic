@@ -8,19 +8,22 @@
     z-index: 5;
     background: rgb(250,250,250);
     transition: 0.5s;
-    overflow: hidden;
+    overflow-y: scroll;
 
     .song-box {
         position: relative;
 
         .bg-img {
+            position: absolute;
             width: 100%;
             height: 500px;
-            filter: blur(100px);
+            filter: blur(50px);
+            background-size: cover;
+            background-position: center;
         }
     
         .song-top {
-            position: absolute;
+            position: relative;
             top: 0;
             z-index: 100;
             display: flex;
@@ -70,17 +73,23 @@
                 }
                 ul {
                     position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    margin: auto;
                     display: flex;
                     justify-content: space-between;
-                    width: 100%;
-                    bottom: 0;
+                    width: 400px;
     
                     li{
-                        width: 20%;
                         padding: 10px 15px;
                         border: 1px solid rgb(193,191,193);
                         border-radius: 5px;
                         background: @background;
+
+                        i {
+                            margin-right: 5px;
+                        }
                     }
                 }
             }
@@ -126,15 +135,116 @@
                         }
                     }
                 }
-                
+            }
+
+            .close-detail {
+                position: absolute;
+                top: 30px;
+                right: -70px;
+                padding: 5px;
+                width: 40px;
+                border-radius: 5px;
+                text-align: center;
+                background: @background;
+                border: @border;
+
+                i {
+                    font-size: 20px;
+                }
             }
     
             ul li {
-                font-size: 12px;
+                font-size: 14px;
                 color: #333;
             }
         }
-    }
 
-    
+        .comment {
+            .comment-left {
+                margin-right: 100px;
+                width: 700px;
+
+                .comment-head {
+                    display: flex;
+                    align-items: flex-end;
+                    border-bottom: @border;
+                    font-size: 24px;
+                    span {
+                        margin-left: 20px;
+                        color: #ccc;
+                        font-size: 12px;
+                    }
+                }
+
+                .comment-input {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 30px 0;
+                    width: 100%;
+                    border: 10px solid rgb(240,240,242);
+                    color: #999;
+                    i {
+                        margin: 5px;
+                        font-size: 30px;
+                        color: #999;
+                    }
+                    .aite{
+                        font-size: 28px;
+                    }
+                }
+
+                .comment-middle {
+                    ul {
+                        margin: 20px 0;
+                        li {
+                            display: flex;
+                            padding: 20px 0;
+                            border-top: 1px solid #eee;
+                            border-bottom: 1px solid #eee;
+
+                            img {
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                            }
+
+                            .comment-content {
+                                flex: 1;
+                                margin-left: 20px;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                                font-size: 14px;
+                                .comment-other {
+                                    display: flex;
+                                    justify-content: space-between;
+
+                                    .comment-operate {
+                                        display: flex;
+
+                                        p {
+                                            padding: 0 20px;
+                                            user-select: none;
+                                            cursor: pointer;
+
+                                            &:nth-child(-n + 2) {
+                                                border-right: @border
+                                            }
+                                            &:last-child {
+                                                padding-right: 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .comment-right {
+                flex: 1;
+            }
+        }
+    }
 }

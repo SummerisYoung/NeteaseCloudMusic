@@ -70,3 +70,12 @@ function bind(obj,eventName,fn) {
         })
     }
 }
+
+//时间戳转事件
+function stampToTime(timestamp) {
+    let stamp = new Date(timestamp),
+        y = stamp.getFullYear(),
+        m = stamp.getMonth() + 1,
+        d = stamp.getDate();
+    return `${y}年${m}月${d}日 ${stamp.toTimeString().substring(0,5)}`
+}
