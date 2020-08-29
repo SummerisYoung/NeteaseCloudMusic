@@ -8,6 +8,8 @@ function getSongDetail(song) {
         let top = detail.children[0].children[1],
             left = top.children[0],
             right = top.children[1]
+        //下层标签
+        let bottom = document.getElementsByClassName('song-bottom')[0]
         //歌词标签
         let lyricDom = right.children[2].children[0]
         //歌曲图片标签
@@ -15,7 +17,7 @@ function getSongDetail(song) {
         //audio标签
         let audio = document.getElementsByTagName('audio')[0]
         //页面中取到的所有dom元素放进一个对象传给后面需要的函数
-        let dom = {detail,bgimg,top,left,right,lyricDom,songImg,audio}
+        let dom = {detail,bgimg,top,bottom,left,right,lyricDom,songImg,audio}
 
 
         //页面宽高
@@ -44,7 +46,9 @@ function getSongDetail(song) {
         //歌词滚动
         bind(audio,'timeupdate',lyricScroll(lyricTime,dom,num,highlight,rotate))
         //获取评论
-        getComment(song.id)
+        getComment(song.id,dom)
+        //获取相关推荐
+        getRecommend(song.id,dom)
         //关闭详情页
         top.children[2].onclick = () => {
             detail.style.width = '0'
@@ -137,16 +141,12 @@ function lyricScroll(lyricTime,dom,num,highlight,rotate) {
 }
 
 //获取评论
-async function getComment(id) {
+async function getComment(id,dom) {
     let res = await POST('http://localhost:3000/comment/music',{id})
-    //精彩评论
-    let hotComments = res.hotComments
-    //最新评论
-    let comments = res.comments
     //获取页面标签
-    let commentDom = document.getElementsByClassName('comment')[0],
-        cleft = commentDom.children[0],
-        cright = commentDom.children[1],
+    let song_bottom = dom.bottom,
+        cleft = song_bottom.children[0],
+        cright = song_bottom.children[1],
         chead = cleft.children[0],
         cinput = cleft.children[1],
         cmiddle = cleft.children[2];
@@ -154,19 +154,32 @@ async function getComment(id) {
     //填入评论总数
     chead.innerHTML += `<span>(已有${res.total}条评论)</span>`
     //填入精彩评论
-    let hotUl = '<ul>'
-    res.hotComments.forEach(h => {
-        hotUl += `
+    let hotUl = '<div class="hot-comment"><p class="comment-section">精彩评论</p><ul>' + commentDom(res.hotComments) + '</ul><p class="read-more">查看更多精彩评论></p></div>'
+    cmiddle.innerHTML += hotUl
+    //填入最新评论
+    let ul = `<div class="new-comment"><p class="comment-section">最新评论<span>(${res.total})</span></p><ul>` + commentDom(res.comments) + '</ul></div>'
+    cmiddle.innerHTML += ul
+}
+
+//把评论填入页面
+function commentDom(comments) {
+    let str = ''
+    comments.forEach(h => {
+        str += `
             <li>
                 <img src="${h.user.avatarUrl}" alt="">
                 <div class="comment-content">
-                    <p><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</p>
+                    <div><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</div>
+
+                    ${h.beReplied.length ? (h.beReplied[0].content ? '<div class="be-replied"><span class="keyword-highlight">@' + h.beReplied[0].user.nickname + '</span>：' + h.beReplied[0].content + '</div>' : '<p style="text-align:center;">该评论已删除</p>') : ''}
+
                     <div class="comment-other">
                         <p>${stampToTime(h.time)}</p>
                         <div class="comment-operate">
+                            <p class="report">举报</p>
                             <p>
                                 <i class="iconfont icon-like"></i>
-                                <span>(${h.likedCount})</span>
+                                ${h.likedCount ? '<span>(' + h.likedCount + ')</span>' : ''}
                             </p>
                             <p>分享</p>
                             <p>回复</p>
@@ -176,6 +189,27 @@ async function getComment(id) {
             </li>
         `
     })
-    hotUl += '</ul>'
-    cmiddle.innerHTML += hotUl
+    return str
+}
+
+//获取相关推荐
+async function getRecommend(id,dom) {
+    //相似歌曲
+    let res = await POST('http://localhost:3000/simi/song',{id})
+    //填入dom
+    let recommend = dom.bottom.children[1]
+    let str = '<div class="recommend-section"><h2>相似歌曲</h2><ul>'
+    res.songs.forEach(s => {
+        str += `
+            <li>
+                <img src='${s.album.picUrl}'>
+                <div class="recommend-content">
+                    <p class="text-ellipsis">${s.name} ${s.alias.length ? '<span style="color:#999">(' + s.alias + ')</span>' : ''}</p>
+                    <p class="text-ellipsis">${author(s.artists)}</p>
+                </div>
+            </li>
+        `
+    })
+    str += '</ul></div>'
+    recommend.innerHTML = str
 }
