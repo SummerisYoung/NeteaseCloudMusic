@@ -28,7 +28,6 @@ async function searchValue(value) {
                 <td class="text-ellipsis">${highlight(author(s.artists),keyword)}</td>
                 <td class="text-ellipsis">${highlight(s.album.name,keyword)}</td>
                 <td>${duration}</td>
-                <td>热度</td>
             </tr>
         `
     });
