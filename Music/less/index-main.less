@@ -135,4 +135,107 @@
             }
         }
     }
+
+    .banner {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+        .banner-list {
+            height: 240px;
+            .banner-ul {
+                position: relative;
+                height: 100%;
+                perspective: 1000px;
+                margin-top: 10px;
+                li {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    display: inline-block;
+                    width: calc(100% - 600px);
+                    opacity: 0;
+                    transition: all 0.3s ease-out;
+                    cursor: pointer;
+                }
+
+                .p0{
+                    transform:translate3d(-300px,11.5px,0) scale(0.9);
+                }
+                .p1{
+                    transform:translate3d(0px,11.5px,0) scale(0.9);
+                    transform-origin:0 50%;
+                    opacity: 0.8;
+                    z-index: 2;
+                }
+                .p2{
+                    transform:translate3d(300px,0,0) scale(1);
+                    z-index: 3;
+                    opacity: 1;
+                }
+                .p3{
+                    transform:translate3d(600px,11.5px,0) scale(0.9);
+                    transform-origin:100% 50%;
+                    opacity: 0.8;
+                    z-index: 2;
+                }
+                .p4{
+                    transform:translate3d(900px,11.5px,0) scale(0.9);
+                }
+                .p5{
+                    transform:translate3d(1200,11.5px,0) scale(0.9);
+                }
+                .p6{
+                    transform:translate3d(1500px,11.5px,0) scale(0.9);
+                }
+                .p7{
+                    transform:translate3d(1800px,11.5px,0) scale(0.9);
+                }
+                .p8{
+                    transform:translate3d(2100px,11.5px,0) scale(0.9);
+                }
+                .p9{
+                    transform:translate3d(2400px,11.5px,0) scale(0.9);
+                }
+            }
+        }
+        
+        &:hover .btn {
+            display: block;
+        }
+
+        .btn{
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 100px;
+            line-height: 100px;
+            font-size: 30px;
+            color: rgb(164,163,162);
+            text-align: center;
+            cursor: pointer;
+        }
+        .next{
+            right: 0;
+        }
+
+        .banner-btn{
+            text-align: center;
+
+            li {
+                display: inline-block;
+                cursor: pointer;
+            }
+            span{
+                display: block;
+                width: 20px;
+                height: 3px;
+                background: #ccc;
+            }
+            .red{
+                background: @red;
+            }
+        }
+    }
 }
