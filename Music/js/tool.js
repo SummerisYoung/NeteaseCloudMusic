@@ -79,3 +79,24 @@ function stampToTime(timestamp) {
         d = stamp.getDate();
     return `${y}年${m}月${d}日 ${stamp.toTimeString().substring(0,5)}`
 }
+
+//数量单位转换
+function numConvert(num) {
+    return num > 100000 ? Math.floor(num / 10000) + '万' : num + ''
+}
+
+//时间单位转换
+function timeConvert(second) {
+    return (Math.floor(second / 60) + '').padStart(2,'0') + ':' + (Math.floor(second % 60) + '').padStart(2,'0')
+}
+
+//点击歌曲,这一行变色
+function changeColor(that) {
+    //先把之前点击的每一项的颜色去掉
+    let tbody = [...document.getElementById('tbody').children]
+    tbody.forEach(t => {
+        t.className = ''
+    })
+    //当前点击的变色
+    that.className = 'deep-color'
+}

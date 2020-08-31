@@ -77,8 +77,8 @@ function syncMusicBar(music_bar) {
             //获取滚动条左右两个时间标签
             let spans = document.querySelectorAll('#footer .footer-middle span')
             //设置时间
-            spans[0].innerText = (Math.floor(current / 60) + '').padStart(2,'0') + ':' + (Math.floor(current % 60) + '').padStart(2,'0')
-            spans[1].innerText = (Math.floor(duration / 60) + '').padStart(2,'0') + ':' + (Math.floor(duration % 60) + '').padStart(2,'0')
+            spans[0].innerText = timeConvert(current)
+            spans[1].innerText = timeConvert(duration)
             //计算并设置当前进度
             let x = current / duration * music_bar.offsetWidth
             music_bar.children[0].style.width = x + 'px'

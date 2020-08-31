@@ -18,7 +18,7 @@ async function searchValue(value) {
     let duration = 0
     res.songs.forEach((s,i) => {
         //计算歌曲时长
-        duration = (Math.floor(s.duration / 1000 / 60) + '').padStart(2,'0') + ':' + (Math.floor(s.duration / 1000 % 60) + '').padStart(2,'0')
+        duration = timeConvert(s.duration / 1000)
         //再布置内容
         str += `
             <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${s.id}">
@@ -37,15 +37,4 @@ async function searchValue(value) {
         cursorwidth:8,         //滚动条的宽度值
         autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
     })
-}
-
-//点击歌曲,这一行变色
-function changeColor(that) {
-    //先把之前点击的每一项的颜色去掉
-    let tbody = [...document.getElementById('tbody').children]
-    tbody.forEach(t => {
-        t.className = ''
-    })
-    //当前点击的变色
-    that.className = 'deep-color'
 }

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+    <head>
+        <meta charset="UTF-8">
+        <title>网易云音乐</title>
+        <link rel="stylesheet" href="http://at.alicdn.com/t/font_2019206_rja6osn2eds.css">
+        <link rel="stylesheet/less" href="./less/index.less">
+        <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.3/less.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+        <script>
+            // 导入公共模板
+            $(function(){
+                $("#topbar").load("public/topbar.html");
+                $("#sidebar").load("public/sidebar.html");
+                $('#footer').load("public/footer.html");
+            });
+        </script>
+        <script src="js/tool.js"></script>
+        <script src="js/playList.js"></script>
+    </head>
+<body>
+    <!-- 顶部导航 -->
+    <div id="topbar"></div>
+
+    <div class="middle">
+        <!-- 侧边栏 -->
+        <div id="sidebar"></div>
+
+        <!-- 主体 -->
+        <div id="playlist">
+            <div class="playlist-top">
+                <img id="playlist-img" src="" alt="">
+                <div class="playlist-content">
+                    <div class="content-top">
+                        <div>
+                            <span>歌单</span>
+                            <h2></h2>
+                        </div>
+                        <div>
+                            <p></p>
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="content-middle">
+                        <div>
+                            <img id="user-img" src="" alt="">
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <ul>
+                            <li><i class="iconfont icon-play"></i>播放全部</li>
+                            <li><i class="iconfont icon-favority"></i><span>收藏</span></li>
+                            <li><i class="iconfont icon-share"></i><span>分享</span></li>
+                            <li><i class="iconfont icon-download"></i>下载全部</li>
+                        </ul>
+                    </div>
+                    <div class="content-bottom">
+                        <p class="tag">标签：</p>
+                        <div>
+                            <p class="description"></p>
+                            <i class="iconfont icon-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="playlist-bottom">
+                <ul>
+                    <li class="active">歌曲列表</li>
+                    <li>评论</li>
+                    <li>收藏者</li>
+                </ul>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="6%"></th>
+                            <th width="6%">操作</th>
+                            <th width="25%">音乐标题</th>
+                            <th width="25%">歌手</th>
+                            <th width="25%">专辑</th>
+                            <th width="13%">时长</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+    <div id="footer"></div>
+</body>
+</html>
