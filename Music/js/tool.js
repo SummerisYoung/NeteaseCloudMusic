@@ -100,3 +100,8 @@ function changeColor(that) {
     //当前点击的变色
     that.className = 'deep-color'
 }
+
+//跳转到用户界面
+function goUser(that) {
+    window.location.href = 'user.html?id=' + that.dataset.userId
+}
