@@ -26,7 +26,7 @@ $(function () {
 async function getSearchHot(search_res,search_ipt) {
     if(search_ipt.value == '') {
         //发送请求
-        let res = await GET('http://localhost:3000/search/hot/detail');
+        let res = await GET('/search/hot/detail');
         //初始化要修改的dom内容
         let str = '<h3>热搜榜</h3><ul class="search-ul">'
         //遍历请求后返回的结果
@@ -68,7 +68,7 @@ async function getInputChange(search_res,search_ipt) {
     search_res.style.width = '450px'
     if(search_ipt.value) {
         //发送请求
-        let res = await GET('http://localhost:3000/search/suggest?keywords=' + search_ipt.value)
+        let res = await GET('/search/suggest?keywords=' + search_ipt.value)
         let str = `<p style="padding:5px 10px" class="suggest-li">搜"${search_ipt.value}"相关的结果></p>`
         let song_articles = ''
         res.result.order.forEach(o => {

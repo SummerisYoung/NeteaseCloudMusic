@@ -8,9 +8,9 @@ async function getSongUrl(that) {
     let volume = document.getElementsByClassName('volume')[0]
     let footer_song = document.getElementsByClassName('footer-song')[0]
     //请求歌曲url
-    let res = await POST('http://localhost:3000/song/url', {id:that.dataset.id}).then(r => r.data[0])
+    let res = await POST('/song/url', {id:that.dataset.id}).then(r => r.data[0])
     //请求歌曲详细信息
-    let det = await POST('http://localhost:3000/song/detail',{ids:that.dataset.id})
+    let det = await POST('/song/detail',{ids:that.dataset.id})
     let song = det.songs[0]
     //音乐url
     audio.src = res.url

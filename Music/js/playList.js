@@ -1,58 +1,39 @@
 $(async function (){
     //获取歌单id
     let url = window.location.href
-    //调用歌单详情接口
     let id = url.substring(url.indexOf('=') + 1)
-    let res = await GET('http://localhost:3000/playlist/detail?id=' + id + '&s=10').then(r => r.playlist)
-    //获取评论内容
-    let commentsRes = await GET('http://localhost:3000/comment/playlist?id=' + id)
-    //获取收藏者内容
-    let loversRes = await GET('http://localhost:3000/playlist/subscribers?id=' + id + '&limit=100')
-    //页面dom
-    let playlist = document.getElementById('playlist');
-    //歌单上部分描述
-    let playlist_top = playlist.children[0]
-    //歌单图片
-    playlist_top.children[0].src = res.coverImgUrl
-    //歌单上部分右侧
-    let playlist_content = playlist_top.children[1]
-    //歌单上部分右侧的上部分
-    let content_top = playlist_content.children[0]
-    //标题
-    content_top.children[0].children[1].innerText = res.name
-    //歌曲数和播放数
-    content_top.children[1].children[0].innerText = `歌曲数${res.trackCount}`
-    content_top.children[1].children[1].innerText = `播放数${numConvert(res.playCount)}`
-    //歌单上部分右侧的中部分
-    let content_middle = playlist_content.children[1]
-    //作者和创建时间
-    content_middle.children[0].children[0].src = res.creator.avatarUrl
-    content_middle.children[0].children[0].dataset.userId = res.creator.userId
+    //调用歌单详情接口
+    let playListRes = await GET('/playlist/detail?id=' + id).then(r => r.playlist)
+    //歌单中的全部歌曲,用res中的全部trackIds请求一次song/detail 接口获取所有歌曲的详情
+    let songsArr = []
+    playListRes.trackIds.forEach(t => {
+        songsArr.push(t.id)
+    })
+    let playlist_songs = await GET('/song/detail?ids=' + songsArr.join(','))
+    //布局上层页面
+    let html = topLayout(playListRes)
+    //布局下层页面
+    html += `
+    <div class="playlist-bottom">
+        <ul class="section">
+            <li id="lists" class="active">歌曲列表</li>
+            <li onclick="commentsLayout(this)" data-id="${id}">评论(${playListRes.commentCount})</li>
+            <li onclick="lovesLayout(this)" data-id="${id}">收藏者</li>
+        </ul>
+        <div class="main">${songsLayout(playlist_songs)}</div>
+    </div>
+    `
+    //填入页面
+    document.getElementById('playlist').innerHTML = html
 
-    content_middle.children[0].children[1].innerText = res.creator.nickname
-    content_middle.children[0].children[1].dataset.userId = res.creator.userId
-
-    content_middle.children[0].children[2].innerText = stampToTime(res.createTime) + '创建'
-    //收藏数和分享数
-    content_middle.children[1].children[1].children[1].innerText = `收藏(${res.subscribedCount})`
-    content_middle.children[1].children[2].children[1].innerText = `分享(${res.shareCount})`
-    //歌单上部分右侧的下部分
-    let content_bottom = playlist_content.children[2]
-    //标签
-    res.tags.forEach((t,i) => {
-        content_bottom.children[0].innerHTML += `<span class="keyword-highlight">${t}</span>`
-        if(i != res.tags.length - 1)
-        content_bottom.children[0].innerHTML += '/'
-    });
-    //描述
-    let description = content_bottom.children[1].children[0]
-    description.innerText = res.description
     //展开收起图标
+    let description = document.getElementsByClassName('description')[0]
     let icon = description.nextElementSibling
     if(description.offsetHeight > 50) {
         icon.style.display = 'block'
         description.style.height = '50px'
         description.classList.add('text-ellipsis') 
+        description.style.whiteSpace = 'pre-wrap'
     }
     icon.onclick = () => {
         if(description.offsetHeight == 50){
@@ -63,49 +44,7 @@ $(async function (){
             description.style.height = '50px'
             icon.style.transform = 'rotate(90deg)'
         }
-            
     }
-    //歌单中的全部歌曲,用res中的全部trackIds请求一次song/detail 接口获取所有歌曲的详情
-    let songsArr = []
-    res.trackIds.forEach(t => {
-        songsArr.push(t.id)
-    })
-    let playlist_songs = await GET('http://localhost:3000/song/detail?ids=' + songsArr.join(','))
-
-    //歌单下部分歌曲
-    let playlist_bottom = playlist_top.nextElementSibling
-    //下部分标题栏
-    let ul = [...playlist_bottom.children[0].children]
-    //下部分主体
-    let main = playlist_bottom.children[1]
-    //一进来先获取歌曲列表
-    main.innerHTML = songsLayout(playlist_songs)
-    //点击标题栏
-    ul.forEach((u,i) => {
-        u.onclick = () => {
-            //所有子标签清除选中样式
-            for(let i of ul) {
-                i.className = ''
-            }
-            //当前子标签设置点中样式
-            u.className = 'active'
-            //判断使用哪个函数
-            switch(i) {
-                case 0: {
-                    main.innerHTML = songsLayout(playlist_songs)
-                    break;
-                }
-                case 1: {
-                    u.innerText = `评论(${res.commentCount})`
-                    main.innerHTML = commentsLayout(commentsRes)
-                    break;
-                }
-                case 2:{
-                    main.innerHTML = lovesLayout(loversRes)
-                }
-            }
-        }
-    })
 
     //设置滚动条
     $('#playlist').niceScroll({
@@ -113,7 +52,61 @@ $(async function (){
         cursorwidth:8,         //滚动条的宽度值
         autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
     })
+
+    //歌曲列表单独设置点击事件
+    document.getElementById('lists').onclick = function() {
+        //设置选中样式
+        active(this)
+        document.getElementsByClassName('main')[0].innerHTML = songsLayout(playlist_songs)
+    }
 })
+
+//上侧布局
+function topLayout(res) {
+    let str = `
+    <div class="playlist-top">
+        <img class="big-img" src="${res.coverImgUrl}" alt="">
+        <div class="playlist-content">
+            <div class="content-top">
+                <div>
+                    <span>歌单</span>
+                    <h2>${res.name}</h2>
+                </div>
+                <div>
+                    <p><span>歌曲数</span><span>${res.trackCount}</span></p>
+                    <p><span>播放数</span><span>${numConvert(res.playCount)}</span</p>
+                </div>
+            </div>
+            <div class="content-middle">
+                <div>
+                    <img style="width:30px;height:30px" class="tiny-img-radius" src="${res.creator.avatarUrl}" alt="" onclick="goUser(this)" data-id="${res.creator.userId}">
+                    <span class="creator" onclick="goUser(this)" data-id="${res.creator.userId}">${res.creator.nickname}</span>
+                    <span class="create-time">${stampToTime(res.createTime)}创建</span>
+                </div>
+                <ul>
+                    <li>
+                        <span><i class="iconfont icon-play"></i>播放全部</span>
+                        <span><i class="iconfont icon-plus"></i></span>
+                    </li>
+                    <li><span><i class="iconfont icon-favority"></i>收藏(${res.subscribedCount})</span></li>
+                    <li><span><i class="iconfont icon-share"></i>分享(${res.shareCount})</span></li>
+                    <li><span><i class="iconfont icon-download"></i>下载全部</span></li>
+                </ul>
+            </div>
+            <div class="content-bottom">
+                ${res.tags.length ? `<p class="tag">标签：<span class="keyword-highlight">${res.tags.join(' / ')}</span></p>` : ''}
+                ${res.description ? `
+                    <div>
+                        <p class="description">${res.description}</p>
+                        <i class="iconfont icon-right"></i>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    </div>
+    `
+    return str
+}
 
 //歌曲列表布局
 function songsLayout(res) {
@@ -156,9 +149,11 @@ function songsLayout(res) {
 }
 
 //评论布局
-function commentsLayout(res) {
+async function commentsLayout(that) {
+    //获取评论内容
+    let res = await GET('/comment/playlist?id=' + that.dataset.id)
     //填入评论内容
-    let comment = `
+    let str = `
         <div class="comment">
             <div class="comment-input">
                 <div>
@@ -175,17 +170,20 @@ function commentsLayout(res) {
     //填入精彩评论
     if(res.hotComments.length) {
         let hotUl = '<div class="hot-comment"><p class="comment-section">精彩评论</p><ul>' + commentDom(res.hotComments) + '</ul><p class="read-more">查看更多精彩评论></p></div>'
-        comment += hotUl
+        str += hotUl
     }
     //填入最新评论
     if(res.comments.length) {
         let ul = `<div class="new-comment"><p class="comment-section">最新评论<span>(${res.total})</span></p><ul>` + commentDom(res.comments) + '</ul></div>'
-        comment += ul
+        str += ul
     }
 
-    comment += '</div></div>'
+    str += '</div></div>'
 
-    return comment
+    document.getElementsByClassName('main')[0].innerHTML = str
+
+    //设置选中样式
+    active(that)
 }
 
 //评论li
@@ -194,7 +192,7 @@ function commentDom(comments) {
     comments.forEach(h => {
         str += `
             <li>
-                <img src="${h.user.avatarUrl}" alt="">
+                <img class="tiny-img-radius" src="${h.user.avatarUrl}" alt="">
                 <div class="comment-content">
                     <div><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</div>
 
@@ -220,12 +218,14 @@ function commentDom(comments) {
 }
 
 //收藏者布局
-function lovesLayout(res) {
+async function lovesLayout(that) {
+    //获取收藏者内容
+    let res = await GET('/playlist/subscribers?id=' + that.dataset.id + '&limit=100')
     let str = '<ul class="subscribers">'
     res.subscribers.forEach(s => {
         str += `
             <li>
-                <img src="${s.avatarUrl}">
+                <img class="small-img-radius" src="${s.avatarUrl}">
                 <p class="text-ellipsis">${s.nickname}</p>
             </li>
         `
@@ -233,5 +233,8 @@ function lovesLayout(res) {
 
     str += '</ul>'
 
-    return str
+    document.getElementsByClassName('main')[0].innerHTML = str
+
+    //设置选中样式
+    active(that)
 }

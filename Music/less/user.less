@@ -1,12 +1,11 @@
 #user {
     flex: 1;
-    background: @dark-background;
+    background: @light-background;
     .user-top {
         display: flex;
         padding: 40px;
-        #user-img {
+        .big-img {
             margin-right: 40px;
-            width: 240px;
         }
 
         .user-content {
@@ -113,6 +112,113 @@
                 }
                 .icon-weibo {
                     color: @red;
+                }
+            }
+        }
+    }
+
+    .user-bottom {
+        .user-item {
+            padding: 10px 40px;
+            border-top: @border;
+            border-bottom: @border;
+        }
+
+        .user-dj {
+            ul li {
+                padding: 10px 40px;
+                display: flex; 
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                cursor: pointer;
+
+                &:nth-child(even) {
+                    background: @dark-background;
+                }
+
+                &:hover {
+                    background: @lihover;
+                }
+
+                div:first-child {
+                    display: flex;
+                    align-items: center;
+
+                    *{
+                        margin-right: 10px;
+                    }
+
+                    .dj-category {
+                        padding: 2px 5px;
+                        border: 1px solid @red;
+                        color: @red;
+                    }
+                }
+
+                div:last-child {
+                    color: #999;
+                    *{
+                        display: inline-block;
+                        width: 100px;
+                    }
+                }
+            }
+        }
+
+        .user-playlist {
+            ul {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                padding: 0 20px;
+                &::after {
+                    content: '';
+                    flex: auto;
+                }
+                li {
+                    margin: 20px;
+                    width: 180px;
+                    font-size: 14px;
+
+                    .playlist-img {
+                        position: relative;
+                        color: #fff;
+                        .right-top {
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            padding: 5px 10px;
+                            width: 50%;
+                            background: linear-gradient(to right, rgba(255,255,255,0), rgba(0, 0, 0, 0.3));
+                            text-align: right;
+                        }
+
+                        .right-bottom {
+                            position: absolute;
+                            bottom: 0;
+                            right: 0;
+                            margin: 10px;
+                            padding: 3px 5px;
+                            border: @border;
+                            border-radius: 50%;
+                            background: #333;
+                            opacity: 0;
+                            transition: 0.3s;
+                        }
+
+                        &:hover .right-bottom {
+                            opacity: 1;
+                        }
+                    }
+
+                    .playlist-name {
+                        margin: 5px 0;
+                    }
+
+                    .trackCount {
+                        color: #999;
+                    }
                 }
             }
         }

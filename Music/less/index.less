@@ -23,10 +23,10 @@
 @border: 1px solid rgb(225,225,226);
 //li hover色
 @lihover: rgb(230,231,234);
-//浅背景色
-@light-background: rgb(245,245,247);
 //深背景色
-@dark-background: rgb(250,250,250);
+@dark-background: rgb(245,245,247);
+//浅背景色
+@light-background: rgb(250,250,250);
 //最小宽度
 body {
     position: relative;
@@ -55,4 +55,53 @@ body {
 //中间的内容高度100%
 .middle {
     height: calc(100vh - 130px);
+}
+//载入中
+.loading{
+    position: relative;
+    top: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 20px;
+        height: 20px;
+    }
+}
+//最小图
+.tiny-img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+//最小图圆角
+.tiny-img-radius {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+//小图
+.small-img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+//小图圆角
+.small-img-radius {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+//中图
+.mid-img {
+    width: 180px;
+    height: 180px;
+    cursor: pointer;
+}
+//大图
+.big-img {
+    width: 220px;
+    height: 220px;
 }

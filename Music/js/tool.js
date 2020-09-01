@@ -2,7 +2,7 @@
 const POST = function (url, data) {
     return new Promise((r,j) => {
        $.ajax({
-            url: url + '?_=' + Date.now(),
+            url: 'http://localhost:3000' + url + '?_=' + Date.now(),
             data,
             method:'post',
             dataType:'json',
@@ -20,7 +20,7 @@ const POST = function (url, data) {
 const GET = function(url) {
     return new Promise((r,j) => {
         $.ajax({
-             url: url,
+             url: 'http://localhost:3000' + url,
              method:'get',
              dataType:'json',
              success(res) {
@@ -103,5 +103,20 @@ function changeColor(that) {
 
 //跳转到用户界面
 function goUser(that) {
-    window.location.href = 'user.html?id=' + that.dataset.userId
+    window.location.href = 'user.html?id=' + that.dataset.id
+}
+
+//跳转到歌单详情页
+function goPlayList(that) {
+    window.location.href = 'playList.html?id=' + that.dataset.id
+}
+
+//设置选中样式
+function active(el) {
+    //清除兄弟标签选中样式
+    [...el.parentNode.children].forEach(c => {
+        c.className = ''
+    })
+    //that标签设置选中样式
+    el.className = 'active'
 }

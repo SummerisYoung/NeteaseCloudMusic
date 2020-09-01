@@ -60,7 +60,7 @@ function getSongDetail(song) {
 //歌词处理
 async function makeLyric(id,dom) {
     //获取歌词
-    let lyrics = await POST('http://localhost:3000/lyric',{id}).then(r => r.lrc.lyric)
+    let lyrics = await POST('/lyric',{id}).then(r => r.lrc.lyric)
     //用一个数组保存歌词时间
     let lyricTime = []
     //布局页面
@@ -142,7 +142,7 @@ function lyricScroll(lyricTime,dom,num,highlight,rotate) {
 
 //获取评论
 async function getComment(id,dom) {
-    let res = await POST('http://localhost:3000/comment/music',{id})
+    let res = await POST('/comment/music',{id})
     //获取页面标签
     let song_bottom = dom.bottom,
         cleft = song_bottom.children[0],
@@ -167,7 +167,7 @@ function commentDom(comments) {
     comments.forEach(h => {
         str += `
             <li>
-                <img src="${h.user.avatarUrl}" alt="">
+                <img class="tiny-img-radius" src="${h.user.avatarUrl}" alt="">
                 <div class="comment-content">
                     <div><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</div>
 
@@ -195,14 +195,14 @@ function commentDom(comments) {
 //获取相关推荐
 async function getRecommend(id,dom) {
     //相似歌曲
-    let res = await POST('http://localhost:3000/simi/song',{id})
+    let res = await POST('/simi/song',{id})
     //填入dom
     let recommend = dom.bottom.children[1]
     let str = '<div class="recommend-section"><h2>相似歌曲</h2><ul>'
     res.songs.forEach(s => {
         str += `
             <li>
-                <img src='${s.album.picUrl}'>
+                <img class="tiny-img" src='${s.album.picUrl}'>
                 <div class="recommend-content">
                     <p class="text-ellipsis">${s.name} ${s.alias.length ? '<span style="color:#999">(' + s.alias + ')</span>' : ''}</p>
                     <p class="text-ellipsis">${author(s.artists)}</p>

@@ -7,7 +7,7 @@ $(function () {
 
 //搜索
 async function searchValue(value) {
-    let res = await GET('http://localhost:3000/search?' + value).then(r => r.result)
+    let res = await GET('/search?' + value).then(r => r.result)
     let tbody = document.getElementById('tbody')
     let search_prompt = document.getElementsByClassName('search-prompt')[0]
     //取到关键词和歌曲总数

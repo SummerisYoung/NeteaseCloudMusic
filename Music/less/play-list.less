@@ -2,10 +2,8 @@
     flex: 1;
     .playlist-top {
         display: flex;
-        #playlist-img {
-            padding: 40px;
-            width: 300px;
-            height: 300px;
+        .big-img {
+            margin: 40px;
         }
 
         .playlist-content {
@@ -39,8 +37,10 @@
                     display: flex;
                     
                     p {
-                        width: 60px;
-                        padding: 0 8px;
+                        display: flex;
+                        flex-direction: column;
+                        width: 75px;
+                        padding: 0 10px;
                         box-sizing: content-box;
                         color: #666;
                         text-align: right;
@@ -58,12 +58,6 @@
                     margin: 10px 0;
                     display: flex;
                     align-items: center;
-                    #user-img {
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 50%;
-                        cursor: pointer;
-                    }
 
                     .creator {
                         margin: 0 20px 0 10px;
@@ -83,14 +77,37 @@
                     font-size: 14px;
 
                     li{
-                        padding: 5px 15px;
                         margin-right: 10px;
                         border: 1px solid rgb(193,191,193);
                         border-radius: 5px;
-                        background: @light-background;
+                        background: white;
+                        user-select: none;
+                        cursor: pointer;
 
                         &:first-child {
+                            display: flex;
                             background: @red;
+                            color: white;
+                            span {
+                                display: inline-block;
+                                height: 100%;
+                                padding: 5px;
+                                &:hover {
+                                    background: rgb(177,35,35)
+                                }
+                                &:first-child {
+                                    width: 80%;
+                                    border-right: @border;
+                                }
+                            }
+                            
+                        }
+
+                        &:nth-child(n + 2) {
+                            padding: 5px 15px;
+                            &:hover {
+                                background: @dark-background;
+                            }
                         }
 
                         i {
@@ -128,7 +145,6 @@
     }
 
     .playlist-bottom {
-        padding: 0 40px;
         .section {
             display: flex;
             height: 30px;
@@ -271,12 +287,6 @@
                             display: block;
                         }
 
-                        img {
-                            width: 50px;
-                            height: 50px;
-                            border-radius: 50%;
-                        }
-
                         .comment-content {
                             flex: 1;
                             margin-left: 20px;
@@ -340,14 +350,10 @@
             li {
                 width: 120px;
                 margin: 40px 40px;
-                img {
-                    width: 100%;
-                    border-radius: 50%;
-                }
+                text-align: center;
                 p {
                     color: #333;
                     font-size: 14px;
-                    text-align: center;
                 }
             }
         }

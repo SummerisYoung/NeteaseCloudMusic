@@ -63,7 +63,7 @@ $(async function() {
 
 //展示数据
 async function dataDom(homeApi) {
-    let res = await GET('http://localhost:3000' + homeApi.url)
+    let res = await GET(homeApi.url)
     let str = ''
     switch(homeApi.name) {
         case 'banner': {
@@ -107,7 +107,7 @@ async function dataDom(homeApi) {
                 str += `
                     <li>
                         <div>${(i + 1 + '').padStart(2,'0')}</div>
-                        <img src="${res.result[i].picUrl}">
+                        <img class="tiny-img" src="${res.result[i].picUrl}">
                         <div>
                             <p class="text-ellipsis">${res.result[i].name}</p>
                             <p class="text-ellipsis">${author(res.result[i].song.artists)}</p>
@@ -122,7 +122,7 @@ async function dataDom(homeApi) {
                 str += `
                     <li>
                         <div>${(i + 1 + '').padStart(2,'0')}</div>
-                        <img src="${res.result[i].picUrl}">
+                        <img class="tiny-img" src="${res.result[i].picUrl}">
                         <div>
                             <p class="text-ellipsis">${res.result[i].name}</p>
                             <p class="text-ellipsis">${author(res.result[i].song.artists)}</p>
@@ -147,7 +147,7 @@ async function dataDom(homeApi) {
             res.result.forEach(i => {
                 str += `
                     <div class="block-item" data-id="${i.id}" onclick="goPlayList(this)">
-                        <img src="${i.picUrl}">
+                        <img class="mid-img" src="${i.picUrl}">
                         <p>${i.name}</p>
                     </div>
                 `
@@ -221,9 +221,4 @@ function banner(banner_ul) {
     banner_ul.parentNode.parentNode.onmouseleave = () => {
         timer=setInterval(nextimg,3000);
     }
-}
-
-//跳转歌单详情页
-function goPlayList(that) {
-    window.location.href = 'playList.html?id=' + that.dataset.id
 }
