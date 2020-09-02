@@ -50,11 +50,7 @@ async function getSearchHot(search_res,search_ipt) {
         search_res.parentElement.style.display = 'block'
         //改一下结果标签宽度
         search_res.style.width = '530px'
-        $(search_res).niceScroll({
-            cursorcolor:"#ddd",     //滚动条的颜色值
-            cursorwidth:8,         //滚动条的宽度值
-            autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
-        })
+        nicescroll(search_res)
     }else{
         getInputChange(search_res,search_ipt)
     }

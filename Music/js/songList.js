@@ -32,9 +32,5 @@ async function searchValue(value) {
         `
     });
     tbody.innerHTML = str
-    $('#songList').niceScroll({
-        cursorcolor:"#ddd",     //滚动条的颜色值
-        cursorwidth:8,         //滚动条的宽度值
-        autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
-    })
+    nicescroll(document.getElementById('songList'))
 }

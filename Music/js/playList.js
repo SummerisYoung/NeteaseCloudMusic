@@ -47,17 +47,16 @@ $(async function (){
     }
 
     //设置滚动条
-    $('#playlist').niceScroll({
-        cursorcolor:"#ddd",     //滚动条的颜色值
-        cursorwidth:8,         //滚动条的宽度值
-        autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
-    })
+    nicescroll(document.getElementById('playlist'))
 
     //歌曲列表单独设置点击事件
     document.getElementById('lists').onclick = function() {
         //设置选中样式
         active(this)
         document.getElementsByClassName('main')[0].innerHTML = songsLayout(playlist_songs)
+
+        // 检测滚动条是否重置大小（当窗口改变大小时）
+        $("#index").getNiceScroll().resize();
     }
 })
 

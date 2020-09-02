@@ -72,8 +72,7 @@
             border: @border;
             background: #fff;
 
-            &::before {
-                content: '';
+            .dot {
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -83,7 +82,16 @@
                 width: 4px;
                 height: 4px;
                 border-radius: 50%;
-                background: @red;
+                background-color: @red;
+            }
+
+            .dot-loading {
+                width: 10px;
+                height: 10px;
+                background-image: url(../public/img/loading.gif);
+                background-size: cover;
+                background-position: center;
+                background-color: transparent;
             }
         }
         

@@ -84,12 +84,7 @@ async function makeLyric(id,dom) {
     dom.lyricDom.innerHTML = str
     //设置定时器，因为页面标签存在长宽变化的transition
     setTimeout(function(){
-        $('.lyric-box').niceScroll({
-            cursorcolor:"rgb(189,191,193)",     //滚动条的颜色值
-            cursorwidth:8,         //滚动条的宽度值
-            autohidemode:false,      //滚动条是否是自动隐藏，默认值为 true
-            cursorborder:'none',    //边框设置
-        })
+        nicescroll(document.getElementsByClassName('lyric-box')[0])
     }, 500);
     //处理一下时间数组,主要针对歌词最后存在一些混音编曲之类的作者的,这些的时间相同的情况,手动延迟一点时间
     for(let i = lyricTime.length - 15;i < lyricTime.length;i++) {

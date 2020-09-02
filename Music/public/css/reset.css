@@ -87,3 +87,7 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+p,span {
+    font-size: 14px;
+}

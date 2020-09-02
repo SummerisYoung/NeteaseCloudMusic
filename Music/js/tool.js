@@ -120,3 +120,12 @@ function active(el) {
     //that标签设置选中样式
     el.className = 'active'
 }
+
+//设置滚动条
+function nicescroll(dom) {
+    $(dom).niceScroll({
+        cursorcolor:"#ddd",     // 滚动条的颜色值
+        cursorwidth:8,         // 滚动条的宽度值
+        autohidemode:false,      // 滚动条是否是自动隐藏，默认值为 true
+    })
+}

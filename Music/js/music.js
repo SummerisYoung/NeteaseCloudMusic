@@ -7,6 +7,10 @@ async function getSongUrl(that) {
     let pause_play = document.querySelector('#footer .footer-left i:nth-child(2)')
     let volume = document.getElementsByClassName('volume')[0]
     let footer_song = document.getElementsByClassName('footer-song')[0]
+    // 拿到滚动条上的圈
+    let dot = document.getElementsByClassName('dot')[0]
+    //加上loading效果
+    dot.classList.add('dot-loading')
     //请求歌曲url
     let res = await POST('/song/url', {id:that.dataset.id}).then(r => r.data[0])
     //请求歌曲详细信息
@@ -16,8 +20,6 @@ async function getSongUrl(that) {
     audio.src = res.url
     //初始化一下音量
     audio.volumn = volume.children[1].offsetLeft / volume.offsetWidth
-    //播放
-    audio.play()
     //更改图标
     pause_play.classList.remove('icon-play')
     pause_play.classList.add('icon-pause')
@@ -31,6 +33,10 @@ async function getSongUrl(that) {
     footer_song.style.opacity = '1'
     //左下角音乐图片点击事件
     footer_song.children[0].onclick = getSongDetail(song)
+    //播放
+    audio.play()
+    //除去loading效果
+    dot.classList.remove('dot-loading')
 }
 
 $(function () {
