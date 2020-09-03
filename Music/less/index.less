@@ -32,10 +32,6 @@ body {
     position: relative;
     min-width: 1050px;
 }
-//盒子居中
-.boxcenter(@tb){
-    margin: @tb auto;
-}
 //中部内容
 .middle {
     display: flex;
@@ -97,12 +93,14 @@ body {
 .mid-img {
     width: 180px;
     height: 180px;
+    border: @border;
     cursor: pointer;
 }
 //大图
 .big-img {
     width: 220px;
     height: 220px;
+    border: @border;
 }
 //点击这一行颜色变深
 .deep-color {
@@ -176,6 +174,68 @@ body {
             .trackCount {
                 color: #999;
             }
+        }
+    }
+}
+
+//选中黑色样式
+.default {
+    color: #eee;
+    background: grey;
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+//歌曲列表
+table {
+    width: 100%;
+    color: #666;
+    font-size: 12px;
+    table-layout: fixed;
+    thead {
+        th {
+            padding: 8px;
+            font-weight: normal;
+            border: @border;
+            border-left: none;
+
+            &:last-child {
+                border-right: none;
+            }
+        } 
+    }
+    
+    tbody {
+        td {
+            padding: 5px;
+        }
+
+        tr > td:first-child {
+            vertical-align: top;
+            text-align: right;
+            color: #999;
+        }
+
+        tr > td:nth-child(2) {
+            display: flex;
+            justify-content: space-evenly;
+            color: #ccc;
+        }
+
+        tr > td:nth-child(3) {
+            color: #333;
+        }
+
+        tr > td:nth-child(n + 6) {
+            color: #999;
+        }
+
+        tr:nth-child(even) {
+            background: @dark-background;
+        }
+
+        tr:hover {
+            background: rgb(235,236,237);
         }
     }
 }

@@ -522,6 +522,170 @@
                 }
             }
         }
+
+        #artists {
+            .artists-top {
+                display: flex;
+                padding: 20px 0;
+                margin-bottom: 30px;
+                color: #999;
+                border-bottom: @border;
+
+                ul {
+                    display: flex;
+                    li {
+                        width: 60px;
+                        height: 20px;
+                        padding: 0 10px;
+                        text-align: center;
+                        border-right: @border;
+                        cursor: pointer;
+                        user-select: none;
+                        &:last-child {
+                            border: none;
+                        }
+                    }
+                }
+            }
+            .artists-ul {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                &::after {
+                    content: '';
+                    width: 210px;
+                }
+                li {
+                    margin: 0 30px 30px 0;
+                    div {
+                        display: flex;
+                        justify-content: space-between;
+                        i {
+                            color: @red;
+                            font-weight: 900;
+                            font-size: 14px;
+                            border: 1px solid rgba(198,47,47,.5);
+                            border-radius: 50%;
+                        }
+                    }
+                }
+            }
+        }
+
+        #newsong {
+            .newsong-top {
+                div {
+                    display: flex;
+                    width: 200px;
+                    margin: 20px auto;
+                    border: @border;
+                    p {
+                        width: 50%;
+                        height: 30px;
+                        line-height: 30px;
+                        text-align: center;
+                        cursor: pointer;
+                        user-select: none;
+                    }
+
+                    .default {
+                        padding: 0;
+                        border-radius: 0;
+                    }
+                }
+                ul {
+                    display: flex;
+                    li {
+                        margin: 10px 30px 0 0;
+                        width: 32px;
+                        line-height: 30px;
+                        margin-left: 0;
+                        cursor: pointer;
+                    }
+
+                    .select {
+                        border-bottom: 2px solid rgb(225,225,226);
+                    }
+                }
+            }
+            .newsong-content {
+                .newsong-operate {
+                    display: flex;
+                    justify-content: space-between;
+                    height: 50px;
+                    padding: 5px 10px;
+                    background: @dark-background;
+                    border: @border;
+                    p:first-child {
+                        display: flex;
+                        align-items: center;
+                        i {
+                            margin-right: 10px;
+                            line-height: 20px;
+                            font-size: 20px;
+                            text-align: center;
+                            border: 1px solid @red;
+                            border-radius: 50%;
+                            color: @red;
+                        }
+                    }
+                    p:last-child {
+                        display: flex;
+                        align-items: center;
+                        padding: 0px 15px;
+                        border: @border;
+                        border-radius: 5px;
+                        background: @light-background
+                    }
+                }
+                table {
+                    font-size: 14px;
+                    border: @border;
+                    tr {
+                        line-height: 50px;
+                    }
+
+                    td{
+                        margin: 0;
+                    }
+
+                    tr > td:first-child {
+                        text-align: center;
+                    }
+
+                    tr > td:nth-child(2) {
+                        display: table-cell;
+                        div {
+                            position: relative;
+                            display: flex;
+                            i {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                right: 0;
+                                bottom: 0;
+                                margin: auto;
+                                width: 20px;
+                                height: 20px;
+                                text-align: center;
+                                line-height: 17px;
+                                color: #fff;
+                                border: @border;
+                                border-radius: 50%;
+                            }
+                        }
+                    }
+
+                    tr:nth-child(even) {
+                        background: @light-background;
+                    }
+
+                    tr:nth-child(odd) {
+                        background: @dark-background;
+                    }
+                }
+            }
+        }
     }
 }
     

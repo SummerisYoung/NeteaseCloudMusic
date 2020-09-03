@@ -24,6 +24,14 @@ $(async function() {
                     main.innerHTML = await topListDom()
                     break;
                 }
+                case "歌手": {
+                    main.innerHTML = await artistDom()
+                    break;
+                }
+                case "最新音乐": {
+                    main.innerHTML = await newSongDom()
+                    break;
+                }
             }
             // 检测滚动条是否重置大小（当窗口改变大小时）
             $("#index").getNiceScroll().resize();
@@ -167,7 +175,6 @@ async function recommendDom() {
     str += '</div>'
     return str
 }
-
 // banner控制器
 function bannerControl(banner_ul) {
     //图片标签数组
@@ -233,7 +240,7 @@ function bannerControl(banner_ul) {
     }
 }
 
-//歌单分类
+// 歌单分类
 async function playlistDom() {
     let str = '<div id="playlist">'
     // 添加歌单分类
@@ -325,10 +332,8 @@ async function playlistDom() {
 
     return str
 }
-
 // 歌单列表
 async function playlistUl(cat) {
-    //歌单图片
     let res = await GET('/top/playlist?limit=100&cat=' + cat)
     let str = '<div class="playlist"><ul>'
 
@@ -358,8 +363,7 @@ async function playlistUl(cat) {
 
     return str
 }
-
-// 歌单控制器
+// 歌单分类控制器
 async function playlistControl(that) {
     console.log(that);
     // 获取内容标签
@@ -374,7 +378,6 @@ async function playlistControl(that) {
     //改变数据
     playlist_content.innerHTML = await playlistUl(that.dataset.name)
 }
-
 // 打开/关闭歌单分类菜单
 function openMenu(that) {
     console.log(window.event.target.id);
@@ -522,4 +525,157 @@ async function topListDom() {
     str += '</div>'
 
     return str
+}
+
+//歌手
+async function artistDom() {
+    let str = `
+    <div id="artists">
+        <div class="artists-top">
+            <span class="language">语种：</span>
+            <ul>
+                <li onclick="artistControl(this)" data-type=0><span class="default">全部</span></li> 
+                <li onclick="artistControl(this)" data-type=1><span>华语</span></li> 
+                <li onclick="artistControl(this)" data-type=2><span>欧美</span></li> 
+                <li onclick="artistControl(this)" data-type=3><span>韩国</span></li> 
+                <li onclick="artistControl(this)" data-type=4><span>日本</span></li> 
+            </ul>
+        </div>
+        <div id="artists-content">
+    `
+    
+    str += await artistUl(0)
+
+    str += `
+        </div>
+    </div>
+    `
+
+    return str
+}
+//歌手列表
+async function artistUl(type) {
+    type = type > 0 ? '?type=' + type : ''
+    let res = await GET('/toplist/artist' + type)
+    let str = '<ul class="artists-ul">'
+    res.list.artists.forEach(a => {
+        str += `
+        <li>
+            <img class="mid-img" src="${a.picUrl}">
+            <div>
+                <span>${a.name}</span>
+                <span><i class="iconfont icon-user"></i></span>
+            </div>
+        </li>
+        `
+    })
+    str += '</ul>'
+    return str
+}
+//歌手语种控制器
+async function artistControl(that) {
+    let artists_content = document.getElementById('artists-content')
+    //改变选中颜色
+    document.getElementsByClassName('default')[0].classList.remove('default')
+    that.children[0].classList.add('default')
+    //添加loading
+    artists_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
+    //改变数据
+    artists_content.innerHTML = await artistUl(that.dataset.type)
+}
+
+// 最新音乐
+async function newSongDom() {
+    let str = `
+        <div id="newsong">
+            <div class="newsong-top">
+                <div>
+                    <p class="default" onclick="newSongControl(this)" data-title="song">新歌速递</p>
+                    <p onclick="newSongControl(this)" data-title="album">新碟上架</p>
+                </div>
+                <ul class="newsong-select">
+                    <li onclick="newSongControl(this)" class="select" data-type=0>全部</li>
+                    <li onclick="newSongControl(this)" data-type=7>华语</li>
+                    <li onclick="newSongControl(this)" data-type=96>欧美</li>
+                    <li onclick="newSongControl(this)" data-type=16>韩国</li>
+                    <li onclick="newSongControl(this)" data-type=8>日本</li>
+                <ul>
+            </div>
+    `
+
+    str += await newSongUl("song","0")
+
+    str += '</div>'
+    return str
+}
+
+// 最新音乐列表
+async function newSongUl(title, type) {
+    let str = '<div class="newsong-content">'
+    // 新歌速递
+    if(title == 'song') {
+        let res = await GET('/top/song?type=' + type)
+        str += `
+        <div class="newsong-operate">
+            <p><i class="iconfont icon-play"></i>播放全部</p>
+            <p><i class="iconfont icon-favority"></i>收藏全部</p>
+        </div>
+        <table>
+            <tbody id="tbody">
+        `
+        res.data.forEach((d,i) => {
+            //计算歌曲时长
+            duration = timeConvert(d.duration / 1000)
+            //再布置内容
+            str += `
+                <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${d.id}">
+                    <td width="4%">${(i + 1 + '').padStart(2,'0')}</td>
+                    <td width="5%">
+                        <div>
+                            <img class="tiny-img" src="${d.album.picUrl}">
+                            <i class="iconfont icon-play"></i>
+                        </div>
+                    </td>
+                    <td width="36%" class="text-ellipsis">${d.name}${d.alias.length ? '<span style="padding:15px 0 0 0;color:#999">(' + d.alias + ')</span>' : ''}</td>
+                    <td width="25%" class="text-ellipsis">${author(d.album.artists)}</td>
+                    <td width="25%" class="text-ellipsis">${d.album.name}${d.album.alias.length ? '<span style="padding:15px 0 0 0;color:#999">(' + d.alias + ')</span>' : ''}</td>
+                    <td width="5%">${duration}</td>
+                </tr>
+            `
+        })
+        str += '</tbody></table>'
+    }else {// 新碟上架
+        let _type = {0:'ALL',7:'ZH',96:'EA',16:'KR',8:'JP'}[type]
+        let res = await GET('/top/album?area=' + _type)
+
+        console.log(res);
+    }
+
+    str += '</div>'
+
+    return str
+}
+
+// 最新音乐控制器
+async function newSongControl(that) {
+    let newsong_content = document.getElementsByClassName('newsong-content')[0]
+    newsong_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
+    //获取之前的头部选中项
+    let t = document.getElementsByClassName('default')[0]
+    //获取之前的li选中项
+    let li = document.getElementsByClassName('select')[0]
+    // 判断是点击了头部选中项还是li选中项
+    if(that.dataset.title) {//头部
+        //改变头部选中项
+        t.classList.remove('default')
+        that.classList.add('default')
+        //改变li选中项
+        li.classList.remove('select')
+        document.getElementsByClassName('newsong-select')[0].children[0].classList.add('select')
+        newsong_content.innerHTML = await newSongUl(that.dataset.title,0)
+    }else {//li
+        li.classList.remove('select')
+        that.classList.add('select')
+        newsong_content.innerHTML = await newSongUl(t.dataset.title,that.dataset.type)
+    }
 }
