@@ -10,13 +10,21 @@ $(async function() {
     // 给栏目添加点击事件
     lis.forEach(l => {
         l.onclick = async function(){
+            active(this)
             main.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
             switch(this.innerText) {
                 case "歌单": {
                     main.innerHTML = await playlistDom()
+                    break;
+                }
+                case "主播电台": {
+
+                }
+                case "排行榜": {
+                    main.innerHTML = await topListDom()
+                    break;
                 }
             }
-            active(this)
             // 检测滚动条是否重置大小（当窗口改变大小时）
             $("#index").getNiceScroll().resize();
         }
@@ -322,7 +330,7 @@ async function playlistDom() {
 async function playlistUl(cat) {
     //歌单图片
     let res = await GET('/top/playlist?limit=100&cat=' + cat)
-    let str = '<ul class="playlist-ul">'
+    let str = '<div class="playlist"><ul>'
 
     res.playlists.forEach(p => {
         str += `
@@ -346,7 +354,7 @@ async function playlistUl(cat) {
         `
     })
 
-    str += '</ul>'
+    str += '</ul></div>'
 
     return str
 }
@@ -380,4 +388,138 @@ function openMenu(that) {
     
     //添加滚动条
     nicescroll(document.getElementsByClassName('catlist-menu')[0])
+}
+
+// 排行榜
+async function topListDom() {
+    let res = await GET('/toplist/detail')
+    // 全球榜
+    let globalList = [...res.list.slice(4)]
+    // 官方榜
+    let officialList = []
+    // 榜头颜色数组
+    let colorArr = ['rgb(81,137,228)','rgb(64,180,192)','rgb(224,96,134)','rgb(200,95,67)']
+    // 处理前四个热榜
+    for(let i = 0;i < 4;i++) {
+        officialList.push(await GET('/playlist/detail?id=' + res.list[i].id).then(r => r.playlist))
+    }
+    // 原创歌曲榜改名原创榜
+    officialList[2].name = '云音乐原创榜'
+    // 处理歌手榜
+    let artistToplist = await GET('/toplist/artist').then(r => {
+        r.list.coverImgUrl = res.artistToplist.coverUrl
+        return r.list
+    })
+    let str = '<div id="toplist">'
+
+    // 官方榜
+    {
+        str += `
+            <div class="offcial">
+                <h2>官方榜</h2>
+                <ul class="offcial-ul">
+        `
+        //官方榜前四个
+        for(let i = 0;i < officialList.length;i++) {
+            str += `
+            <li>
+                <div class="offcial-ultop" style="background-color:${colorArr[i]}" data-id="${officialList[i].id}" onclick="goPlayList(this)">
+                    <div>
+                        <h3>${officialList[i].name.substring(3,4)}</h3>
+                        <div>
+                            <h4>${officialList[i].name.substring(4)}</h4>
+                            <p>${stampToTime(officialList[i].updateTime).substring(5,9)}更新</p>
+                        </div>
+                    </div>
+                    <div><i class="iconfont icon-play"></i></div>
+                </div>
+                <ul class="offcial-item">
+            `      
+
+            for(let j = 0;j < 8;j++) {
+                str += `
+                <li onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${officialList[i].tracks[j].id}">
+                    <div class="text-ellipsis">
+                        <span>${j + 1}</span>
+                        <span>-</span>
+                        <span>${officialList[i].tracks[j].name}</span>
+                    </div>
+                    <span class="artist text-ellipsis">${author(officialList[i].tracks[j].ar)}</span>
+                </li>
+                `
+            }
+            
+            str += `
+                </ul>
+                <p class="offcial-more">查看全部></p>
+            </li>
+            `
+        }
+        //歌手榜
+        str += `
+        <li>
+            <div class="offcial-ultop" style="background-color:rgb(145,67,200)">
+                <div>
+                    <h3>歌</h3>
+                    <div>
+                        <h4>手榜</h4>
+                        <p>${stampToTime(artistToplist.updateTime).substring(5,9)}更新</p>
+                    </div>
+                </div>
+            </div>
+            <ul class="offcial-item">
+        `
+        for(let j = 0;j < 8;j++) {
+            str += `
+            <li>
+                <div class="text-ellipsis">
+                    <span>${j + 1}</span>
+                    <span>-</span>
+                    <span>${artistToplist.artists[j].name}</span>
+                </div>
+            </li>
+            `
+        }
+        str += `
+            </ul>
+            <p class="offcial-more">查看全部></p>
+        </li>
+        `
+                    
+        str += `
+                </ul>
+            </div>
+        `
+    }
+
+    // 全球榜
+    {
+        str += `
+        <div class="global playlist">
+            <h2>全球榜</h2>
+            <ul class="global-ul">
+        ` 
+
+        globalList.forEach(g => {
+            str += `
+            <li data-id="${g.id}" onclick="goPlayList(this)">
+                <div class="playlist-img">
+                    <img class="mid-img" src="${g.coverImgUrl}">
+                    <p class="right-top">
+                        <i class="iconfont icon-headset"></i>
+                        <span>${numConvert(g.playCount)}</span>
+                    </p>
+                </div>
+                <p class="playlist-name">${g.name}</p>
+            </li>
+            `
+        })
+
+        str += '</ul></div>'
+    }
+    
+
+    str += '</div>'
+
+    return str
 }

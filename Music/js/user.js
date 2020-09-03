@@ -31,6 +31,7 @@ $(async function() {
 
 //上层页面
 function topLayout(res) {
+    console.log(res);
     let str = `
     <div class="user-top">
         <img class="big-img" src="${res.profile.avatarUrl}" alt="">
@@ -72,7 +73,7 @@ function topLayout(res) {
             </div>
 
             <div class="content-bottom">
-                <p class="binding"><span>社交网络：</span><i class="iconfont ${res.bindings[1].url ? 'icon-weibo' : ''}"></i>${res.bindings[1].url ? '' : '未绑定'}</p>
+                <p class="binding"><span>社交网络：</span><i class="iconfont ${res.bindings[1] && res.bindings[1].url ? 'icon-weibo' : ''}"></i>${res.bindings[1] && res.bindings[1].url ? '' : '未绑定'}</p>
                 <p class="description">个人介绍：${res.profile.signature ? res.profile.signature : '暂无介绍'}</p>
             </div>
         </div>
@@ -116,7 +117,7 @@ function djLayout(res) {
 //歌单页面
 function plLayout(res) {
     let str = `
-        <div class="user-playlist">
+        <div class="playlist">
             <p class="user-item">歌单</p>
             <ul>
     `

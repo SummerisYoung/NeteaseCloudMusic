@@ -71,7 +71,7 @@ function bind(obj,eventName,fn) {
     }
 }
 
-//时间戳转事件
+//时间戳转时间
 function stampToTime(timestamp) {
     let stamp = new Date(timestamp),
         y = stamp.getFullYear(),
@@ -92,13 +92,14 @@ function timeConvert(second) {
 
 //点击歌曲,这一行变色
 function changeColor(that) {
+    console.log(that);
     //先把之前点击的每一项的颜色去掉
-    let tbody = [...document.getElementById('tbody').children]
-    tbody.forEach(t => {
-        t.className = ''
+    let prev = [...document.getElementsByClassName('deep-color')]
+    prev.forEach(p => {
+        p.classList.remove('deep-color')
     })
     //当前点击的变色
-    that.className = 'deep-color'
+    that.classList.add('deep-color')
 }
 
 //跳转到用户界面
