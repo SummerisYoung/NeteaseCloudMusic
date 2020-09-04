@@ -672,6 +672,7 @@
                                 color: #fff;
                                 border: @border;
                                 border-radius: 50%;
+                                background: rgba(0,0,0,.5);
                             }
                         }
                     }
@@ -682,6 +683,36 @@
 
                     tr:nth-child(odd) {
                         background: @dark-background;
+                    }
+                }
+            }
+            .newalbum {
+                display: flex;
+                border-top: @border;
+                h2 {
+                    margin: 0 10px;
+                    font-size: 24px;
+                    padding-top: 20px;
+                }
+                ul {
+                    .bg {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 220px;
+                        height: 180px;
+                        background: url(../public/img/coverall.png);
+                        background-position:0 -986px;
+                    }
+                    li{
+                        position: relative;
+
+                        p {
+                            font-size: 16px;
+                        }
+                        span {
+                            color: #ccc;
+                        }
                     }
                 }
             }

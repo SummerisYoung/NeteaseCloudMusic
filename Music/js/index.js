@@ -603,18 +603,18 @@ async function newSongDom() {
             </div>
     `
 
-    str += await newSongUl("song","0")
+    str += await newSongUl()
 
     str += '</div>'
     return str
 }
 
 // 最新音乐列表
-async function newSongUl(title, type) {
+async function newSongUl(title="song", area=0) {
     let str = '<div class="newsong-content">'
     // 新歌速递
     if(title == 'song') {
-        let res = await GET('/top/song?type=' + type)
+        let res = await GET('/top/song?type=' + area)
         str += `
         <div class="newsong-operate">
             <p><i class="iconfont icon-play"></i>播放全部</p>
@@ -645,10 +645,35 @@ async function newSongUl(title, type) {
         })
         str += '</tbody></table>'
     }else {// 新碟上架
-        let _type = {0:'ALL',7:'ZH',96:'EA',16:'KR',8:'JP'}[type]
-        let res = await GET('/top/album?area=' + _type)
+        let _area = {0:'ALL',7:'ZH',96:'EA',16:'KR',8:'JP'}[area]
+        let res = await GET('/top/album?area=' + _area)
 
-        console.log(res);
+        str += `
+        <div class="newalbum">
+            <h2>本周新碟</h2>
+            <div class="playlist">
+                <ul>
+        `
+
+        res.monthData.forEach(m => {
+            str += `
+            <li data-id="${m.id}" onclick="goPlayList(this)">
+                <div class="bg"></div>
+                <div class="playlist-img">
+                    <img class="mid-img" src="${m.picUrl}">
+                    <p class="right-bottom"><i class="iconfont icon-play"></i></p>
+                </div>
+                <p class="text-ellipsis">${m.name}${m.alias.length ? '<span style="color:#ccc">(' + m.alias +  ')</span>' : ''}</p>
+                <span>${author(m.artists)}</span>
+            </li>
+            `
+        })
+
+        str +=`
+                </ul>
+            </div>
+        </div>
+        `
     }
 
     str += '</div>'
