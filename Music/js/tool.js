@@ -112,6 +112,11 @@ function goPlayList(that) {
     window.location.href = 'playList.html?id=' + that.dataset.id
 }
 
+//跳转到专辑详情页
+function goAlbum(that) {
+    window.location.href = 'album.html?id=' + that.dataset.id
+}
+
 //设置选中样式
 function active(el) {
     //清除兄弟标签选中样式

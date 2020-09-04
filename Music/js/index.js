@@ -657,7 +657,7 @@ async function newSongUl(title="song", area=0) {
 
         res.monthData.forEach(m => {
             str += `
-            <li data-id="${m.id}" onclick="goPlayList(this)">
+            <li data-id="${m.id}" onclick="goAlbum(this)">
                 <div class="bg"></div>
                 <div class="playlist-img">
                     <img class="mid-img" src="${m.picUrl}">
