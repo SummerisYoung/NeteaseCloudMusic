@@ -39,7 +39,7 @@ $(async function (){
 function topLayout(res) {
     let str = `
     <div class="playlist-top">
-        <img class="big-img" src="${res.picUrl}" alt="">
+        <img class="big-img" src="${res.picUrl + '?param=220y220'}" alt="">
         <div class="playlist-content">
             <div class="content-top">
                 <span>专辑</span>
@@ -155,7 +155,7 @@ function commentDom(comments) {
     comments.forEach(h => {
         str += `
             <li>
-                <img class="tiny-img-radius" src="${h.user.avatarUrl}" alt="">
+                <img class="tiny-img-radius" src="${h.user.avatarUrl + '?param=50y50'}" alt="">
                 <div class="comment-content">
                     <div><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</div>
 

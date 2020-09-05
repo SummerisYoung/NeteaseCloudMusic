@@ -1,10 +1,10 @@
 $(async function() {
-    // 页面最高父级
-    let dom = document.getElementById('index')
+    // 获取页面标签
+    let index = document.getElementById('index')
     // 栏目导航
-    let lis = [...dom.children[0].children]
+    let lis = [...index.children[0].children]
     // 获取主体标签
-    let main = dom.children[1]
+    let main = index.children[1]
     // 获取个性推荐
     main.innerHTML = await recommendDom()
     // 给栏目添加点击事件
@@ -13,6 +13,10 @@ $(async function() {
             active(this)
             main.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
             switch(this.innerText) {
+                case '个性推荐': {
+                    main.innerHTML = await recommendDom()
+                    break;
+                }
                 case "歌单": {
                     main.innerHTML = await playlistDom()
                     break;
@@ -30,17 +34,18 @@ $(async function() {
                 }
                 case "最新音乐": {
                     main.innerHTML = await newSongDom()
+                    console.log('布局页面结束');
                     break;
                 }
             }
             // 检测滚动条是否重置大小（当窗口改变大小时）
-            $("#index").getNiceScroll().resize();
+            $(index).getNiceScroll().resize();
         }
     })
     // 添加banner控制器
     bannerControl(document.getElementsByClassName('banner-list')[0].children[0])
     // 添加滚动条
-    nicescroll(document.getElementById('index'))
+    nicescroll(index)
 })
 
 // 个性推荐
@@ -123,7 +128,7 @@ async function recommendDom() {
                     str += `
                         <li>
                             <div>${(i + 1 + '').padStart(2,'0')}</div>
-                            <img class="tiny-img" src="${res.result[i].picUrl}">
+                            <img class="tiny-img" src="${res.result[i].picUrl  + '?param=50y50'}">
                             <div>
                                 <p class="text-ellipsis">${res.result[i].name}</p>
                                 <p class="text-ellipsis">${author(res.result[i].song.artists)}</p>
@@ -138,7 +143,7 @@ async function recommendDom() {
                     str += `
                         <li>
                             <div>${(i + 1 + '').padStart(2,'0')}</div>
-                            <img class="tiny-img" src="${res.result[i].picUrl}">
+                            <img class="tiny-img" src="${res.result[i].picUrl  + '?param=50y50'}">
                             <div>
                                 <p class="text-ellipsis">${res.result[i].name}</p>
                                 <p class="text-ellipsis">${author(res.result[i].song.artists)}</p>
@@ -160,11 +165,11 @@ async function recommendDom() {
     
                         <div class="block-list block-${homeApi[i].class}">
                 `
-                res.result.forEach(i => {
+                res.result.forEach(r => {
                     str += `
-                        <div class="block-item" data-id="${i.id}" onclick="goPlayList(this)">
-                            <img class="mid-img" src="${i.picUrl}">
-                            <p>${i.name}</p>
+                        <div class="block-item" data-id="${r.id}" onclick="goPlayList(this)">
+                            <img class="mid-img" src="${homeApi[i].name == '独家放送' || homeApi[i].name == '推荐MV' ? r.picUrl : r.picUrl + '?param=180y180'}">
+                            <p>${r.name}</p>
                         </div>
                     `
                 });
@@ -341,7 +346,7 @@ async function playlistUl(cat) {
         str += `
             <li data-id="${p.id}" onclick="goPlayList(this)">
                 <div class="playlist-img">
-                    <img class="mid-img" src="${p.coverImgUrl}">
+                    <img class="mid-img" src="${p.coverImgUrl + '?param=180y180'}">
                     <p class="right-top">
                         <i class="iconfont icon-headset"></i>
                         <span>${numConvert(p.playCount)}</span>
@@ -507,7 +512,7 @@ async function topListDom() {
             str += `
             <li data-id="${g.id}" onclick="goPlayList(this)">
                 <div class="playlist-img">
-                    <img class="mid-img" src="${g.coverImgUrl}">
+                    <img class="mid-img" src="${g.coverImgUrl + '?param=180y180'}">
                     <p class="right-top">
                         <i class="iconfont icon-headset"></i>
                         <span>${numConvert(g.playCount)}</span>
@@ -561,7 +566,7 @@ async function artistUl(type) {
     res.list.artists.forEach(a => {
         str += `
         <li>
-            <img class="mid-img" src="${a.picUrl}">
+            <img class="mid-img" src="${a.picUrl  + '?param=180y180'}">
             <div>
                 <span>${a.name}</span>
                 <span><i class="iconfont icon-user"></i></span>
@@ -611,7 +616,9 @@ async function newSongDom() {
 
 // 最新音乐列表
 async function newSongUl(title="song", area=0) {
+    console.log('开始请求数据');
     let str = '<div class="newsong-content">'
+    console.log('请求数据结束');
     // 新歌速递
     if(title == 'song') {
         let res = await GET('/top/song?type=' + area)
@@ -632,7 +639,7 @@ async function newSongUl(title="song", area=0) {
                     <td width="4%">${(i + 1 + '').padStart(2,'0')}</td>
                     <td width="5%">
                         <div>
-                            <img class="tiny-img" src="${d.album.picUrl}">
+                            <img class="tiny-img" src="${d.album.picUrl  + '?param=50y50'}">
                             <i class="iconfont icon-play"></i>
                         </div>
                     </td>
@@ -647,6 +654,7 @@ async function newSongUl(title="song", area=0) {
     }else {// 新碟上架
         let _area = {0:'ALL',7:'ZH',96:'EA',16:'KR',8:'JP'}[area]
         let res = await GET('/top/album?area=' + _area)
+        console.log(res);
 
         str += `
         <div class="newalbum">
@@ -660,7 +668,7 @@ async function newSongUl(title="song", area=0) {
             <li data-id="${m.id}" onclick="goAlbum(this)">
                 <div class="bg"></div>
                 <div class="playlist-img">
-                    <img class="mid-img" src="${m.picUrl}">
+                    <img class="mid-img" src="${m.picUrl + '?param=180y180'}">
                     <p class="right-bottom"><i class="iconfont icon-play"></i></p>
                 </div>
                 <p class="text-ellipsis">${m.name}${m.alias.length ? '<span style="color:#ccc">(' + m.alias +  ')</span>' : ''}</p>
@@ -677,7 +685,7 @@ async function newSongUl(title="song", area=0) {
     }
 
     str += '</div>'
-
+    console.log('处理数据结束');
     return str
 }
 

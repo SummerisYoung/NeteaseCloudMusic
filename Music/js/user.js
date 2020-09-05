@@ -34,7 +34,7 @@ function topLayout(res) {
     console.log(res);
     let str = `
     <div class="user-top">
-        <img class="big-img" src="${res.profile.avatarUrl}" alt="">
+        <img class="big-img" src="${res.profile.avatarUrl + '?param=220y220'}" alt="">
         <div class="user-content">
             <div class="content-top">
                 <div class="top-head">
@@ -94,7 +94,7 @@ function djLayout(res) {
         str += `
             <li>
                 <div>
-                    <img class="tiny-img" src="${d.picUrl}">
+                    <img class="tiny-img" src="${d.picUrl  + '?param=50y50'}">
                     <span class="dj-name">${d.name}</span>
                     <span class="dj-category">${d.category}</span>
                 </div>
@@ -126,7 +126,7 @@ function plLayout(res) {
         str += `
             <li data-id="${p.id}" onclick="goPlayList(this)">
                 <div class="playlist-img">
-                    <img class="mid-img" src="${p.coverImgUrl}">
+                    <img class="mid-img" src="${p.coverImgUrl  + '?param=180y180'}">
                     <p class="right-top">
                         <i class="iconfont icon-headset"></i>
                         <span>${numConvert(p.playCount)}</span>

@@ -35,7 +35,9 @@ const GET = function(url) {
 
 //关键词高亮
 function highlight(str,keyword) {
+    // 搜索头部的关键词
     if(str == '') return `<span class="keyword-highlight">${keyword}</span>`
+    // 搜索内容的关键词
     let index = str.toLowerCase().indexOf(keyword.toLowerCase())
     if(index != -1){
         let rep = str.substring(index,index + keyword.length)

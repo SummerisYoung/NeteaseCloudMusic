@@ -60,6 +60,7 @@ body {
     top: 50%;
     left: 50%;
     display: flex;
+    align-items: center;
     img {
         width: 20px;
         height: 20px;
@@ -164,6 +165,14 @@ body {
                     transition: 0.3s;
                 }
 
+                .left-bottom {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    margin: 10px;
+                    color: #fff;
+                }
+
                 &:hover .right-bottom {
                     opacity: 1;
                 }
@@ -179,7 +188,6 @@ body {
         }
     }
 }
-
 //选中黑色样式
 .default {
     color: #eee;
@@ -187,13 +195,12 @@ body {
     padding: 2px 5px;
     border-radius: 2px;
 }
-
 //歌曲列表
 table {
     width: 100%;
     color: #666;
-    font-size: 12px;
     table-layout: fixed;
+    user-select: none;
     thead {
         th {
             padding: 8px;
@@ -210,6 +217,10 @@ table {
     tbody {
         td {
             padding: 5px;
+        }
+
+        tr {
+            line-height: 25px;
         }
 
         tr > td:first-child {
@@ -239,5 +250,22 @@ table {
         tr:hover {
             background: rgb(235,236,237);
         }
+    }
+}
+// li的hover样式
+.li-hover{
+    li {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    li:nth-child(even) {
+        background: @dark-background;
+    }
+    
+    li:hover {
+        background: rgb(235,236,237);
     }
 }

@@ -1,19 +1,18 @@
-#songList {
+#searchList {
     height: calc(100vh - 130px);
     flex: 1;
+    background: @light-background;
+
+    .keyword-highlight {
+        cursor: default;
+    }
 
     p:first-child {
-        padding: 30px 30px;
-        font-size: 12px;
+        padding: 40px 40px;
+        cursor: default;
     }
 
-    .best-match {
-        padding: 8px 30px;
-        font-size: 12px;
-        color: #666;
-    }
-
-    ul {
+    .search-nav {
         display: flex;
         justify-content: space-around;
         height: 30px;
@@ -23,6 +22,8 @@
             height: 100%;
             line-height: 100%;
             box-sizing: content-box;
+            cursor: pointer;
+            user-select: none;
         }
 
         .active {
@@ -32,55 +33,117 @@
         }
     }
 
-    table {
-        width: 100%;
-        color: #666;
-        font-size: 12px;
-        table-layout: fixed;
-        thead {
-            th {
-                padding: 8px;
-                font-weight: normal;
-                border: @border;
-                border-left: none;
-
-                &:last-child {
-                    border-right: none;
-                }
-            } 
+    .main {
+        img {
+            margin: 10px 10px 10px 40px;
         }
-        
-        tbody {
-            td {
-                padding: 5px;
+        #search-singer {
+            ul li{
+                i {
+                    margin-left: 10px;
+                    line-height: 20px;
+                    font-size: 20px;
+                    font-weight: 900;
+                    text-align: center;
+                    border: 1px solid rgba(198,47,47,.5);
+                    border-radius: 50%;
+                    color: @red;
+                }
             }
-
-            tr > td:first-child {
-                vertical-align: top;
-                text-align: right;
-                color: #999;
+        }
+        #search-album {
+            ul li {
+                position: relative;
+                .bg {
+                    position: absolute;
+                    left: 25px;
+                    width: 80px;
+                    height: 50px;
+                    background: url(../public/img/coverall.png);
+                    background-position: 135px -252px;
+                }
+                &>span:nth-child(3) {
+                    margin-left: 20px;
+                    display: inline-block;
+                    width: 600px;
+                }
+                &>span:nth-child(4) {
+                    color: #666;
+                }
             }
-
-            tr > td:nth-child(2) {
-                display: flex;
-                justify-content: space-evenly;
-                color: #ccc;
+        }
+        #search-video {
+            img {
+                margin: 0;
             }
-
-            tr > td:nth-child(3) {
-                color: #333;
+        }
+        #search-playlist {
+            ul li {
+                &>span:nth-child(2) {
+                    display: inline-block;
+                    width: 600px;
+                }
+                &>span:nth-child(3) {
+                    display: inline-block;
+                    width: 200px;
+                    color: #999;
+                }
+                &>span:last-child {
+                    color: #666;
+                }
             }
-
-            tr > td:nth-child(n + 6) {
-                color: #999;
+        }
+        #search-lyric {
+            tbody {
+                tr:nth-child(even){
+                    background: @light-background;
+                    td:last-child {
+                        display: flex;
+                        span {
+                            padding: 5px 10px;
+                            margin: 10px 10px 0 0;
+                            color: #000;
+                            border: @border;
+                            background: #fff;
+                            border-radius: 5px;
+                        }
+                    }
+                }
+                tr:nth-child(odd){
+                    background: @dark-background;
+                }
+                .lyric {
+                    height: 100px;
+                    white-space: pre-wrap;
+                }
             }
-
-            tr:nth-child(even) {
-                background: rgb(245,245,247);
+        }
+        #search-radio {
+            &>p {
+                padding: 10px 40px;
+                border-bottom: @border;
             }
-
-            tr:hover {
-                background: rgb(235,236,237);
+            img {
+                margin: 0;
+            }
+        }
+        #search-user {
+            ul {
+                padding-right: 40px;
+                li {
+                    display: flex;
+                    align-items: center;
+                    span:last-child {
+                        float: right;
+                        margin-left: auto;
+                    }
+                    .icon-man {
+                        color: #1296db;
+                    }
+                    .icon-woman {
+                        color: rgb(255,135,195);
+                    }
+                }
             }
         }
     }

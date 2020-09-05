@@ -64,7 +64,7 @@ $(async function (){
 function topLayout(res) {
     let str = `
     <div class="playlist-top">
-        <img class="big-img" src="${res.coverImgUrl}" alt="">
+        <img class="big-img" src="${res.coverImgUrl + '?param=220y220'}" alt="">
         <div class="playlist-content">
             <div class="content-top">
                 <div>
@@ -191,7 +191,7 @@ function commentDom(comments) {
     comments.forEach(h => {
         str += `
             <li>
-                <img class="tiny-img-radius" src="${h.user.avatarUrl}" alt="">
+                <img class="tiny-img-radius" src="${h.user.avatarUrl  + '?param=50y50'}" alt="">
                 <div class="comment-content">
                     <div><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</div>
 
@@ -224,7 +224,7 @@ async function lovesLayout(that) {
     res.subscribers.forEach(s => {
         str += `
             <li>
-                <img class="small-img-radius" src="${s.avatarUrl}">
+                <img class="small-img-radius" src="${s.avatarUrl +'?param=100y100'}">
                 <p class="text-ellipsis">${s.nickname}</p>
             </li>
         `

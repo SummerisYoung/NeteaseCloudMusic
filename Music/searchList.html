@@ -8,6 +8,7 @@
         <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.3/less.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
         <script>
             // 导入公共模板
             $(function(){
@@ -17,7 +18,7 @@
             });
         </script>
         <script src="js/tool.js"></script>
-        <script src="js/songList.js"></script>
+        <script src="js/searchList.js"></script>
         
     </head>
 <body>
@@ -29,9 +30,9 @@
         <div id="sidebar"></div>
 
         <!-- 主体 -->
-        <div id="songList">
+        <div id="searchList">
             <p class="search-prompt"></p>
-            <ul>
+            <ul class="search-nav">
                 <li class="active">单曲</li>
                 <li>歌手</li>
                 <li>专辑</li>
@@ -41,22 +42,9 @@
                 <li>主播电台</li>
                 <li>用户</li>
             </ul>
-            <p class="best-match">最佳匹配</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="6%"></th>
-                        <th width="6%">操作</th>
-                        <th width="25%">音乐标题</th>
-                        <th width="25%">歌手</th>
-                        <th width="25%">专辑</th>
-                        <th width="13%">时长</th>
-                    </tr>
-                </thead>
-
-                <tbody id="tbody">
-                </tbody>
-            </table>
+            <div class="main">
+                <div class="loading"><img src='./public/img/loading.gif'>载入中...</div>
+            </div>
         </div>
     </div>
 

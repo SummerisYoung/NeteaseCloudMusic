@@ -18,8 +18,8 @@ $(function () {
     })
 
     //点击了搜索图标或按回车键都跳转
-    icon.addEventListener('click',goSongList.bind(this,search_ipt));
-    search_ipt.addEventListener('keydown',goSongList.bind(this,search_ipt));
+    icon.addEventListener('click',gosearchList.bind(this,search_ipt));
+    search_ipt.addEventListener('keydown',gosearchList.bind(this,search_ipt));
 })
 
 //获取热搜
@@ -112,8 +112,8 @@ async function getInputChange(search_res,search_ipt) {
 }
 
 //跳转到歌曲列表界面
-function goSongList(search_ipt) {
+function gosearchList(search_ipt) {
     if(window.event.keyCode == 13 || window.event.keyCode == undefined) {
-        window.location.href = 'songList.html?keywords=' + search_ipt.value + '&type=1&limit=100'
+        window.location.href = 'searchList.html?keywords=' + search_ipt.value + '&type=1&limit=100'
     }
 }

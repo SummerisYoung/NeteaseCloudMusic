@@ -162,7 +162,7 @@ function commentDom(comments) {
     comments.forEach(h => {
         str += `
             <li>
-                <img class="tiny-img-radius" src="${h.user.avatarUrl}" alt="">
+                <img class="tiny-img-radius" src="${h.user.avatarUrl  + '?param=50y50'}" alt="">
                 <div class="comment-content">
                     <div><span class="keyword-highlight">${h.user.nickname}</span>：${h.content}</div>
 
@@ -197,7 +197,7 @@ async function getRecommend(id,dom) {
     res.songs.forEach(s => {
         str += `
             <li>
-                <img class="tiny-img" src='${s.album.picUrl}'>
+                <img class="tiny-img" src='${s.album.picUrl  + '?param=50y50'}'>
                 <div class="recommend-content">
                     <p class="text-ellipsis">${s.name} ${s.alias.length ? '<span style="color:#999">(' + s.alias + ')</span>' : ''}</p>
                     <p class="text-ellipsis">${author(s.artists)}</p>
