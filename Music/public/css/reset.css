@@ -87,9 +87,12 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
-p,span {
-    font-size: 14px;
-    user-select: none;
-    cursor: pointer;
+p {
+  font-size: 14px;
+  user-select: none;
+}
+span {
+  font-size: 14px;
+  user-select: none;
+  cursor: pointer;
 }

@@ -9,7 +9,7 @@ $(async function (){
     let html = topLayout(res.album)
     //布局下层页面
     html += `
-    <div class="playlist-bottom">
+    <div class="album-bottom">
         <ul class="section">
             <li id="lists" class="active">歌曲列表</li>
             <li onclick="commentsLayout(this)" data-id="${id}">评论(${res.album.info.commentCount})</li>
@@ -22,7 +22,7 @@ $(async function (){
     document.getElementById('album').innerHTML = html
 
     //设置滚动条
-    nicescroll(document.getElementById('playlist'))
+    nicescroll(document.getElementById('album'))
 
     //歌曲列表单独设置点击事件
     document.getElementById('lists').onclick = function() {
@@ -38,9 +38,9 @@ $(async function (){
 //上侧布局
 function topLayout(res) {
     let str = `
-    <div class="playlist-top">
+    <div class="album-top">
         <img class="big-img" src="${res.picUrl + '?param=220y220'}" alt="">
-        <div class="playlist-content">
+        <div class="album-content">
             <div class="content-top">
                 <span>专辑</span>
                 <h2>${res.name}</h2>
@@ -182,13 +182,15 @@ function commentDom(comments) {
 
 //专辑详情布局
 function descriptionLayout(that) {
+    // 描述数组
+    let arr = that.dataset.description.split('\n')
     let str = `
     <div class="description">
         <h3>专辑介绍</h3>
-        <div>${that.dataset.description}</div>
-    </div>
+        <ul>
     `
-
+    arr.forEach(a => str += `<li>${a}<li>`)
+    str += '</ul></div>'
     document.getElementsByClassName('main')[0].innerHTML = str
 
     //设置选中样式

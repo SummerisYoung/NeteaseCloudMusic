@@ -34,7 +34,6 @@ $(async function() {
                 }
                 case "最新音乐": {
                     main.innerHTML = await newSongDom()
-                    console.log('布局页面结束');
                     break;
                 }
             }
@@ -329,7 +328,7 @@ async function playlistDom() {
         `
     })
     
-    str += '</ul></div><div id="playlist-content">'
+    str += '</ul></div><div class="content">'
 
     str += await playlistUl("全部")
 
@@ -372,7 +371,7 @@ async function playlistUl(cat) {
 async function playlistControl(that) {
     console.log(that);
     // 获取内容标签
-    let playlist_content = document.getElementById('playlist-content')
+    let playlist_content = document.getElementsByClassName('content')[0]
     // 放入加载样式
     playlist_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
     //标签选中
@@ -532,24 +531,69 @@ async function topListDom() {
     return str
 }
 
-//歌手
+// 歌手
 async function artistDom() {
     let str = `
     <div id="artists">
         <div class="artists-top">
-            <span class="language">语种：</span>
-            <ul>
-                <li onclick="artistControl(this)" data-type=0><span class="default">全部</span></li> 
-                <li onclick="artistControl(this)" data-type=1><span>华语</span></li> 
-                <li onclick="artistControl(this)" data-type=2><span>欧美</span></li> 
-                <li onclick="artistControl(this)" data-type=3><span>韩国</span></li> 
-                <li onclick="artistControl(this)" data-type=4><span>日本</span></li> 
-            </ul>
+            <div class="top-ul" id="language">
+                <span>语种：</span>
+                <ul>
+                    <li onclick="artistControl(this)" data-area=-1><span class="default">全部</span></li> 
+                    <li onclick="artistControl(this)" data-area=7><span>华语</span></li> 
+                    <li onclick="artistControl(this)" data-area=96><span>欧美</span></li>
+                    <li onclick="artistControl(this)" data-area=8><span>日本</span></li> 
+                    <li onclick="artistControl(this)" data-area=16><span>韩国</span></li>
+                    <li onclick="artistControl(this)" data-area=0><span>其他</span></li>
+                </ul>
+            </div>
+            <div class="top-ul" id="category">
+                <span>分类：</span>
+                <ul>
+                    <li onclick="artistControl(this)" data-type=-1><span class="default">全部</span></li> 
+                    <li onclick="artistControl(this)" data-type=1><span>男歌手</span></li> 
+                    <li onclick="artistControl(this)" data-type=2><span>女歌手</span></li> 
+                    <li onclick="artistControl(this)" data-type=3><span>乐队组合</span></li>
+                </ul>
+            </div>
+            <div class="top-ul" id="filter">
+                <span>筛选：</span>
+                <ul>
+                    <li onclick="artistControl(this)" data-initial=-1><span class="default">热门</span></li> 
+                    <li onclick="artistControl(this)" data-initial="a"><span>A</span></li>
+                    <li onclick="artistControl(this)" data-initial="b"><span>B</span></li>
+                    <li onclick="artistControl(this)" data-initial="c"><span>C</span></li>
+                    <li onclick="artistControl(this)" data-initial="d"><span>D</span></li>
+                    <li onclick="artistControl(this)" data-initial="e"><span>E</span></li>
+                    <li onclick="artistControl(this)" data-initial="f"><span>F</span></li>
+                    <li onclick="artistControl(this)" data-initial="g"><span>G</span></li>
+                    <li onclick="artistControl(this)" data-initial="h"><span>H</span></li>
+                    <li onclick="artistControl(this)" data-initial="i"><span>I</span></li>
+                    <li onclick="artistControl(this)" data-initial="j"><span>J</span></li>
+                    <li onclick="artistControl(this)" data-initial="k"><span>K</span></li>
+                    <li onclick="artistControl(this)" data-initial="l"><span>L</span></li>
+                    <li onclick="artistControl(this)" data-initial="m"><span>M</span></li>
+                    <li onclick="artistControl(this)" data-initial="n"><span>N</span></li>
+                    <li onclick="artistControl(this)" data-initial="o"><span>O</span></li>
+                    <li onclick="artistControl(this)" data-initial="p"><span>P</span></li>
+                    <li onclick="artistControl(this)" data-initial="q"><span>Q</span></li>
+                    <li onclick="artistControl(this)" data-initial="r"><span>R</span></li>
+                    <li onclick="artistControl(this)" data-initial="s"><span>S</span></li>
+                    <li onclick="artistControl(this)" data-initial="t"><span>T</span></li>
+                    <li onclick="artistControl(this)" data-initial="u"><span>U</span></li>
+                    <li onclick="artistControl(this)" data-initial="v"><span>V</span></li>
+                    <li onclick="artistControl(this)" data-initial="w"><span>W</span></li>
+                    <li onclick="artistControl(this)" data-initial="x"><span>X</span></li>
+                    <li onclick="artistControl(this)" data-initial="y"><span>Y</span></li>
+                    <li onclick="artistControl(this)" data-initial="z"><span>Z</span></li>
+                    <li onclick="artistControl(this)" data-initial="0"><span>#</span></li>
+                </ul>
+            </div>
         </div>
-        <div id="artists-content">
+        <div class="content">
     `
     
-    str += await artistUl(0)
+    str += await artistUl()
 
     str += `
         </div>
@@ -558,14 +602,13 @@ async function artistDom() {
 
     return str
 }
-//歌手列表
-async function artistUl(type) {
-    type = type > 0 ? '?type=' + type : ''
-    let res = await GET('/toplist/artist' + type)
+// 歌手列表
+async function artistUl(params={'type':-1,'area':-1,'initial':-1}) {
+    let res = await GET('/artist/list?type=' + params.type +'&area=' + params.area + '&initial=' + params.initial)
     let str = '<ul class="artists-ul">'
-    res.list.artists.forEach(a => {
+    res.artists.forEach(a => {
         str += `
-        <li>
+        <li onclick="goArtist(this)" data-id="${a.id}">
             <img class="mid-img" src="${a.picUrl  + '?param=180y180'}">
             <div>
                 <span>${a.name}</span>
@@ -577,16 +620,27 @@ async function artistUl(type) {
     str += '</ul>'
     return str
 }
-//歌手语种控制器
-async function artistControl(that) {
-    let artists_content = document.getElementById('artists-content')
-    //改变选中颜色
-    document.getElementsByClassName('default')[0].classList.remove('default')
+// 歌手控制器
+async function artistControl(that) {// that是一个li
+    let artists_content = document.getElementsByClassName('content')[0]
+    // 找到父级id
+    let divId = that.parentNode.parentNode.id
+    // 找到父级下的前一个选中项并移除选中样式
+    document.querySelector('#' + divId + ' .default').classList.remove('default')
+    // 当前li添加选中样式
     that.children[0].classList.add('default')
     //添加loading
     artists_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
-    //改变数据
-    artists_content.innerHTML = await artistUl(that.dataset.type)
+    // 获取三维数据
+    let params = {}
+    document.querySelectorAll('.default').forEach(d => {
+        // 获取每个点击对象的dataset的键和值
+        let data = Object.entries(d.parentNode.dataset)[0]
+        // 数据填充
+        params[data[0]] = data[1]
+    })
+    
+    artists_content.innerHTML = await artistUl(params)
 }
 
 // 最新音乐
@@ -613,11 +667,10 @@ async function newSongDom() {
     str += '</div>'
     return str
 }
-
 // 最新音乐列表
 async function newSongUl(title="song", area=0) {
     console.log('开始请求数据');
-    let str = '<div class="newsong-content">'
+    let str = '<div class="content">'
     console.log('请求数据结束');
     // 新歌速递
     if(title == 'song') {
@@ -688,10 +741,9 @@ async function newSongUl(title="song", area=0) {
     console.log('处理数据结束');
     return str
 }
-
 // 最新音乐控制器
 async function newSongControl(that) {
-    let newsong_content = document.getElementsByClassName('newsong-content')[0]
+    let newsong_content = document.getElementsByClassName('content')[0]
     newsong_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
     //获取之前的头部选中项
     let t = document.getElementsByClassName('default')[0]

@@ -1,4 +1,4 @@
-//post请求
+// post请求
 const POST = function (url, data) {
     return new Promise((r,j) => {
        $.ajax({
@@ -16,7 +16,7 @@ const POST = function (url, data) {
     })
 }
 
-//get请求
+// get请求
 const GET = function(url) {
     return new Promise((r,j) => {
         $.ajax({
@@ -33,7 +33,7 @@ const GET = function(url) {
      })
 }
 
-//关键词高亮
+// 关键词高亮
 function highlight(str,keyword) {
     // 搜索头部的关键词
     if(str == '') return `<span class="keyword-highlight">${keyword}</span>`
@@ -47,7 +47,7 @@ function highlight(str,keyword) {
     }
 }
 
-//作者格式化
+// 作者格式化
 function author(artists) {
     //先遍历取到全部作者
     let song_articles = ''
@@ -62,7 +62,7 @@ function author(artists) {
     return song_articles
 }
 
-//一个标签上同一事件绑定不同函数
+// 一个标签上同一事件绑定不同函数
 function bind(obj,eventName,fn) {
     if(obj.addEventListener) {
         obj.addEventListener(eventName, fn);
@@ -73,7 +73,7 @@ function bind(obj,eventName,fn) {
     }
 }
 
-//时间戳转时间
+// 时间戳转时间
 function stampToTime(timestamp) {
     let stamp = new Date(timestamp),
         y = stamp.getFullYear(),
@@ -82,17 +82,17 @@ function stampToTime(timestamp) {
     return `${y}年${m}月${d}日 ${stamp.toTimeString().substring(0,5)}`
 }
 
-//数量单位转换
+// 数量单位转换
 function numConvert(num) {
     return num > 100000 ? Math.floor(num / 10000) + '万' : num + ''
 }
 
-//时间单位转换
+// 时间单位转换
 function timeConvert(second) {
     return (Math.floor(second / 60) + '').padStart(2,'0') + ':' + (Math.floor(second % 60) + '').padStart(2,'0')
 }
 
-//点击歌曲,这一行变色
+// 点击歌曲,这一行变色
 function changeColor(that) {
     console.log(that);
     //先把之前点击的每一项的颜色去掉
@@ -104,22 +104,27 @@ function changeColor(that) {
     that.classList.add('deep-color')
 }
 
-//跳转到用户界面
+// 跳转到用户页
 function goUser(that) {
     window.location.href = 'user.html?id=' + that.dataset.id
 }
 
-//跳转到歌单详情页
+// 跳转到歌单页
 function goPlayList(that) {
     window.location.href = 'playList.html?id=' + that.dataset.id
 }
 
-//跳转到专辑详情页
+// 跳转到专辑页
 function goAlbum(that) {
     window.location.href = 'album.html?id=' + that.dataset.id
 }
 
-//设置选中样式
+// 跳转到歌手页
+function goArtist(that) {
+    window.location.href = `artist.html?id=` + that.dataset.id
+}
+
+// 设置选中样式
 function active(el) {
     //清除兄弟标签选中样式
     [...el.parentNode.children].forEach(c => {
@@ -129,7 +134,7 @@ function active(el) {
     el.className = 'active'
 }
 
-//设置滚动条
+// 设置滚动条
 function nicescroll(dom) {
     $(dom).niceScroll({
         cursorcolor:"#ddd",     // 滚动条的颜色值

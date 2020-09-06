@@ -1,111 +1,112 @@
-//引入重置文件
+// 引入重置文件
 @import "../public/css/reset.css";
-//顶部导航
+// 顶部导航
 @import "./topbar.less";
-//侧边栏
+// 侧边栏
 @import "./sidebar.less";
-//主体
+// 主体
 @import "./index-main.less";
-//底部
+// 底部
 @import "./footer.less";
-//歌曲列表
+// 歌曲列表
 @import "./song-list.less";
-//歌曲详情
+// 歌曲详情
 @import "./song-detail.less";
-//专辑详情
+// 专辑详情
 @import "./album.less";
-//歌单详情
+// 歌单详情
 @import "./play-list.less";
-//用户中心
+// 用户中心
 @import "./user.less";
-//页面色
+// 歌手详情
+@import "./artist.less";
+// 页面色
 @red: rgb(198,47,47);
 @red-grey: rgb(209,88,88);
-//边框
+// 边框
 @border: 1px solid rgb(225,225,226);
-//li hover色
+// li hover色
 @lihover: rgb(230,231,234);
-//深背景色
+// 深背景色
 @dark-background: rgb(245,245,247);
-//浅背景色
+// 浅背景色
 @light-background: rgb(250,250,250);
-//最小宽度
+// 最小宽度
 body {
     position: relative;
     min-width: 1050px;
 }
-//中部内容
+// 中部内容
 .middle {
     display: flex;
 }
-//关键词高亮
+// 关键词高亮
 .keyword-highlight {
     color: steelblue;
     cursor: pointer;
     user-select: none;
 }
-//文字超出变为...
+// 文字超出变为...
 .text-ellipsis {
     white-space:nowrap;
     overflow: hidden;
     text-overflow:ellipsis;
 }
-//中间的内容高度100%
+// 中间的内容高度100%
 .middle {
     height: calc(100vh - 130px);
 }
-//载入中
+// 载入中
 .loading{
-    position: absolute;
-    top: 50%;
-    left: 50%;
     display: flex;
+    height: 100%;
     align-items: center;
+    justify-content: center;
     img {
         width: 20px;
         height: 20px;
     }
 }
-//最小图
+// 最小图
 .tiny-img {
     width: 50px;
     height: 50px;
     cursor: pointer;
 }
-//最小图圆角
+// 最小图圆角
 .tiny-img-radius {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     cursor: pointer;
 }
-//小图
+// 小图
 .small-img {
     width: 100px;
     height: 100px;
     cursor: pointer;
 }
-//小图圆角
+// 小图圆角
 .small-img-radius {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     cursor: pointer;
 }
-//中图
+// 中图
 .mid-img {
     width: 180px;
     height: 180px;
     border: @border;
     cursor: pointer;
 }
-//大图
+// 大图
 .big-img {
     width: 220px;
     height: 220px;
     border: @border;
 }
-//点击这一行颜色变深
+// 点击这一行颜色变深
 .deep-color {
     background: rgb(227,227,229) !important;
     td {
@@ -188,14 +189,14 @@ body {
         }
     }
 }
-//选中黑色样式
+// 选中黑色样式
 .default {
     color: #eee;
     background: grey;
     padding: 2px 5px;
     border-radius: 2px;
 }
-//歌曲列表
+// 歌曲列表
 table {
     width: 100%;
     color: #666;
@@ -257,8 +258,6 @@ table {
     li {
         display: flex;
         align-items: center;
-        cursor: pointer;
-        user-select: none;
     }
     
     li:nth-child(even) {

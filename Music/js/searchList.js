@@ -117,7 +117,7 @@ async function searchSinger(keyword, searchList) {
     `
     res.artists.forEach(a => {
         str += `
-        <li>
+        <li onclick="goArtist(this)" data-id="${a.id}">
             <img class="tiny-img" src="${a.picUrl + '?param=50y50'}">
             <span>${highlight(a.name,keyword)}</span>
             <span><i class="iconfont icon-user"></i></span>
@@ -188,12 +188,12 @@ async function searchVideo(keyword, searchList) {
                     ${timeConvert(v.durationms / 1000)}
                 </p>
             </div>
-            <p class="playlist-name text-ellipsis">${v.title}</p>
+            <p class="playlist-name text-ellipsis">${highlight(v.title,keyword)}</p>
             <p class="trackCount">by ${v.creator.userName}</p>
         </li>
         `
     })
-    res += '</ul></div></div>'
+    str += '</ul></div></div>'
 
     searchList.children[2].innerHTML = str
 
@@ -217,7 +217,7 @@ async function searchPlayList(keyword, searchList) {
         str += `
         <li>
             <img class="tiny-img" src="${p.coverImgUrl + '?param=50y50'}">
-            <span>${p.name}</span>
+            <span>${highlight(p.name, keyword)}</span>
             <span>${p.trackCount}首</span>
             <span>${p.creator.nickname}</span>
         </li>
@@ -308,7 +308,7 @@ async function searchRadio(keyword, searchList) {
         str += `
         <li>
             <img class="mid-img" src="${d.picUrl + '?param=180y180'}">
-            <p class="playlist-name text-ellipsis">${d.name}</p>
+            <p class="playlist-name text-ellipsis">${highlight(d.name, keyword)}</p>
             <p class="trackCount">by ${d.dj.nickname}</p>
         </li>
         `
