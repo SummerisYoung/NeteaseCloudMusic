@@ -113,7 +113,6 @@ function topLayout(res) {
 
 // 歌曲列表布局
 function songsLayout(res) {
-    console.log(res);
     let str = `
         <table>
             <thead>

@@ -152,7 +152,6 @@
             display: flex;
             width: 300px;
             margin: 20px auto;
-            background: @dark-background;
             p {
                 width: 80%;
                 height: 30px;
@@ -222,6 +221,7 @@
                             width: 5%;
                             text-align: center;
                             color: @red;
+                            visibility: hidden;
                         }
                         &:nth-child(2) {
                             width: 60%;
@@ -241,6 +241,10 @@
                             width: 10%;
                             color: #666;
                         }
+                    }
+
+                    .visible {
+                        visibility: visible !important;
                     }
                 }
             }

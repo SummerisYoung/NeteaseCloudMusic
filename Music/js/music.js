@@ -2,20 +2,20 @@
 async function getSongUrl(that) {
     // 把歌曲详情加载到页面
     $('#song-detail').load('public/songDetail.html')
-    // 拿到audio标签
+    // 获取audio标签
     let audio = document.getElementsByTagName('audio')[0]
     // 播放、暂停标签
     let pause_play = document.querySelector('#footer .footer-left i:nth-child(2)')
     // 音量条标签
     let volume = document.getElementsByClassName('volume')[0]
     let footer_song = document.getElementsByClassName('footer-song')[0]
-    // 拿到进度条,进度归0
+    // 获取进度条,进度归0
     let music_bar = document.getElementsByClassName('music-bar')[0]
     music_bar.style.width = 0
-    // 拿到进度条上的圈,圈归位
+    // 获取进度条上的圈,圈归位
     let progress = music_bar.children[1]
     progress.style.left = "-7px"
-    // 拿到进度条上的圈里面的点,加上loading效果
+    // 获取进度条上的圈里面的点,加上loading效果
     let dot = progress.children[0]
     dot.classList.add('dot-loading')
     // 请求歌曲url
@@ -46,9 +46,16 @@ async function getSongUrl(that) {
     audio.play()
     // 除去loading效果
     dot.classList.remove('dot-loading')
-    // 播放列表处理
-    myList(that.parentNode.dataset.id, audio)
-    
+    // 如果存在歌单或专辑的id,且该歌单或专辑就是本地存储里预备好的
+    if(that.dataset.id && sessionStorage.getItem('list').indexOf(that.dataset.id) != -1) {
+        // 如果播放列表是空的
+        if(document.getElementsByClassName('none').length) {
+            // 初始化
+            myList(audio)
+        }
+    }
+    // 如果播放列表是显示的,那么别忘了同步播放样式
+    document.getElementsByClassName('list')[0].style.display == 'flex' && syncVisible(audio)
 }
 
 $(function () {
@@ -58,6 +65,9 @@ $(function () {
     let audio = document.getElementsByTagName('audio')[0]
     // 获取播放暂停图标
     let pause_play = document.querySelector('#footer .footer-left i:nth-child(2)')
+    // 获取上一个、下一个标签
+    let prev = document.getElementsByClassName('icon-previous')[0]
+    let next = document.getElementsByClassName('icon-next')[0]
     // 获取音量条
     let volumn = document.getElementsByClassName('volume')[0]
     // 播放列表icon标签
@@ -74,8 +84,38 @@ $(function () {
         }else{
             audio.play()
         }
+        // 正在播放,点击暂停
         pause_play.classList.toggle('icon-pause')
         pause_play.classList.toggle('icon-play')
+        let visible = document.getElementsByClassName('visible')[0]
+        // 如果播放列表也开着,那么它里面播放的音乐也得同步暂停
+        if(visible) {
+            visible.children[0].classList.toggle('icon-play')
+            visible.children[0].classList.toggle('icon-pause')
+        }
+    }
+
+    // 点击了上一个
+    prev.onclick = () => {
+        // 获取播放列表里的所有音乐
+        let songs = document.getElementById('list-ul') && [...document.getElementById('list-ul').children]
+        // 先改一下下标
+        window.playing--
+        // 判断边界
+        window.playing = window.playing < 0 ? songs.length - 1 : window.playing
+        // 换歌
+        getSongUrl(songs[window.playing])
+    }
+
+    // 点击了下一个
+    next.onclick = () => {
+        let songs = document.getElementById('list-ul') && [...document.getElementById('list-ul').children]
+        // 先改一下下标
+        window.playing++
+        // 判断边界
+        window.playing = window.playing > songs.length - 1 ? 0 : window.playing
+        // 换歌
+        getSongUrl(songs[window.playing])
     }
 
     // 更新播放条
@@ -92,6 +132,10 @@ $(function () {
         list.style.display = 'flex'
         // 调整滚动条
         $(list.children[2]).getNiceScroll().resize()
+        // 同步播放样式
+        if(document.getElementById('list-ul')) {
+            syncVisible(audio)
+        }
         // 点击外面关闭播放列表
         document.onclick = (e) => {
             // 如果点击的冒泡路径里,既没有播放列表标签,又没有footer标签
@@ -200,30 +244,48 @@ function dragVolumn(audio) {
 }
 
 // 播放列表处理
-function myList(id, audio) {
+function myList(audio) {
     // 获取播放列表
     let list_content = document.getElementsByClassName('list-content')[0]
-    // 如果当前点击的歌单或专辑的id就是预备好的
-    if(id && sessionStorage.getItem('list').indexOf(id) != -1) {
-        // 播放列表布局
-        let str = '<ul class="li-hover">'
-        // 获取播放列表歌曲
-        let songs = JSON.parse(sessionStorage.getItem('list')).songs
-        // 改变总歌曲数
-        document.getElementById('list-count').innerText = songs.length
-        songs.forEach(l => {
-            str += `
-            <li onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${l.id}">
-                <p></p>
-                <p class="text-ellipsis">${l.name} ${l.alia.length ? `<span style="color:#999">${l.alia}</span>` : ''}</p>
-                <p class="text-ellipsis">${author(l.ar)}</p>
-                <p><i class="iconfont icon-link"></i></p>
-                <p>${timeConvert(l.dt / 1000)}</p>
-            </li>
-            `
-        });
-        str += '</ul>'
-        list_content.innerHTML = str
-        nicescroll(list_content)
-    }
+    // 播放列表布局
+    let str = '<ul class="li-hover" id="list-ul">'
+    // 获取播放列表歌曲
+    let songs = JSON.parse(sessionStorage.getItem('list')).songs
+    // 改变总歌曲数
+    document.getElementById('list-count').innerText = songs.length
+    songs.forEach((l,i) => {
+        if(l.id == audio.dataset.id) {
+            // 全局变量记录一下正在播放的音乐在音乐列表里的下标
+            window.playing = i
+        }
+        str += `
+        <li onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${l.id}">
+            <p ${l.id == audio.dataset.id ? 'class="visible"' : ''}><i class="iconfont icon-play"></i></p>
+            <p class="text-ellipsis">${l.name} ${l.alia.length ? `<span style="color:#999">${l.alia}</span>` : ''}</p>
+            <p class="text-ellipsis">${author(l.ar)}</p>
+            <p><i class="iconfont icon-link"></i></p>
+            <p>${timeConvert(l.dt / 1000)}</p>
+        </li>
+        `
+    });
+    str += '</ul>'
+    list_content.innerHTML = str
+    nicescroll(list_content)
+}
+
+// 播放列表的播放样式要能和音乐列表同步
+function syncVisible(audio) {
+    // 除去上一个听的歌的播放样式
+    document.getElementsByClassName('visible')[0].classList.remove('visible')
+    // 获取播放列表的所有歌曲
+    let songs = [...document.getElementById('list-ul').children]
+    // 遍历查找点击的是哪首歌
+    songs.forEach((s,i) => {
+        // 找到就设置播放样式
+        if(s.dataset.id == audio.dataset.id) {
+            s.children[0].classList.add('visible')
+            // 全局变量记录一下正在播放的音乐在音乐列表里的下标
+            window.playing = i
+        }
+    })
 }
