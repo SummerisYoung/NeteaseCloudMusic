@@ -159,6 +159,39 @@
                             opacity: 0;
                             transition: all 0.3s ease-out;
                             cursor: pointer;
+
+                            span {
+                                position: absolute;
+                                right: 0;
+                                z-index: 5;
+                                bottom: 15px;
+                                padding: 2px 5px;
+                                color: #fff;
+                                &::after {
+                                    position: absolute;
+                                    top: 0;
+                                    left: -10px;
+                                    z-index: -1;
+                                    width: 23px;
+                                    height: 100%;
+                                    content: '';
+                                    border-radius: 50%;
+                                }
+                            }
+
+                            .bg-r {
+                                background: @red;
+                                &::after {
+                                    background: @red;
+                                }
+                            }
+
+                            .bg-b {
+                                background: rgb(74,121,204);
+                                &::after {
+                                    background: rgb(74,121,204);
+                                }
+                            }
                         }
 
                         .p0{

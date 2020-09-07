@@ -135,4 +135,115 @@
             font-size: 12px;
         }
     }
+
+    .list {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        right: 0;
+        bottom: 65px;
+        z-index: 5;
+        width: 800px;
+        height: 70vh;
+        box-shadow: -2px -2px 5px rgba(0,0,0,.2);
+        background: #fff;
+
+        .list-nav {
+            display: flex;
+            width: 300px;
+            margin: 20px auto;
+            background: @dark-background;
+            p {
+                width: 80%;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                cursor: pointer;
+                user-select: none;
+                border: @border;
+                &:first-child {
+                    border-radius: 5px 0 0 5px;
+                }
+                &:last-child {
+                    border-radius: 0 5px 5px 0;
+                }
+            }
+
+            .default {
+                padding: 0;
+                border-radius: 0;
+            }
+        }
+
+        .list-operate {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 40px;
+            color: #999;
+            border: @border;
+            p:last-child {
+                span {
+                    i {
+                        margin: 0 10px;
+                    }
+                    &:first-child {
+                        border-right: @border;
+                        padding: 0 10px;
+                    }
+                    &:hover {
+                        color: #333;
+                    }
+                }
+            }
+        }
+        .list-content {
+            flex: 1;
+            .none {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #999;
+
+                p:first-child {
+                    font-size: 16px;
+                    margin-bottom: 20px;
+                }
+                a {
+                    color: #000;
+                    text-decoration: underline;
+                }
+            }
+            .li-hover {
+                height: 100%;
+                li {
+                    p {
+                        &:nth-child(1) {
+                            width: 5%;
+                            text-align: center;
+                            color: @red;
+                        }
+                        &:nth-child(2) {
+                            width: 60%;
+                        }
+                        &:nth-child(3) {
+                            width: 20%;
+                            color: #999;
+                            cursor: pointer;
+                        }
+                        &:nth-child(4) {
+                            width: 5%;
+                            color: #999;
+                             cursor: pointer;
+                            text-align: left;
+                        }
+                        &:nth-child(5) {
+                            width: 10%;
+                            color: #666;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

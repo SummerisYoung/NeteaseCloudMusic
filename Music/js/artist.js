@@ -16,8 +16,8 @@ $(async function () {
                     <h2>${res.artist.name}</h2>
                 </div>
                 <p><i class="iconfont icon-favority"></i>收藏</p>
-                ${res.artist.alias.length ? `<p>${res.artist.alias}</p>` : ''}
             </div>
+            ${res.artist.alias.length ? `<p class="alias">${res.artist.alias}</p>` : ''}
             <div class="content-bottom">
                 ${res.artist.musicSize ? `<p><i class="iconfont icon-music"></i>单曲数：${res.artist.musicSize}</p>` : ''}
                 ${res.artist.albumSize ? `<p><i class="iconfont icon-album"></i>专辑数：${res.artist.albumSize}</p>` : ''}
@@ -78,8 +78,12 @@ $(async function () {
 async function albumLayout(id) {
     // 获取热门五十首
     let res1 = await GET('/artists?id=' + id).then(r => r.hotSongs)
+    // 覆盖全局播放列表，预备播放
+    myList.push(res1)
     // 普通专辑
     let res2 = await GET('/artist/album?id=' + id + '&limit=10').then(r => r.hotAlbums)
+    // 覆盖全局播放列表，预备播放
+    myList.push(res2)
     // 布局页面
     let str = '<div id="album">'
     // 热门50首
@@ -99,7 +103,7 @@ async function albumLayout(id) {
         `
         res1.forEach((h,i) => {
             str += `
-            <li>
+            <li ondblclick="getSongUrl(this)" data-id="${h.id}">
                 <span>${(i + 1 + '').padStart(2,'0')}</span>
                 <span><i class="iconfont icon-love"></i><i class="iconfont icon-download"></i></span>
                 <span>${h.name}</span>
@@ -131,7 +135,7 @@ async function albumLayout(id) {
             if(a.size == 1) {// 如果这个专辑只有一首歌
                 str += `
                     <ul class="li-hover text-ellipsis">
-                        <li>
+                        <li ondblclick="getSongUrl(this)" data-id="${a.id}">
                             <span>01</span>
                             <span><i class="iconfont icon-love"></i><i class="iconfont icon-download"></i></span>
                             <span>${a.name}</span>
@@ -144,7 +148,7 @@ async function albumLayout(id) {
                 str += `<ul class="li-hover text-ellipsis ${res3.length > 10 ? 'beyond' : ''}">`
                 res3.forEach((r,i) => {
                     str += `
-                    <li>
+                    <li ondblclick="getSongUrl(this)" data-id="${r.id}">
                         <span>${(i + 1 + '').padStart(2,'0')}</span>
                         <span><i class="iconfont icon-love"></i><i class="iconfont icon-download"></i></span>
                         <span>${r.name}</span>
@@ -178,7 +182,7 @@ async function mvLayout(id) {
     let res = await GET('/artist/mv?id=' + id)
     console.log(res);
     // 布局页面
-    //布局页面
+    // 布局页面
     let str = `
     <div id="mv">
         <div class="playlist">

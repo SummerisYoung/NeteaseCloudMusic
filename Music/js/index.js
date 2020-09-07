@@ -49,7 +49,7 @@ $(async function() {
 
 // 个性推荐
 async function recommendDom() {
-    //个性推荐六个子栏目对象
+    // 个性推荐六个子栏目对象
     let homeApi = [
         {
             name:'banner',
@@ -90,14 +90,44 @@ async function recommendDom() {
                 str += `
                     <div class="banner">
                         <div class="banner-list">
-                            <ul class="banner-ul">
+                            <ul class="banner-ul" id="banner-ul">
                 `
+                // banner这里要区分targetType
+                // 1: 独家 -> 播放音乐
+                // 10: 独家 -> 专辑
+                // 3000: 数字专辑/独家策划 -> 跳转页面
                 res.banners.forEach((b,i) => {
-                    str += `
-                        <li class="p${i}">
-                            <img src=${b.imageUrl}>
-                        </li>
-                    `
+                    switch(b.targetType) {
+                        case 1: {
+                            str += `
+                                <li class="p${i}" onclick="getSongUrl(this)" data-id="${b.targetId}">
+                                    <img src=${b.imageUrl}>
+                                    <span class="bg-r">独家</span>
+                                </li>
+                            `
+                            break;
+                        }
+                        case 10: {
+                            str += `
+                                <li class="p${i}" onclick="goAlbum(this)" data-id="${b.targetId}">
+                                    <img src=${b.imageUrl}>
+                                    <span class="bg-r">独家</span>
+                                </li>
+                            `
+                            break;
+                        }
+                        case 3000: {
+                            str += `
+                                <li class="p${i}">
+                                    <a href="${b.url}">
+                                        <img src=${b.imageUrl}>
+                                        <span class="bg-b">独家策划</span>
+                                    </a>
+                                </li>
+                            `
+                            break;
+                        }
+                    }
                 })
                 str += `</ul></div>
                     <a href="javascript:;" class="prev btn"><</a>
@@ -181,17 +211,20 @@ async function recommendDom() {
 }
 // banner控制器
 function bannerControl(banner_ul) {
-    //图片标签数组
+    // 图片标签数组
     let picDom = [...banner_ul.children]
-    //图片底下按钮数组
+    // 图片底下按钮数组
     let btn = [...document.querySelectorAll('.banner-btn span')]
-    //图片样式数组
-    let picClass = ['p0','p1','p2','p3','p4','p5','p6','p7','p8','p9']
-    //切换图片下标
+    // 图片样式数组
+    let picClass = []
+    for(let i = 0; i < picDom.length;i++) {
+        picClass.push(`p${i}`)
+    }
+    // 切换图片下标
     let index = 0
-    //定时器
+    // 定时器
     let timer = null
-    //上一张
+    // 上一张
 	function previmg(){
 		picClass.push(picClass[0]);
 		picClass.shift();
@@ -205,7 +238,7 @@ function bannerControl(banner_ul) {
         }
         btn[index].className = 'red'
     }
-    //下一张
+    // 下一张
 	function nextimg(){
 		picClass.unshift(picClass[picClass.length - 1]);
 		picClass.pop();
@@ -219,26 +252,26 @@ function bannerControl(banner_ul) {
         }
         btn[index].className = 'red'
     }
-    //点击左按钮
+    // 点击左按钮
     document.getElementsByClassName('prev')[0].onclick = previmg
-    //点击右按钮
+    // 点击右按钮
     document.getElementsByClassName('next')[0].onclick = nextimg
-    //点击class为p1的元素触发上一张照片的函数
+    // 点击class为p1的元素触发上一张照片的函数
 	$(document).on("click",".p1",function(){
 		previmg();
 	});
 
-	//点击class为p3的元素触发下一张照片的函数
+	// 点击class为p3的元素触发下一张照片的函数
 	$(document).on("click",".p3",function(){
 		nextimg();
 	});
-    //进入页面自动开始定时器
+    // 进入页面自动开始定时器
 	timer = setInterval(nextimg,3000);
-    //鼠标移入box时清除定时器
+    // 鼠标移入box时清除定时器
 	banner_ul.parentNode.parentNode.onmouseover = () => {
 		clearInterval(timer);
 	}
-    // //鼠标移出box时开始定时器
+    // 鼠标移出box时开始定时器
     banner_ul.parentNode.parentNode.onmouseleave = () => {
         timer=setInterval(nextimg,3000);
     }
@@ -282,7 +315,7 @@ async function playlistDom() {
             }
         }
     })
-    //歌单分类dom
+    // 歌单分类dom
     str += `
     <div class="catlist" onclick="openMenu(this)">
         <p class="display-sub" id="display-sub"><span id="display-sub">全部歌单</span><i class="iconfont icon-right" id="display-sub"></i></p>
@@ -292,7 +325,7 @@ async function playlistDom() {
                 <div class="catlist-menu">
                     <p id="all" class="choose" onclick="playlistControl(this)" data-name="全部歌单"><span>全部歌单</span></p>
     `
-    //遍历歌单分类对象
+    // 遍历歌单分类对象
     for(let i in category) {
         str += `
         <div class="category">
@@ -317,7 +350,7 @@ async function playlistDom() {
     </div>
     `
     
-    //热门歌单
+    // 热门歌单
     let hots = await GET('/playlist/hot')
 
     str += '<div class="hot-tag"><span>热门标签：</span><ul>'
@@ -369,22 +402,20 @@ async function playlistUl(cat) {
 }
 // 歌单分类控制器
 async function playlistControl(that) {
-    console.log(that);
     // 获取内容标签
     let playlist_content = document.getElementsByClassName('content')[0]
     // 放入加载样式
     playlist_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
-    //标签选中
+    // 标签选中
     document.getElementsByClassName('choose')[0].classList.remove('choose')
     that.classList.add('choose')
-    //改变标签文字
+    // 改变标签文字
     document.getElementsByClassName('display-sub')[0].children[0].innerText = that.dataset.name
-    //改变数据
+    // 改变数据
     playlist_content.innerHTML = await playlistUl(that.dataset.name)
 }
 // 打开/关闭歌单分类菜单
 function openMenu(that) {
-    console.log(window.event.target.id);
     if(window.event.target.id == 'display-sub' || window.event.target.id == 'all' || window.event.target.tagName == 'LI'){
         if(window.getComputedStyle(that.children[1]).display == 'none') {
             that.children[1].style.display = 'block'
@@ -393,7 +424,7 @@ function openMenu(that) {
         }
     }
     
-    //添加滚动条
+    // 添加滚动条
     nicescroll(document.getElementsByClassName('catlist-menu')[0])
 }
 
@@ -426,7 +457,7 @@ async function topListDom() {
                 <h2>官方榜</h2>
                 <ul class="offcial-ul">
         `
-        //官方榜前四个
+        // 官方榜前四个
         for(let i = 0;i < officialList.length;i++) {
             str += `
             <li>
@@ -462,7 +493,7 @@ async function topListDom() {
             </li>
             `
         }
-        //歌手榜
+        // 歌手榜
         str += `
         <li>
             <div class="offcial-ultop" style="background-color:rgb(145,67,200)">
@@ -629,7 +660,7 @@ async function artistControl(that) {// that是一个li
     document.querySelector('#' + divId + ' .default').classList.remove('default')
     // 当前li添加选中样式
     that.children[0].classList.add('default')
-    //添加loading
+    // 添加loading
     artists_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
     // 获取三维数据
     let params = {}
@@ -669,9 +700,7 @@ async function newSongDom() {
 }
 // 最新音乐列表
 async function newSongUl(title="song", area=0) {
-    console.log('开始请求数据');
     let str = '<div class="content">'
-    console.log('请求数据结束');
     // 新歌速递
     if(title == 'song') {
         let res = await GET('/top/song?type=' + area)
@@ -684,9 +713,9 @@ async function newSongUl(title="song", area=0) {
             <tbody id="tbody">
         `
         res.data.forEach((d,i) => {
-            //计算歌曲时长
+            // 计算歌曲时长
             duration = timeConvert(d.duration / 1000)
-            //再布置内容
+            // 再布置内容
             str += `
                 <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${d.id}">
                     <td width="4%">${(i + 1 + '').padStart(2,'0')}</td>
@@ -707,7 +736,6 @@ async function newSongUl(title="song", area=0) {
     }else {// 新碟上架
         let _area = {0:'ALL',7:'ZH',96:'EA',16:'KR',8:'JP'}[area]
         let res = await GET('/top/album?area=' + _area)
-        console.log(res);
 
         str += `
         <div class="newalbum">
@@ -738,27 +766,26 @@ async function newSongUl(title="song", area=0) {
     }
 
     str += '</div>'
-    console.log('处理数据结束');
     return str
 }
 // 最新音乐控制器
 async function newSongControl(that) {
     let newsong_content = document.getElementsByClassName('content')[0]
     newsong_content.innerHTML = `<div class="loading"><img src='./public/img/loading.gif'>载入中...</div>`
-    //获取之前的头部选中项
+    // 获取之前的头部选中项
     let t = document.getElementsByClassName('default')[0]
-    //获取之前的li选中项
+    // 获取之前的li选中项
     let li = document.getElementsByClassName('select')[0]
     // 判断是点击了头部选中项还是li选中项
-    if(that.dataset.title) {//头部
-        //改变头部选中项
+    if(that.dataset.title) {// 头部
+        // 改变头部选中项
         t.classList.remove('default')
         that.classList.add('default')
-        //改变li选中项
+        // 改变li选中项
         li.classList.remove('select')
         document.getElementsByClassName('newsong-select')[0].children[0].classList.add('select')
         newsong_content.innerHTML = await newSongUl(that.dataset.title,0)
-    }else {//li
+    }else {// li
         li.classList.remove('select')
         that.classList.add('select')
         newsong_content.innerHTML = await newSongUl(t.dataset.title,that.dataset.type)

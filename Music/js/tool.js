@@ -49,11 +49,11 @@ function highlight(str,keyword) {
 
 // 作者格式化
 function author(artists) {
-    //先遍历取到全部作者
+    // 先遍历取到全部作者
     let song_articles = ''
 
     artists.forEach((b,i) => {
-        song_articles += b.name
+        song_articles += `<span onclick="goArtist(this)" data-id=${b.id}>${b.name}</span>`
         if(i < artists.length - 1) {
             song_articles += ' / '
         }
@@ -94,13 +94,12 @@ function timeConvert(second) {
 
 // 点击歌曲,这一行变色
 function changeColor(that) {
-    console.log(that);
-    //先把之前点击的每一项的颜色去掉
+    // 先把之前点击的每一项的颜色去掉
     let prev = [...document.getElementsByClassName('deep-color')]
     prev.forEach(p => {
         p.classList.remove('deep-color')
     })
-    //当前点击的变色
+    // 当前点击的变色
     that.classList.add('deep-color')
 }
 
@@ -126,11 +125,11 @@ function goArtist(that) {
 
 // 设置选中样式
 function active(el) {
-    //清除兄弟标签选中样式
+    // 清除兄弟标签选中样式
     [...el.parentNode.children].forEach(c => {
         c.className = ''
     })
-    //that标签设置选中样式
+    // that标签设置选中样式
     el.className = 'active'
 }
 

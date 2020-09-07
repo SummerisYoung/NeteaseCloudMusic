@@ -1,20 +1,20 @@
 $(async function() {
-    //获取用户id
+    // 获取用户id
     let url = window.location.href
     let id = url.substring(url.indexOf('=') + 1)
-    //请求用户详情
+    // 请求用户详情
     let userRes = await GET('/user/detail?uid=' + id)
-    //布局上层页面
+    // 布局上层页面
     let html = topLayout(userRes)
-    //布局下层页面
+    // 布局下层页面
     html += '<div class="user-bottom">'
-    //请求用户创建的电台信息
+    // 请求用户创建的电台信息
     let djRes = await GET('/user/audio?uid=' + id)
     if(djRes.djRadios.length) {
         // 布局电台页面
         html += djLayout(djRes)
     }
-    //请求用户的歌单信息
+    // 请求用户的歌单信息
     let playRes = await GET('/user/playlist?uid=' + id)
     if(playRes.playlist.length) {
         // 布局歌单页面
@@ -22,14 +22,14 @@ $(async function() {
     }
     
     html += '</div>'
-    //页面标签
+    // 页面标签
     let user = document.getElementById('user')
     user.innerHTML = html
-    //设置滚动条
+    // 设置滚动条
     nicescroll(user)
 })
 
-//上层页面
+// 上层页面
 function topLayout(res) {
     console.log(res);
     let str = `
@@ -83,7 +83,7 @@ function topLayout(res) {
     return str
 }
 
-//电台页面
+// 电台页面
 function djLayout(res) {
     let str = `
         <div class="user-dj">
@@ -114,7 +114,7 @@ function djLayout(res) {
     return str
 }
 
-//歌单页面
+// 歌单页面
 function plLayout(res) {
     let str = `
         <div class="playlist">

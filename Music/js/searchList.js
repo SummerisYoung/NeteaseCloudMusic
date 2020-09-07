@@ -78,7 +78,7 @@ async function searchSong(keyword, searchList) {
                         <th width="13%">时长</th>
                     </tr>
                 </thead>
-                <tbody id="tbody">
+                <tbody id="search-tbody">
     `
     res.songs.forEach((s,i) => {
         // 再布置内容
@@ -138,7 +138,7 @@ async function searchAlbum(keyword, searchList) {
     let res = await GET('/search?keywords=' + keyword + '&type=10').then(r => r.result)
     // 更改顶部提示
     searchList.children[0].innerHTML = `搜索${highlight('',keyword)}，找到${res.albumCount}张专辑`
-    //布局页面
+    // 布局页面
     let str =`
     <div id="search-album">
         <ul class="li-hover">
@@ -169,7 +169,7 @@ async function searchVideo(keyword, searchList) {
     let res = await GET('/search?keywords=' + keyword + '&type=1014').then(r => r.result)
     // 更改顶部提示
     searchList.children[0].innerHTML = `搜索${highlight('',keyword)}，找到${res.videoCount}个视频`
-    //布局页面
+    // 布局页面
     let str = `
     <div id="search-video">
         <div class="playlist">
@@ -207,7 +207,7 @@ async function searchPlayList(keyword, searchList) {
     let res = await GET('/search?keywords=' + keyword + '&type=1000').then(r => r.result)
     // 更改顶部提示
     searchList.children[0].innerHTML = `搜索${highlight('',keyword)}，找到${res.playlistCount}个歌单`
-    //布局页面
+    // 布局页面
     let str = `
     <div id="search-playlist">
         <ul class="li-hover">
@@ -238,7 +238,7 @@ async function searchLyric(keyword, searchList) {
     let res = await GET('/search?keywords=' + keyword + '&type=1006').then(r => r.result)
     // 更改顶部提示
     searchList.children[0].innerHTML = `搜索${highlight('',keyword)}，找到${res.songCount}首歌词`
-    //布局页面
+    // 布局页面
     let str = `
         <div id="search-lyric">
             <table>
@@ -296,7 +296,7 @@ async function searchRadio(keyword, searchList) {
     let res = await GET('/search?keywords=' + keyword + '&type=1009').then(r => r.result)
     // 更改顶部提示
     searchList.children[0].innerHTML = `搜索${highlight('',keyword)}，找到${res.djRadiosCount}个电台`
-    //布局页面
+    // 布局页面
     let str = `
     <div id="search-radio">
         <p class="title">主播电台</p>
@@ -328,7 +328,7 @@ async function searchUser(keyword, searchList) {
     let res = await GET('/search?keywords=' + keyword + '&type=1002').then(r => r.result)
     // 更改顶部提示
     searchList.children[0].innerHTML = `搜索${highlight('',keyword)}，找到${res.userprofileCount}位用户`
-    //布局页面
+    // 布局页面
     let str = `
     <div id="search-user">
         <ul class="li-hover">
@@ -363,7 +363,7 @@ function spread(that) {
     }
 }
 
-//复制文本到剪贴板
+// 复制文本到剪贴板
 function copyText(that)
 {
     new ClipboardJS(that,{

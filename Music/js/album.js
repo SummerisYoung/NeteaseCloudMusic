@@ -1,13 +1,14 @@
 $(async function (){
-    //获取歌单id
+    // 获取专辑id
     let url = window.location.href
     let id = url.substring(url.indexOf('=') + 1)
-    //调用歌单详情接口
+    // 调用专辑详情接口
     let res = await GET('/album?id=' + id)
-    console.log(res);
-    //布局上层页面
+    // 覆盖全局播放列表，预备播放
+    myList.push(res)
+    // 布局上层页面
     let html = topLayout(res.album)
-    //布局下层页面
+    // 布局下层页面
     html += `
     <div class="album-bottom">
         <ul class="section">
@@ -18,15 +19,15 @@ $(async function (){
         <div class="main">${songsLayout(res)}</div>
     </div>
     `
-    //填入页面
+    // 填入页面
     document.getElementById('album').innerHTML = html
 
-    //设置滚动条
+    // 设置滚动条
     nicescroll(document.getElementById('album'))
 
-    //歌曲列表单独设置点击事件
+    // 歌曲列表单独设置点击事件
     document.getElementById('lists').onclick = function() {
-        //设置选中样式
+        // 设置选中样式
         active(this)
         document.getElementsByClassName('main')[0].innerHTML = songsLayout(res)
 
@@ -35,7 +36,7 @@ $(async function (){
     }
 })
 
-//上侧布局
+// 上侧布局
 function topLayout(res) {
     let str = `
     <div class="album-top">
@@ -66,7 +67,7 @@ function topLayout(res) {
     return str
 }
 
-//歌曲列表布局
+// 歌曲列表布局
 function songsLayout(res) {
     let str = `
         <table>
@@ -85,9 +86,9 @@ function songsLayout(res) {
     `
     let duration = 0
     res.songs.forEach((s,i) => {
-        //计算歌曲时长
+        // 计算歌曲时长
         duration = timeConvert(s.dt / 1000)
-        //再布置内容
+        // 再布置内容
         str += `
             <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${s.id}">
                 <td>${(i + 1 + '').padStart(2,'0')}</td>
@@ -106,12 +107,12 @@ function songsLayout(res) {
     return str
 }
 
-//评论布局
+// 评论布局
 async function commentsLayout(that) {
-    //获取评论内容
+    // 获取评论内容
     let res = await GET('/comment/album?id=' + that.dataset.id)
     console.log(res);
-    //填入评论内容
+    // 填入评论内容
     let str = `
         <div class="comment">
             <div class="comment-input">
@@ -126,12 +127,12 @@ async function commentsLayout(that) {
             </div>
             <div class="comment-middle">
     `
-    //填入精彩评论
+    // 填入精彩评论
     if(res.hotComments.length) {
         let hotUl = '<div class="hot-comment"><p class="comment-section">精彩评论</p><ul>' + commentDom(res.hotComments) + '</ul><p class="read-more">查看更多精彩评论></p></div>'
         str += hotUl
     }
-    //填入最新评论
+    // 填入最新评论
     if(res.comments.length) {
         let ul = `<div class="new-comment"><p class="comment-section">最新评论<span>(${res.total})</span></p><ul>` + commentDom(res.comments) + '</ul></div>'
         str += ul
@@ -145,11 +146,11 @@ async function commentsLayout(that) {
 
     document.getElementsByClassName('main')[0].innerHTML = str
 
-    //设置选中样式
+    // 设置选中样式
     active(that)
 }
 
-//评论li
+// 评论li
 function commentDom(comments) {
     let str = ''
     comments.forEach(h => {
@@ -180,7 +181,7 @@ function commentDom(comments) {
     return str
 }
 
-//专辑详情布局
+// 专辑详情布局
 function descriptionLayout(that) {
     // 描述数组
     let arr = that.dataset.description.split('\n')
@@ -193,6 +194,6 @@ function descriptionLayout(that) {
     str += '</ul></div>'
     document.getElementsByClassName('main')[0].innerHTML = str
 
-    //设置选中样式
+    // 设置选中样式
     active(that)
 }

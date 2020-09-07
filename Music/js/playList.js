@@ -1,18 +1,22 @@
 $(async function (){
-    //获取歌单id
+    // 获取歌单id
     let url = window.location.href
     let id = url.substring(url.indexOf('=') + 1)
-    //调用歌单详情接口
+    // 调用歌单详情接口
     let playListRes = await GET('/playlist/detail?id=' + id).then(r => r.playlist)
-    //歌单中的全部歌曲,用res中的全部trackIds请求一次song/detail 接口获取所有歌曲的详情
+    // 歌单中的全部歌曲,用res中的全部trackIds请求一次song/detail 接口获取所有歌曲的详情
     let songsArr = []
     playListRes.trackIds.forEach(t => {
         songsArr.push(t.id)
     })
-    let playlist_songs = await GET('/song/detail?ids=' + songsArr.join(','))
-    //布局上层页面
+    let playlist_songs = await GET('/song/detail?ids=' + songsArr.join(',')).then(r => {
+        return {id,songs:r.songs}
+    })
+    // 覆盖本地存储播放列表,预备播放
+    sessionStorage.setItem('list',JSON.stringify(playlist_songs))
+    // 布局上层页面
     let html = topLayout(playListRes)
-    //布局下层页面
+    // 布局下层页面
     html += `
     <div class="playlist-bottom">
         <ul class="section">
@@ -23,10 +27,10 @@ $(async function (){
         <div class="main">${songsLayout(playlist_songs)}</div>
     </div>
     `
-    //填入页面
+    // 填入页面
     document.getElementById('playlist').innerHTML = html
 
-    //展开收起图标
+    // 展开收起图标
     let description = document.getElementsByClassName('description')[0]
     let icon = description.nextElementSibling
     if(description.offsetHeight > 50) {
@@ -46,12 +50,12 @@ $(async function (){
         }
     }
 
-    //设置滚动条
+    // 设置滚动条
     nicescroll(document.getElementById('playlist'))
 
-    //歌曲列表单独设置点击事件
+    // 歌曲列表单独设置点击事件
     document.getElementById('lists').onclick = function() {
-        //设置选中样式
+        // 设置选中样式
         active(this)
         document.getElementsByClassName('main')[0].innerHTML = songsLayout(playlist_songs)
 
@@ -60,7 +64,7 @@ $(async function (){
     }
 })
 
-//上侧布局
+// 上侧布局
 function topLayout(res) {
     let str = `
     <div class="playlist-top">
@@ -107,8 +111,9 @@ function topLayout(res) {
     return str
 }
 
-//歌曲列表布局
+// 歌曲列表布局
 function songsLayout(res) {
+    console.log(res);
     let str = `
         <table>
             <thead>
@@ -122,13 +127,13 @@ function songsLayout(res) {
                 </tr>
             </thead>
             
-            <tbody id="tbody">
+            <tbody id="tbody" data-id="${res.id}">
     `
     let duration = 0
     res.songs.forEach((s,i) => {
-        //计算歌曲时长
+        // 计算歌曲时长
         duration = timeConvert(s.dt / 1000)
-        //再布置内容
+        // 再布置内容
         str += `
             <tr onclick="changeColor(this)" ondblclick="getSongUrl(this)" data-id="${s.id}">
                 <td>${(i + 1 + '').padStart(2,'0')}</td>
@@ -147,11 +152,11 @@ function songsLayout(res) {
     return str
 }
 
-//评论布局
+// 评论布局
 async function commentsLayout(that) {
-    //获取评论内容
+    // 获取评论内容
     let res = await GET('/comment/playlist?id=' + that.dataset.id)
-    //填入评论内容
+    // 填入评论内容
     let str = `
         <div class="comment">
             <div class="comment-input">
@@ -166,12 +171,12 @@ async function commentsLayout(that) {
             </div>
             <div class="comment-middle">
     `
-    //填入精彩评论
+    // 填入精彩评论
     if(res.hotComments.length) {
         let hotUl = '<div class="hot-comment"><p class="comment-section">精彩评论</p><ul>' + commentDom(res.hotComments) + '</ul><p class="read-more">查看更多精彩评论></p></div>'
         str += hotUl
     }
-    //填入最新评论
+    // 填入最新评论
     if(res.comments.length) {
         let ul = `<div class="new-comment"><p class="comment-section">最新评论<span>(${res.total})</span></p><ul>` + commentDom(res.comments) + '</ul></div>'
         str += ul
@@ -181,11 +186,11 @@ async function commentsLayout(that) {
 
     document.getElementsByClassName('main')[0].innerHTML = str
 
-    //设置选中样式
+    // 设置选中样式
     active(that)
 }
 
-//评论li
+// 评论li
 function commentDom(comments) {
     let str = ''
     comments.forEach(h => {
@@ -216,9 +221,9 @@ function commentDom(comments) {
     return str
 }
 
-//收藏者布局
+// 收藏者布局
 async function lovesLayout(that) {
-    //获取收藏者内容
+    // 获取收藏者内容
     let res = await GET('/playlist/subscribers?id=' + that.dataset.id + '&limit=100')
     let str = '<ul class="subscribers">'
     res.subscribers.forEach(s => {
@@ -234,6 +239,6 @@ async function lovesLayout(that) {
 
     document.getElementsByClassName('main')[0].innerHTML = str
 
-    //设置选中样式
+    // 设置选中样式
     active(that)
 }
