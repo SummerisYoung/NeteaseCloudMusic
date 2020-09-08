@@ -3,9 +3,15 @@ $(async function (){
     let url = window.location.href
     let id = url.substring(url.indexOf('=') + 1)
     // 调用专辑详情接口
-    let res = await GET('/album?id=' + id)
-    // 覆盖全局播放列表，预备播放
-    myList.push(res)
+    let res = await GET('/album?id=' + id).then(r => {
+        r.id = id
+        return r
+    })
+    // 本地存储
+    let storage = {}
+    storage[res.id] = res.songs
+    // 覆盖本地存储播放列表,预备播放
+    sessionStorage.setItem('list',JSON.stringify(storage))
     // 布局上层页面
     let html = topLayout(res.album)
     // 布局下层页面
@@ -82,7 +88,7 @@ function songsLayout(res) {
                 </tr>
             </thead>
             
-            <tbody id="tbody">
+            <tbody id="tbody" data-parent-id=${res.id}>
     `
     let duration = 0
     res.songs.forEach((s,i) => {

@@ -137,7 +137,8 @@ function active(el) {
 function nicescroll(dom) {
     $(dom).niceScroll({
         cursorcolor:"#ddd",     // 滚动条的颜色值
-        cursorwidth:8,         // 滚动条的宽度值
-        autohidemode:false,      // 滚动条是否是自动隐藏，默认值为 true
+        cursorwidth:8,          // 滚动条的宽度值
+        autohidemode:false,     // 滚动条是否是自动隐藏，默认值为 true
+        zIndex: 5               // 改变z-index值的滚动条的div
     })
 }

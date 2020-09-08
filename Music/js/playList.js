@@ -12,8 +12,11 @@ $(async function (){
     let playlist_songs = await GET('/song/detail?ids=' + songsArr.join(',')).then(r => {
         return {id,songs:r.songs}
     })
+    // 本地存储
+    let storage = {}
+    storage[playlist_songs.id] = playlist_songs.songs
     // 覆盖本地存储播放列表,预备播放
-    sessionStorage.setItem('list',JSON.stringify(playlist_songs))
+    sessionStorage.setItem('list',JSON.stringify(storage))
     // 布局上层页面
     let html = topLayout(playListRes)
     // 布局下层页面
@@ -126,7 +129,7 @@ function songsLayout(res) {
                 </tr>
             </thead>
             
-            <tbody id="tbody" data-id="${res.id}">
+            <tbody id="tbody" data-parent-id="${res.id}">
     `
     let duration = 0
     res.songs.forEach((s,i) => {

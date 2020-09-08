@@ -61,31 +61,31 @@ async function getInputChange(search_res,search_ipt) {
     if(search_ipt.value) {
         // 发送请求
         let res = await GET('/search/suggest?keywords=' + search_ipt.value)
-        let str = `<p style="padding:5px 10px" class="suggest-li" onclick="gosearchList()">搜"${search_ipt.value}"相关的结果></p>`
+        let str = `<p style="padding:5px 10px" class="suggest-li" onclick="gosearchList()">搜"${highlight('',search_ipt.value,)}"相关的结果></p>`
         res.result.order.forEach(o => {
             switch(o) {
                 case 'songs':
                     str += `<p class="suggest-order"><i class="iconfont icon-note"></i>单曲</p><ul>`
                     res.result[o].forEach(s => {
-                        str += `<li class="suggest-li text-ellipsis" onclick="getSongUrl(this)" data-id="${s.id}">${s.name}  ${s.alias.length ? '(' + s.alias + ')' : ''} - ${author(s.artists)}</li>`
+                        str += `<li class="suggest-li text-ellipsis" onclick="getSongUrl(this)" data-id="${s.id}">${highlight(s.name,search_ipt.value)}  ${s.alias.length ? '(' + s.alias + ')' : ''} - ${highlight(author(s.artists),search_ipt.value)}</li>`
                     })
                     break;
                 case 'artists':
                     str += `<p class="suggest-order"><i class="iconfont icon-user"></i>歌手</p><ul>`
                     res.result[o].forEach(s => {
-                        str += `<li class="suggest-li text-ellipsis" onclick="goArtist(this)" data-id="${s.id}">${s.name}</li>`
+                        str += `<li class="suggest-li text-ellipsis" onclick="goArtist(this)" data-id="${s.id}">${highlight(s.name,search_ipt.value)}</li>`
                     })
                     break;
                 case 'albums':
                     str += `<p class="suggest-order"><i class="iconfont icon-album"></i>专辑</p><ul>`
                     res.result[o].forEach(s => {
-                        str += `<li class="suggest-li text-ellipsis" onclick="goAlbum(this)" data-id="${s.id}">${s.name} - ${s.artist.name}</li>`
+                        str += `<li class="suggest-li text-ellipsis" onclick="goAlbum(this)" data-id="${s.id}">${highlight(s.name,search_ipt.value)} - ${highlight(s.artist.name,search_ipt.value)}</li>`
                     })
                     break;
                 case 'playlists':
                     str += `<p class="suggest-order"><i class="iconfont icon-musiclist"></i>歌单</p><ul>`
                     res.result[o].forEach(s => {
-                        str += `<li class="suggest-li text-ellipsis" onclick="goPlayList(this)" data-id="${s.id}">${s.name}</li>`
+                        str += `<li class="suggest-li text-ellipsis" onclick="goPlayList(this)" data-id="${s.id}">${highlight(s.name,search_ipt.value)}</li>`
                     })
                     break;
             }

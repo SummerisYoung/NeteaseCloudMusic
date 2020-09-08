@@ -78,12 +78,10 @@ $(async function () {
 async function albumLayout(id) {
     // 获取热门五十首
     let res1 = await GET('/artists?id=' + id).then(r => r.hotSongs)
-    // 覆盖全局播放列表，预备播放
-    myList.push(res1)
     // 普通专辑
     let res2 = await GET('/artist/album?id=' + id + '&limit=10').then(r => r.hotAlbums)
-    // 覆盖全局播放列表，预备播放
-    myList.push(res2)
+    // 本地存储对象
+    let storage = {}
     // 布局页面
     let str = '<div id="album">'
     // 热门50首
@@ -99,7 +97,7 @@ async function albumLayout(id) {
                         <i class="iconfont icon-play"></i>
                     </p>
                 </div>
-                <ul class="li-hover text-ellipsis beyond">
+                <ul class="li-hover text-ellipsis beyond" data-parent-id=1>
         `
         res1.forEach((h,i) => {
             str += `
@@ -112,10 +110,14 @@ async function albumLayout(id) {
             `
         });
         str += `</ul><p onclick="lookmore(this)">查看全部50首></p></div></div>`
+        // 放入本地存储
+        storage['1'] = res1
     }
     // 普通专辑
     {
         for(let a of res2) {
+            // 请求专辑内容
+            let res3 = await GET('/album?id=' + a.id).then(r => r.songs)
             str += `
             <div class="album-item">
                 <div class="album-left">
@@ -132,36 +134,26 @@ async function albumLayout(id) {
                         </p>
                     </div>
             `
-            if(a.size == 1) {// 如果这个专辑只有一首歌
+            str += `<ul class="li-hover text-ellipsis ${res3.length > 10 ? 'beyond' : ''}" data-parent-id=${a.id}>`
+            res3.forEach((r,i) => {
                 str += `
-                    <ul class="li-hover text-ellipsis">
-                        <li ondblclick="getSongUrl(this)" data-id="${a.id}">
-                            <span>01</span>
-                            <span><i class="iconfont icon-love"></i><i class="iconfont icon-download"></i></span>
-                            <span>${a.name}</span>
-                            <span>${timeConvert(a.dt / 1000)}</span>
-                        </li>
-                    </ul>
+                <li ondblclick="getSongUrl(this)" data-id="${r.id}">
+                    <span>${(i + 1 + '').padStart(2,'0')}</span>
+                    <span><i class="iconfont icon-love"></i><i class="iconfont icon-download"></i></span>
+                    <span>${r.name}</span>
+                    <span>${timeConvert(r.dt / 1000)}</span>
+                </li>
                 `
-            }else {// 如果超过一首歌，那么就得请求专辑内容
-                let res3 = await GET('/album?id=' + a.id).then(r => r.songs)
-                str += `<ul class="li-hover text-ellipsis ${res3.length > 10 ? 'beyond' : ''}">`
-                res3.forEach((r,i) => {
-                    str += `
-                    <li ondblclick="getSongUrl(this)" data-id="${r.id}">
-                        <span>${(i + 1 + '').padStart(2,'0')}</span>
-                        <span><i class="iconfont icon-love"></i><i class="iconfont icon-download"></i></span>
-                        <span>${r.name}</span>
-                        <span>${timeConvert(r.dt / 1000)}</span>
-                    </li>
-                    `
-                })
-                str += `</ul>${res3.length > 10 ? `<p onclick="goAlbum(this)" data-id="${a.id}">查看全部${res3.length}首></p>` : ''}`
-            }
+            })
+            str += `</ul>${res3.length > 10 ? `<p onclick="goAlbum(this)" data-id="${a.id}">查看全部${res3.length}首></p>` : ''}`
             str += '</div></div>'
+            // 放入本地存储
+            storage[a.id] = res3
         }
     }
     str += '</div>'
+    // 覆盖本地存储
+    sessionStorage.setItem('list',JSON.stringify(storage))
 
     return str
 }

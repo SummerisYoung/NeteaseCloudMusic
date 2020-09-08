@@ -1,23 +1,19 @@
 // 请求音乐url
 async function getSongUrl(that) {
+    // 根据点击的元素父级有无parentId判断是列表还是单曲
+    // 列表
+    if(that.parentNode.dataset.parentId) {
+        // 全局记录一下当前正在播放的歌曲的歌单或专辑id
+        window.parentId = that.parentNode.dataset.parentId
+    }
     // 把歌曲详情加载到页面
     $('#song-detail').load('public/songDetail.html')
     // 获取audio标签
     let audio = document.getElementsByTagName('audio')[0]
-    // 播放、暂停标签
-    let pause_play = document.querySelector('#footer .footer-left i:nth-child(2)')
-    // 音量条标签
-    let volume = document.getElementsByClassName('volume')[0]
+    // 左下角设置
     let footer_song = document.getElementsByClassName('footer-song')[0]
-    // 获取进度条,进度归0
-    let music_bar = document.getElementsByClassName('music-bar')[0]
-    music_bar.style.width = 0
-    // 获取进度条上的圈,圈归位
-    let progress = music_bar.children[1]
-    progress.style.left = "-7px"
-    // 获取进度条上的圈里面的点,加上loading效果
-    let dot = progress.children[0]
-    dot.classList.add('dot-loading')
+    // 音乐界面初始化
+    initSong()
     // 请求歌曲url
     let res = await POST('/song/url', {id:that.dataset.id}).then(r => r.data[0])
     // 请求歌曲详细信息
@@ -27,11 +23,6 @@ async function getSongUrl(that) {
     audio.src = res.url
     // 给audio绑定一下正在播放的音乐id
     audio.dataset.id = that.dataset.id
-    // 初始化一下音量
-    audio.volumn = volume.children[1].offsetLeft / volume.offsetWidth
-    // 更改图标
-    pause_play.classList.remove('icon-play')
-    pause_play.classList.add('icon-pause')
     // 左下角图片url
     footer_song.children[0].children[0].src = song.al.picUrl + '?param=50y50'
     // 左下角歌曲名和歌手
@@ -45,17 +36,17 @@ async function getSongUrl(that) {
     // 播放
     audio.play()
     // 除去loading效果
-    dot.classList.remove('dot-loading')
-    // 如果存在歌单或专辑的id,且该歌单或专辑就是本地存储里预备好的
-    if(that.dataset.id && sessionStorage.getItem('list').indexOf(that.dataset.id) != -1) {
-        // 如果播放列表是空的
-        if(document.getElementsByClassName('none').length) {
+    document.getElementsByClassName('dot')[0].classList.remove('dot-loading')
+    // 如果正在播放的是列表
+    if(window.parentId) {
+        // 播放列表为空或播放的歌单变了
+        if(document.getElementById('list-ul') == null || window.parentId != document.getElementById('list-ul').dataset.parentId) {
             // 初始化
             myList(audio)
         }
+        // 同步播放样式
+        syncVisible(audio)
     }
-    // 如果播放列表是显示的,那么别忘了同步播放样式
-    document.getElementsByClassName('list')[0].style.display == 'flex' && syncVisible(audio)
 }
 
 $(function () {
@@ -96,27 +87,10 @@ $(function () {
     }
 
     // 点击了上一个
-    prev.onclick = () => {
-        // 获取播放列表里的所有音乐
-        let songs = document.getElementById('list-ul') && [...document.getElementById('list-ul').children]
-        // 先改一下下标
-        window.playing--
-        // 判断边界
-        window.playing = window.playing < 0 ? songs.length - 1 : window.playing
-        // 换歌
-        getSongUrl(songs[window.playing])
-    }
+    prev.onclick = prevBtn
 
     // 点击了下一个
-    next.onclick = () => {
-        let songs = document.getElementById('list-ul') && [...document.getElementById('list-ul').children]
-        // 先改一下下标
-        window.playing++
-        // 判断边界
-        window.playing = window.playing > songs.length - 1 ? 0 : window.playing
-        // 换歌
-        getSongUrl(songs[window.playing])
-    }
+    next.onclick = nextBtn
 
     // 更新播放条
     audio.ontimeupdate = syncMusicBar(music_bar)
@@ -130,8 +104,13 @@ $(function () {
     // 显示播放列表
     icon_playlist.onclick = function(){
         list.style.display = 'flex'
-        // 调整滚动条
-        $(list.children[2]).getNiceScroll().resize()
+        // 获取歌曲li的高度
+        let liHeight = list.children[2].children[0].children[0].offsetHeight
+        // 调整滚动条高度和位置
+        if($(list.children[2]).getNiceScroll().length) {
+            $(list.children[2]).getNiceScroll().resize()
+            $(list.children[2]).getNiceScroll(0).doScrollTop(window.playing * liHeight,0)
+        }
         // 同步播放样式
         if(document.getElementById('list-ul')) {
             syncVisible(audio)
@@ -147,6 +126,24 @@ $(function () {
         }
     }
 })
+
+// 音乐界面初始化操作
+function initSong() {
+    // 音乐播放时间归0
+    document.getElementsByTagName('audio')[0].currentTime = 0
+    // 播放时间归0
+    document.querySelectorAll('#footer .footer-middle span')[0].innerText = '00:00'
+    // 进度条进度归0
+    document.getElementsByClassName('passed')[0].style.width = 0
+    // 进度条上的圈归位
+    document.getElementsByClassName('progress')[0].style.left = "-7px"
+    // 进度条上的圈里面的点加上loading效果
+    document.getElementsByClassName('dot')[0].classList.add('dot-loading')
+    // 播放暂停标签
+    let play_pause = document.querySelector('#footer .footer-left i:nth-child(2)')
+    play_pause.classList.remove('icon-play')
+    play_pause.classList.add('icon-pause')
+}
 
 // 更新播放条
 function syncMusicBar(music_bar) {
@@ -168,9 +165,9 @@ function syncMusicBar(music_bar) {
             music_bar.children[0].style.width = x + 'px'
             progress.style.left = x - progress.offsetWidth / 2 + 'px';
         }
+        // 歌曲播放完毕调用点击下一个函数
+        if(this.currentTime == this.duration) nextBtn()
     }
-    
-    
 }
 
 // 拖动播放条
@@ -247,10 +244,10 @@ function dragVolumn(audio) {
 function myList(audio) {
     // 获取播放列表
     let list_content = document.getElementsByClassName('list-content')[0]
-    // 播放列表布局
-    let str = '<ul class="li-hover" id="list-ul">'
     // 获取播放列表歌曲
-    let songs = JSON.parse(sessionStorage.getItem('list')).songs
+    let songs = JSON.parse(sessionStorage.getItem('list'))[window.parentId]
+    // 播放列表布局
+    let str = `<ul class="li-hover" id="list-ul" data-parent-id=${window.parentId}>`
     // 改变总歌曲数
     document.getElementById('list-count').innerText = songs.length
     songs.forEach((l,i) => {
@@ -288,4 +285,36 @@ function syncVisible(audio) {
             window.playing = i
         }
     })
+}
+
+// 点击了上一个
+function prevBtn() {
+    // 看看播放列表是否有歌曲
+    let list_ul = document.getElementById('list-ul')
+    if(list_ul) {
+        // 获取播放列表里的所有音乐
+        let songs = [...document.getElementById('list-ul').children]
+        // 先改一下下标
+        window.playing--
+        // 判断边界
+        window.playing = window.playing < 0 ? songs.length - 1 : window.playing
+        // 换歌
+        getSongUrl(songs[window.playing])
+    }
+}
+
+// 点击了下一个
+function nextBtn() {
+    // 看看播放列表是否有歌曲
+    let list_ul = document.getElementById('list-ul')
+    if(list_ul) {
+        // 获取播放列表里的所有音乐
+        let songs = [...document.getElementById('list-ul').children]
+        // 先改一下下标
+        window.playing++
+        // 判断边界
+        window.playing = window.playing > songs.length - 1 ? 0 : window.playing
+        // 换歌
+        getSongUrl(songs[window.playing])
+    }
 }
