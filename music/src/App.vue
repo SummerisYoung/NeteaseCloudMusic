@@ -1,32 +1,32 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <!-- 顶部导航 -->
+    <top-bar />
+
+    <div class="middle">
+      <!-- 侧边栏 -->
+      <side-bar />
+
+      <!-- 主体 -->
+      <router-view/>
     </div>
-    <router-view/>
+
+    <!-- 底部 -->
+    <foot />
   </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+import TopBar from './components/topbar/topbar'
+import SideBar from './components/sidebar/sidebar'
+import Foot from './components/foot/foot'
+export default {
+  components: {
+    TopBar,SideBar,Foot
   }
 }
+</script>
+
+<style lang="less">
+@import url(//at.alicdn.com/t/font_2019206_xfd0lu0p5re.css);
 </style>

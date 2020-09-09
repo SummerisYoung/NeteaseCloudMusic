@@ -1,0 +1,259 @@
+/* 引入重置文件 */
+@import './reset.css';
+
+/* 全局变量 */
+// 页面色
+@red: rgb(198,47,47);
+@red-grey: rgb(209,88,88);
+// 边框
+@border: 1px solid rgb(225,225,226);
+// li hover色
+@lihover: rgb(230,231,234);
+// 深背景色
+@dark-background: rgb(245,245,247);
+// 浅背景色
+@light-background: rgb(250,250,250);
+
+/* 全局样式 */
+// 最小宽度
+body {
+    position: relative;
+    min-width: 1050px;
+}
+// 中部内容
+.middle {
+    display: flex;
+}
+// 关键词高亮
+.keyword-highlight {
+    color: steelblue;
+    cursor: pointer;
+    user-select: none;
+}
+// 文字超出变为...
+.text-ellipsis {
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+// 中间的内容高度100%
+.middle {
+    height: calc(100vh - 130px);
+}
+// 载入中
+.loading{
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    img {
+        width: 20px;
+        height: 20px;
+    }
+}
+// 最小图
+.tiny-img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+// 最小图圆角
+.tiny-img-radius {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+// 小图
+.small-img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+// 小图圆角
+.small-img-radius {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+// 中图
+.mid-img {
+    width: 180px;
+    height: 180px;
+    border: @border;
+    cursor: pointer;
+}
+// 大图
+.big-img {
+    width: 220px;
+    height: 220px;
+    border: @border;
+}
+// 点击这一行颜色变深
+.deep-color {
+    background: rgb(227,227,229) !important;
+    td {
+        color: #000;
+    }
+    td:nth-child(1),td:nth-child(6) {
+        color: #000;
+    }
+    td:nth-child(3) {
+        p {
+            color: #000 !important;
+        }
+    }
+    span {
+        color: #000;
+    }
+}
+// 歌单
+.playlist {
+    ul {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 0 20px;
+        &::after {
+            content: '';
+            width: 240px;
+        }
+        li {
+            margin: 20px;
+            width: 180px;
+            font-size: 14px;
+
+            .playlist-img {
+                position: relative;
+                color: #fff;
+                .right-top {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    padding: 5px 10px;
+                    width: 50%;
+                    background: linear-gradient(to right, rgba(255,255,255,0), rgba(0, 0, 0, 0.3));
+                    text-align: right;
+                }
+
+                .right-bottom {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    margin: 10px;
+                    padding: 3px 5px;
+                    border: @border;
+                    border-radius: 50%;
+                    background: #333;
+                    opacity: 0;
+                    transition: 0.3s;
+                }
+
+                .left-bottom {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    margin: 10px;
+                    color: #fff;
+                }
+
+                &:hover .right-bottom {
+                    opacity: 1;
+                }
+            }
+
+            .playlist-name {
+                margin: 5px 0;
+            }
+
+            .trackCount {
+                color: #999;
+            }
+        }
+    }
+}
+// 选中黑色样式
+.default {
+    color: #eee;
+    background: grey;
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+// 歌曲列表
+table {
+    width: 100%;
+    color: #666;
+    table-layout: fixed;
+    user-select: none;
+    thead {
+        th {
+            padding: 8px;
+            font-weight: normal;
+            border: @border;
+            border-left: none;
+
+            &:last-child {
+                border-right: none;
+            }
+        } 
+    }
+    
+    tbody {
+        td {
+            padding: 5px;
+        }
+
+        tr {
+            line-height: 25px;
+        }
+
+        tr > td:first-child {
+            vertical-align: top;
+            text-align: right;
+            color: #999;
+        }
+
+        tr > td:nth-child(2) {
+            display: flex;
+            justify-content: space-evenly;
+            color: #ccc;
+        }
+
+        tr > td:nth-child(3) {
+            color: #333;
+        }
+
+        tr > td:nth-child(n + 6) {
+            color: #999;
+        }
+
+        tr:nth-child(even) {
+            background: @dark-background;
+        }
+
+        tr:hover {
+            background: rgb(235,236,237);
+        }
+    }
+}
+// li的hover样式
+.li-hover{
+    li {
+        display: flex;
+        align-items: center;
+        line-height: 30px;
+    }
+    
+    li:nth-child(even) {
+        background: @dark-background;
+    }
+    
+    li:hover {
+        background: rgb(235,236,237);
+    }
+}
+// 所有图标都变成点击图标
+.iconfont {
+    cursor: pointer;
+}
