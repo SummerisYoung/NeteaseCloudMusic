@@ -3,6 +3,8 @@ $(async function () {
     let id = window.location.href.match(/(?<=(id=)).*/)[0]
     // 请求基本信息
     let res = await GET('/artists?id=' + id)
+    // 全局保存一下名字
+    window.artistName = res.artist.name
     // 获取页面标签
     let artist = document.getElementById('artist')
     // 布局上层页面
@@ -172,33 +174,36 @@ function lookmore(that) {
 async function mvLayout(id) {
     // 获取mv
     let res = await GET('/artist/mv?id=' + id)
-    console.log(res);
     // 布局页面
-    // 布局页面
-    let str = `
-    <div id="mv">
-        <div class="playlist">
-            <ul>
-    `
-    res.mvs.forEach(v => {
+    let str = ``
+    // MV不为空
+    if(res.mvs.length) {
         str += `
-        <li>
-            <div class="playlist-img">
-                <img class="mid-img" src="${v.imgurl + '?param=180y180'}">
-                <p class="right-top">
-                    <i class="iconfont icon-video"></i>
-                    <span>${numConvert(v.playCount)}</span>
-                </p>
-                <p class="left-bottom">
-                    ${timeConvert(v.duration / 1000)}
-                </p>
-            </div>
-            <p class="playlist-name text-ellipsis">${v.name}</p>
-        </li>
+        <div id="mv">
+            <div class="playlist">
+                <ul>
         `
-    })
-    str += '</ul></div></div>'
-
+        res.mvs.forEach(v => {
+            str += `
+            <li>
+                <div class="playlist-img">
+                    <img class="mid-img" src="${v.imgurl + '?param=180y180'}">
+                    <p class="right-top">
+                        <i class="iconfont icon-video"></i>
+                        <span>${numConvert(v.playCount)}</span>
+                    </p>
+                    <p class="left-bottom">
+                        ${timeConvert(v.duration / 1000)}
+                    </p>
+                </div>
+                <p class="playlist-name text-ellipsis">${v.name}</p>
+            </li>
+            `
+        })
+        str += '</ul></div></div>'
+    }else {
+        str += '<div class="loading">没有相关MV</div>'
+    }
     return str
 }
 
@@ -206,12 +211,18 @@ async function mvLayout(id) {
 async function descLayout(id) {
     // 获取详情
     let res = await GET('/artist/desc?id=' + id)
+    console.log(res);
     // 布局页面
     let str = `
     <div id="desc">
     `
     // 歌手描述数组
     let arr = []
+    // 把自己写的简介填到介绍里
+    res.introduction.unshift({
+        ti: window.artistName + '简介',
+        txt: res.briefDesc
+    })
     res.introduction.forEach(i => {
         // 歌手描述按照\n分割成字符串
         arr = i.txt.split('\n')

@@ -194,7 +194,7 @@ async function recommendDom() {
     
                         <div class="block-list block-${homeApi[i].class}">
                 `
-                res.result.forEach(r => {
+                res.result.forEach(r => { 
                     str += `
                         <div class="block-item" data-id="${r.id}" onclick="goPlayList(this)">
                             <img class="mid-img" src="${homeApi[i].name == '独家放送' || homeApi[i].name == '推荐MV' ? r.picUrl : r.picUrl + '?param=180y180'}">
