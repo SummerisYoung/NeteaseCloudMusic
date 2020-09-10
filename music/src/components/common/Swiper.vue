@@ -1,7 +1,7 @@
 <template>
 <div class="banner" @mouseenter="swiperPause()" @mouseleave="swiperBegin()">
-  <ul class="banner-ul" id="banner">
-    <li :class="picClass[i]" v-for="(b,i) in banners" :key="b.targetId" @click="swiperPic(picClass[i])">
+  <ul class="banner-ul">
+    <li :class="picClass[i]" v-for="(b,i) in swipers" :key="b.imageUrl" @click="swiperPic(picClass[i])">
       <img :src="b.imageUrl">
       <span class="bg-r">独家</span>
     </li>
@@ -10,26 +10,17 @@
   <a href="javascript:;" class="next btn" @click="nextimg()">&gt;</a>
 
   <ul class="banner-btn">
-    <li href="javascript:;" v-for="(b,i) in banners" :key="b.targetId"><span :class="i == index ? 'red':''"></span></li>
+    <li v-for="(b,i) in swipers" :key="b.imageUrl" @mouseenter="swiperBtn(i)">
+      <span :class="i == index ? 'red':''"></span>
+    </li>
   </ul>
 </div>
 </template>
 
 <script>
-import tabVue from './tab.vue';
 export default {
   props: {
-    banners: {
-      type: Array,
-      default: []
-    }
-  },
-  watch: {
-    // 监听父组件是否传递过来轮播图数据
-    banners: function(newVal,oldVal){
-      // 如果传递过来了数据,就调用初始化方法
-      newVal && this.initBanners();
-    }
+    swipers: Array
   },
   data() {
     return {
@@ -40,9 +31,9 @@ export default {
   },
   methods: {
     // 轮播图初始化
-    initBanners() {
+    initSwipers() {
       // 根据banner数量生成图片样式数组
-      for(let i = 0; i < this.banners.length;i++) {
+      for(let i = 0; i < this.swipers.length;i++) {
         this.picClass.push(`p${i}`)
       }
       // 定时器开始自动轮播
@@ -68,6 +59,23 @@ export default {
         this.index = this.picClass.length - 1;
       }
     },
+    // 鼠标移入下方btn切换图片
+    swiperBtn(btnIndex) {
+      // 创建原始样式数组,这样做的目的是保证每个图片对应的样式不变
+      let arr = []
+      for(let i = 0;i < this.picClass.length;i++) {
+        arr.push('p' + i)
+      }
+      // 改一下下标
+      this.index = btnIndex
+      // 移动样式
+      while(btnIndex) {
+        arr.unshift(arr.pop())
+        btnIndex--
+      }
+      // 把修改后的样式交给picClass,操作页面
+      this.picClass = arr
+    },
     // 下一张
     nextimg(){
       this.picClass.unshift(this.picClass[this.picClass.length - 1]);
@@ -79,15 +87,18 @@ export default {
     },
     // 鼠标移入暂停轮播
     swiperPause() {
-      console.log(111);
       clearInterval(this.timer)
     },
     // 鼠标移除继续轮播
     swiperBegin() {
-      let that = this
-      setTimeout(function(){
-        that.timer = that.nextimg()
-      },3000)
+      this.timer = setInterval(this.nextimg,3000)
+    }
+  },
+  watch: {
+    // 监听父组件是否传递过来轮播图数据
+    swipers(newVal) {
+      // 如果传递过来了数据,就调用初始化方法
+      newVal && this.initSwipers();
     }
   }
 }

@@ -1,24 +1,28 @@
 <template>
-<div id="index">
+<div id="index" ref="index">
     <tab class="index-tab" :items="items" :currentIndex="currentIndex" @changeTab="changeTab"/>
     <component class="main" :is="currentComponent"></component>
 </div>
 </template>
 
 <script>
-import Tab from 'components/common/tab'
-import Recommend from 'views/home/recommend'
-import PlayList from 'views/home/playlist'
+import Tab from 'components/common/Tab'
+import Personalized from 'views/home/personalized/personalized'
+import * as util from '../../utils/util'
+
 export default {
     components: {
-        Tab,Recommend,PlayList
+        Tab,Personalized
     },
     data() {
         return {
             items: ['个性推荐','歌单','主播电台','排行榜','歌手','最新音乐'],
-            currentTabComponent: ['Recommend','PlayList','radio','toplist','artist','newsong'],
+            currentTabComponent: ['Personalized','PlayList','radio','toplist','artist','newsong'],
             currentIndex: 0
         }
+    },
+    mounted() {
+        this.$utils.nicescroll(this.$refs.index)
     },
     computed: {
         currentComponent() {
@@ -55,44 +59,6 @@ export default {
         #recommend {
             .block {
                 padding: 30px 0;
-                .block-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: flex-end;
-                    padding-bottom: 10px;
-                    border-bottom: @border;
-
-                    h2 {
-                        font-size: 20px;
-                        font-weight: 500;
-                    }
-
-                    span {
-                        font-size: 12px;
-                        font-weight: 300;
-                    }
-                }
-
-                .block-list {
-                    display: flex;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-
-                    .block-item {
-                        margin-bottom: 30px;
-                        img {
-                            margin: 10px 0;
-                            border: @border;
-                            cursor: pointer;
-                        }
-
-                        p {
-                            width: 180px;
-                            font-size: 14px;
-                            cursor: pointer;
-                        }
-                    }
-                }
 
                 .block-privatecontent {
                     .block-item {

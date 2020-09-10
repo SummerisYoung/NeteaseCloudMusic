@@ -28,5 +28,5 @@ export default {
 </script>
 
 <style lang="less">
-@import url(//at.alicdn.com/t/font_2019206_xfd0lu0p5re.css);
+@import url(//at.alicdn.com/t/font_2019206_i0e5kj949z.css);
 </style>
