@@ -108,6 +108,7 @@ export default {
 .banner {
   position: relative;
   height: 300px;
+  margin: 0 20px;
   overflow: hidden;
 
   .banner-ul {
@@ -160,10 +161,10 @@ export default {
       }
 
       .p0{
-          transform:translate3d(-300px,11.5px,0) scale(0.9);
+          transform:translate3d(-300px,11px,0) scale(0.9);
       }
       .p1{
-          transform:translate3d(0px,11.5px,0) scale(0.9);
+          transform:translate3d(0px,11px,0) scale(0.9);
           transform-origin:0 50%;
           opacity: 0.8;
           z-index: 2;
@@ -174,28 +175,28 @@ export default {
           opacity: 1;
       }
       .p3{
-          transform:translate3d(600px,11.5px,0) scale(0.9);
+          transform:translate3d(600px,11px,0) scale(0.9);
           transform-origin:100% 50%;
           opacity: 0.8;
           z-index: 2;
       }
       .p4{
-          transform:translate3d(900px,11.5px,0) scale(0.9);
+          transform:translate3d(900px,11px,0) scale(0.9);
       }
       .p5{
-          transform:translate3d(1200,11.5px,0) scale(0.9);
+          transform:translate3d(1200,11px,0) scale(0.9);
       }
       .p6{
-          transform:translate3d(1500px,11.5px,0) scale(0.9);
+          transform:translate3d(1500px,11px,0) scale(0.9);
       }
       .p7{
-          transform:translate3d(1800px,11.5px,0) scale(0.9);
+          transform:translate3d(1800px,11px,0) scale(0.9);
       }
       .p8{
-          transform:translate3d(2100px,11.5px,0) scale(0.9);
+          transform:translate3d(2100px,11px,0) scale(0.9);
       }
       .p9{
-          transform:translate3d(2400px,11.5px,0) scale(0.9);
+          transform:translate3d(2400px,11px,0) scale(0.9);
       }
   }
   
@@ -241,4 +242,5 @@ export default {
       }
   }
 } 
+
 </style>

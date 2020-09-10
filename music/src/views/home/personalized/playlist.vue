@@ -1,18 +1,16 @@
 <template>
-<div class="block">
+<div>
     <div class="block-header">
         <h2>推荐歌单</h2>
         <span>更多></span>
     </div>
     
-    <div class="block-list block-playlist">
-        <play-list-ul :playlists="playlists"/>
-    </div>
+    <play-list-ul :playlists="playlists"/>
 </div>
 </template>
 
 <script>
-import PlayListUl from "../../../components/common/PlayListUl"
+import PlayListUl from "components/common/PlayListUl"
 export default {
     components: {
         PlayListUl
@@ -24,24 +22,6 @@ export default {
 </script>
 
 <style lang="less">
-.block-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding-bottom: 10px;
-    border-bottom: @border;
-
-    h2 {
-        font-size: 20px;
-        font-weight: 500;
-    }
-
-    span {
-        font-size: 12px;
-        font-weight: 300;
-    }
-}
-
 .block-list {
     display: flex;
     justify-content: space-between;

@@ -2,15 +2,23 @@
   <div>
     <swiper :swipers="banners"/>
     <play-list :playlists="playlists"/>
+    <private-content :privatecontents="privatecontents" />
+    <new-song :newsongs="newsongs" />
+    <mv :mvs="mvs" />
+    <dj-program :djprograms="djprograms" />
   </div>
 </template>
 
 <script>
-import Swiper from '../../../components/common/Swiper'
+import Swiper from 'components/common/Swiper'
 import PlayList from './playlist'
+import PrivateContent from './privatecontent'
+import NewSong from './newsong'
+import Mv from './mv'
+import DjProgram from './djprogram'
 export default {
   components: {
-    Swiper,PlayList
+    Swiper,PlayList,PrivateContent,NewSong,Mv,DjProgram
   },
   data() {
     return {
@@ -27,37 +35,67 @@ export default {
   },
   methods: {
     // 并发获取数据
-    async getData() {
-      [this.banners,this.playlists] = await Promise.all([this.getBanners(),this.getPlayList()])
+    async getData() {[
+      this.banners,
+      this.playlists,
+      this.privatecontents,
+      this.newsongs,
+      this.mvs,
+      this.djprograms
+      ] = await Promise.all([
+        this.getBanners(),
+        this.getPlayLists(),
+        this.getPrivateContents(),
+        this.getNewSongs(),
+        this.getMVs(),
+        this.getDjPrograms()
+      ])
     },
     // 获取banners
     getBanners() {
       return this.$axios.get('/banner?type=0').then(r => r.banners)
     },
     // 获取推荐歌单
-    getPlayList() {
+    getPlayLists() {
       return this.$axios.get('/personalized?limit=10').then(r => r.result)
     },
     // 获取独家放送
-    getPrivateContent() {
-      return this.$axios.get('/personalized/privatecontent')
+    getPrivateContents() {
+      return this.$axios.get('/personalized/privatecontent').then(r => r.result)
     },
     // 获取最新音乐
-    getNewSong() {
-      return this.$axios.get('/personalized/newsong')
+    getNewSongs() {
+      return this.$axios.get('/personalized/newsong').then(r => r.result)
     },
     // 获取推荐MV
-    getMV() {
-      return this.$axios.get('/personalized/mv')
+    getMVs() {
+      return this.$axios.get('/personalized/mv').then(r => r.result)
     },
     // 获取主播电台
-    getDjProgram() {
-      return this.$axios.get('/personalized/djprogram')
+    getDjPrograms() {
+      return this.$axios.get('/personalized/djprogram').then(r => r.result)
     }
   }
 }
 </script>
 
 <style lang="less">
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 10px;
+  margin: 0 20px;
+  border-bottom: @border;
 
+  h2 {
+      font-size: 20px;
+      font-weight: 500;
+  }
+
+  span {
+      font-size: 12px;
+      font-weight: 300;
+  }
+}
 </style>
