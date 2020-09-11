@@ -39,6 +39,9 @@ h6 {
 ul {
   list-style: none;
 }
+li {
+  user-select: none;
+}
 
 button,
 input,

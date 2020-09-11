@@ -16,9 +16,9 @@
 
 <script>
 export default {
-    props: {
-        privatecontents: Array
-    }
+  props: {
+    privatecontents: Array
+  }
 }
 </script>
 

@@ -61,7 +61,7 @@ export default {
   mounted() {
     // 给歌单分类添加滚动条
     this.$nextTick(() => {
-      this.$utils.nicescroll('.catlist-menu')
+      this.nicescroll('.catlist-menu')
     })
   },
   methods: {

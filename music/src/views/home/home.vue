@@ -1,7 +1,7 @@
 <template>
 <div id="index">
-    <tab class="index-tab" :items="items" :currentIndex="currentIndex" @changeTab="changeTab"/>
-    <component class="main" :is="currentComponent"></component>
+  <tab class="index-tab" :items="items" :currentIndex="currentIndex" @changeTab="changeTab"/>
+  <component class="main" :is="homeComponent"></component>
 </div>
 </template>
 
@@ -10,35 +10,35 @@ import Tab from 'components/common/Tab'
 import Personalized from 'views/home/personalized/personalized'
 import Playlist from './playlist/playlist'
 import Toplist from './toplist/toplist'
-import * as util from '../../utils/util'
-
+import Artist from './artist/artist'
+import Newsong from './newsong/newsong'
 export default {
-    components: {
-        Tab,Personalized,Playlist,Toplist
-    },
-    data() {
-        return {
-            items: ['个性推荐','歌单','主播电台','排行榜','歌手','最新音乐'],
-            currentTabComponent: ['Personalized','Playlist','radio','Toplist','artist','newsong'],
-            currentIndex: 0
-        }
-    },
-    mounted() {
-        this.$nextTick(() => {
-            this.$utils.nicescroll('#index')
-        })
-    },
-    computed: {
-        currentComponent() {
-            return this.currentTabComponent[this.currentIndex]
-        }
-    },
-    methods: {
-        // 接受子组件传递过来的index值,修改当前下标
-        changeTab(index){
-            this.currentIndex = index
-        }
+  components: {
+    Tab,Personalized,Playlist,Toplist,Artist,Newsong
+  },
+  data() {
+    return {
+      items: ['个性推荐','歌单','主播电台','排行榜','歌手','最新音乐'],
+      homeTabComponent: ['Personalized','Playlist','radio','Toplist','Artist','newsong'],
+      currentIndex: 0
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.nicescroll('#index')
+    })
+  },
+  computed: {
+    homeComponent() {
+      return this.homeTabComponent[this.currentIndex]
+    }
+  },
+  methods: {
+    // 接受子组件传递过来的index值,修改当前下标
+    changeTab(index){
+      this.currentIndex = index
+    }
+  }
 }
 </script>
 

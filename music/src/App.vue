@@ -176,24 +176,8 @@ table {
         }
     }
 }
-// li的hover样式
-.li-hover{
-    li {
-        display: flex;
-        align-items: center;
-        line-height: 30px;
-    }
-    
-    li:nth-child(even) {
-        background: @dark-background;
-    }
-    
-    li:hover {
-        background: rgb(235,236,237);
-    }
-}
 // 所有图标都变成点击图标
 .iconfont {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

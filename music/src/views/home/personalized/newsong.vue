@@ -35,12 +35,7 @@
 export default {
   props: {
     newsongs: Array,
-  },
-  methods: {
-    author(artists) {
-      return this.$utils.author(artists);
-    },
-  },
+  }
 };
 </script>
 

@@ -1,9 +1,9 @@
 <template>
   <div class="tag">
-    <span>{{tagName}}：</span>
-    <ul>
-      <li v-for="t in tags" :key="t.id">
-        <span @click="changeTag(t.name)">{{t.name}}</span>
+    <span :class="[tagName == '筛选' ? 'tagname' : '']">{{tagName}}：</span>
+    <ul :class="[tagName == '筛选' ? 'filter' : '']">
+      <li v-for="t in tags" :key="t.name">
+        <span :class="[active == t.value ? 'default' : '']" @click="changeTag(t)">{{t.name}}</span>
       </li>
     </ul>
   </div>
@@ -14,10 +14,12 @@ export default {
   props: {
     tagName: String,
     tags: Array,
+    active: String
   },
   methods: {
-    changeTag(name) {
-      this.$emit('changeTag',name)
+    changeTag(o) {
+      o.tagName = this.tagName
+      this.$emit('changeTag',o)
     }
   }
 };
@@ -27,9 +29,13 @@ export default {
 .tag {
   margin: 10px 20px;
   display: flex;
-  align-items: center;
+  align-items: top;
+  .tagname {
+    width: 44px;
+  }
   ul {
     display: flex;
+    flex-wrap: wrap;
     li {
       padding: 0 20px;
       text-align: center;
@@ -48,5 +54,8 @@ export default {
       }
     }
   }
+}
+.filter li {
+  margin-bottom: 20px;
 }
 </style>

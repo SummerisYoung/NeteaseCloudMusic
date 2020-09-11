@@ -7,7 +7,7 @@ import utils from './utils/util'
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
-Vue.prototype.$utils = utils
+Vue.use(utils)
 
 new Vue({
   router,

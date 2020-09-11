@@ -18,7 +18,7 @@
 export default {
   props: {
     mvs: Array,
-  },
+  }
 };
 </script>
 

@@ -44,12 +44,9 @@ export default {
       })
     },
     // 点击了热门标签
-    changeTag(name) {
-      this.tagName = name
-      this.changeCat(name)
-    },
-    numConvert(num) {
-      this.$utils.numConvert(num)
+    changeTag(tag) {
+      this.tagName = tag.name
+      this.changeCat(tag.name)
     }
   },
 };

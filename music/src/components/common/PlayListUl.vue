@@ -3,9 +3,10 @@
     <loading v-if="this.$store.state.loading"/>
     <ul v-else>
       <li v-for="p in playlists" :key="p.id">
+        <div class="bg-img"></div>
         <div class="playlist-img">
           <img class="mid-img" :src="(p.coverImgUrl ? p.coverImgUrl : p.picUrl) + '?param=180y180'">
-          <p class="right-top">
+          <p class="right-top" v-if="p.playCount">
             <i class="iconfont icon-headset"></i>
             <span>{{numConvert(p.playCount)}}</span>
           </p>
@@ -17,7 +18,10 @@
             {{p.creator.nickname}}
           </p>
         </div>
-        <p class="playlist-name text-ellipsis">{{p.name}}</p>
+        <p class="text-ellipsis playlist-name">{{p.name}}
+          <span class="alias" v-if="p.alias">({{p.alias[0]}})</span>
+        </p>
+        <p class="album-name text-ellipsis" v-if="p.artists" v-html="author(p.artists)"></p>
       </li>
     </ul>
   </div>
@@ -32,11 +36,11 @@ export default {
   props: {
     playlists: Array
   },
-  methods: {
-    numConvert(num) {
-      return this.$utils.numConvert(num)
-    }
-  }
+  // watch: {
+  //   playlists(val) {
+  //     console.log(111,val);
+  //   }
+  // }
 }
 </script>
 
@@ -44,6 +48,7 @@ export default {
 // 歌单
 .playlist {
   height: 100%;
+  width: 100%;
   ul {
     display: flex;
     justify-content: space-between;
@@ -53,14 +58,26 @@ export default {
       width: 240px;
     }
     li {
+      position: relative;
       margin: 20px;
       width: 180px;
       font-size: 14px;
+
+      .bg-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 220px;
+        height: 180px;
+        background: url(/img/coverall.png);
+        background-position:0 -986px;
+      }
 
       .playlist-img {
         position: relative;
         height: 180px;
         color: #fff;
+        
         .right-top {
           position: absolute;
           top: 0;
@@ -105,9 +122,20 @@ export default {
 
       .playlist-name {
         margin: 5px 0;
+        overflow:hidden; 
+        text-overflow:ellipsis;
+        display:-webkit-box; 
+        -webkit-box-orient:vertical;
+        -webkit-line-clamp:2;
+        white-space: initial;
+
+        .alias {
+          font-size: 16px;
+          color: #999;
+        }
       }
 
-      .trackCount {
+      .album-name {
         color: #999;
       }
     }
