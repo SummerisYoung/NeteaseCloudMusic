@@ -23,11 +23,7 @@ export default {
       currentIndex: 0
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.nicescroll('#index')
-    })
-  },
+  
   computed: {
     homeComponent() {
       return this.homeTabComponent[this.currentIndex]
@@ -47,8 +43,8 @@ export default {
     display: flex;
     flex-direction: column;
     flex: 1;
+    height: 100%;
     padding: 0 30px;
-    background: @light-background;
 
     .index-tab {
       margin: 0 20px;

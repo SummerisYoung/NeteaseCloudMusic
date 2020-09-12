@@ -47,13 +47,6 @@ export default {
         "rgb(145,67,200)"
       ],
     };
-  },
-  watch: {
-    officialList(){
-      this.$nextTick(() =>{
-        this.refresh('#index')
-      })
-    }
   }
 };
 </script>

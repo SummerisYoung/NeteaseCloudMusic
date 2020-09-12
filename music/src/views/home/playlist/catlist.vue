@@ -6,6 +6,7 @@
     </p>
     <div class="menu-before" v-show="isOpen">
       <div class="catlist-main">
+        <el-scrollbar>
         <h6>添加标签</h6>
         <div class="catlist-menu">
           <p id="all" class="choose" @click="changeCat('全部歌单')">
@@ -25,6 +26,7 @@
             </ul>
           </div>
         </div>
+        </el-scrollbar>
       </div>
     </div>
   </div>
@@ -57,12 +59,6 @@ export default {
   },
   created() {
     this.$axios.get('/playlist/catlist').then(r => this.classify(r))
-  },
-  mounted() {
-    // 给歌单分类添加滚动条
-    this.$nextTick(() => {
-      this.nicescroll('.catlist-menu')
-    })
   },
   methods: {
     classify(r) {

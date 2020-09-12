@@ -1,6 +1,3 @@
-import $ from 'jquery'
-import niceScroll from 'jquery.nicescroll'
-
 export default {
   install:function(Vue){
     // 关键词高亮
@@ -72,20 +69,5 @@ export default {
       // 当前点击的变色
       that.classList.add('deep-color')
     };
-
-    // 滚动条
-    Vue.prototype.nicescroll = function(dom) {
-      $(dom).niceScroll({
-        cursorcolor:"#ddd",     // 滚动条的颜色值
-        cursorwidth:8,          // 滚动条的宽度值
-        autohidemode:false,     // 滚动条是否是自动隐藏，默认值为 true
-        zIndex: 5               // 改变z-index值的滚动条的div
-      })
-    }
-
-    // 刷新滚动条
-    Vue.prototype.refresh = function(dom) {
-      $(dom).getNiceScroll().resize()
-    }
   }
 }

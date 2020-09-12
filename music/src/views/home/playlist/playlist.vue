@@ -1,7 +1,7 @@
 <template>
   <div>
     <cat-list :tagName="tagName" @changeCat="changeCat" />
-    <tag tagName="热门标签" :tags="tags" @changeTag="changeTag"/>
+    <tag tagName="热门标签" active="" :tags="tags" @changeTag="changeTag"/>
     <play-list-ul :playlists="playlists"/>
   </div>
 </template>

@@ -8,7 +8,9 @@
       <side-bar />
 
       <!-- 主体 -->
-      <router-view/>
+      <el-scrollbar style="flex:1;">
+        <router-view/>
+      </el-scrollbar>
     </div>
 
     <!-- 底部 -->
@@ -36,10 +38,6 @@ body {
     position: relative;
     min-width: 1050px;
 }
-// 中部内容
-.middle {
-    display: flex;
-}
 // 关键词高亮
 .keyword-highlight {
     color: steelblue;
@@ -54,7 +52,9 @@ body {
 }
 // 中间的内容高度100%
 .middle {
-    height: calc(100vh - 130px);
+  display: flex;
+  height: calc(100vh - 130px);
+  background: @light-background;
 }
 // 最小图
 .tiny-img {
@@ -179,5 +179,12 @@ table {
 // 所有图标都变成点击图标
 .iconfont {
   cursor: pointer;
+}
+// element ui 滚动条样式设置
+.el-scrollbar__wrap {
+  overflow-x: hidden !important;
+}
+.el-scrollbar__bar {
+  opacity: 1 !important;
 }
 </style>

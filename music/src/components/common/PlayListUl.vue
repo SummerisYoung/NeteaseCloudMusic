@@ -35,12 +35,7 @@ export default {
   },
   props: {
     playlists: Array
-  },
-  // watch: {
-  //   playlists(val) {
-  //     console.log(111,val);
-  //   }
-  // }
+  }
 }
 </script>
 
