@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import SearchBox from './searchbox'
+import SearchBox from './SearchBox'
 export default {
   components: {
     SearchBox
@@ -81,7 +81,7 @@ export default {
   }
 
   .topbar-middle {
-    i {
+    > i {
       display: inline-block;
       height: 24px;
       line-height: 24px;
@@ -94,7 +94,7 @@ export default {
       border: 1px solid rgb(168, 40, 40);
       cursor: pointer;
     }
-    i:nth-child(1) {
+    > i:nth-child(1) {
       border-right: transparent;
     }
   }

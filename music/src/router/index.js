@@ -6,7 +6,11 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
-    component: () => import('views/home/home.vue')
+    component: () => import('views/home/index.vue')
+  },
+  {
+    path: '/search/:keyword',
+    component: () => import('views/search/index.vue')
   },
 ]
 

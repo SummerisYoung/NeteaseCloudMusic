@@ -4,15 +4,15 @@
       id="search-ipt"
       type="text"
       placeholder="搜索音乐，视频，歌词，电台"
-      @click.stop="openSearch()"
+      @click.stop="openSearchBox()"
       @focus="getSearchHot()"
       @input="getInputChange()"
+      @keyup.enter="goSearch()"
       v-model="iptValue"
-      onkeydown="gosearchList()"
     />
-    <i class="iconfont icon-search" onclick="gosearchList()"></i>
+    <i class="iconfont icon-search" @click="goSearch()"></i>
     <div class="search-res-box" v-if="isSearch" ref="search">
-      <el-scrollbar class="search-res">
+      <el-scrollbar class="search-res" :class="[iptValue ? 'search-universal' : '']">
         <div v-if="iptValue == ''">
           <h3>热搜榜</h3>
           <ul class="search-ul">
@@ -30,9 +30,26 @@
           </ul>
         </div>
         <div v-else>
-          <p style="padding:5px 10px" class="suggest-li" onclick="gosearchList()" 
-          v-html="'搜' + highlight('',iptValue) + '相关的结果'">></p>
-          
+          <p
+            style="padding:5px 10px"
+            class="suggest-li"
+            v-html="'搜' + highlight('',iptValue) + '相关的结果'"
+            @click="goSearch()"
+          >></p>
+          <div v-for="o in searchRes.order" :key="o">
+            <p class="suggest-order">
+              <i class="iconfont" :class="searchIcon[o]"></i>{{searchName[o]}}
+            </p>
+            <ul v-if="searchRes[o]">
+              <li
+                class="suggest-li text-ellipsis"
+                v-for="s in searchRes[o]"
+                :key="s.id"
+                v-html="searchLi(s)"
+              >
+              </li>
+            </ul>
+          </div>
         </div>
       </el-scrollbar>
     </div>
@@ -43,10 +60,22 @@
 export default {
   data() {
     return {
-      isSearch: false,
-      hotRes: [],
-      searchRes: [],
-      iptValue: ''
+      isSearch: false, // 打开关闭搜索菜单
+      hotRes: [], // 热搜
+      iptValue: "", // input输入的内容
+      searchRes: {}, // 搜索结果
+      searchIcon: {
+        artists: "icon-user",
+        songs: "icon-song",
+        albums: "icon-album",
+        playlists: "icon-musiclist",
+      }, // 搜索结果对应图标
+      searchName: {
+        artists: "歌手",
+        songs: "单曲",
+        albums: "专辑",
+        playlists: "歌单",
+      }// 搜索结果对应名称
     };
   },
   mounted() {
@@ -56,7 +85,7 @@ export default {
     });
   },
   methods: {
-    openSearch() {
+    openSearchBox() {
       this.isSearch = true;
     },
     getSearchHot() {
@@ -65,9 +94,25 @@ export default {
       });
     },
     getInputChange() {
-      this.$axios.get('/search/suggest?keywords=' + this.iptValue).then(r => {
-        this.searchRes = r.result
-      })
+      if (this.iptValue) {
+        this.$axios
+          .get("/search/suggest?keywords=" + this.iptValue)
+          .then((r) => {
+            this.searchRes = r.result;
+          });
+      }
+    },
+    searchLi(s) {
+      let name = this.highlight(s.name,this.iptValue)
+      let alias = s.alias && s.alias.length ? '(' + s.alias + ')' : ''
+      let artists = s.artists ? this.highlight(this.author(s.artists),this.iptValue) : ''
+      let artist = s.artist ? this.highlight(s.artist.name,this.iptValue) : ''
+      return name + ' - ' + alias + artists + artist
+    },
+    goSearch() {
+      if(this.iptValue) {
+        this.$router.push({path:'/search/:keyword',query: {keyword: this.iptValue}})
+      }
     }
   },
 };
@@ -99,10 +144,14 @@ export default {
 
   i {
     position: absolute;
-    top: 1px;
+    top: 2px;
     right: 5px;
     border: none;
     font-size: 16px;
+    color: rgb(200, 100, 100);
+    &:hover {
+      color: rgb(220, 170, 170);
+    }
   }
   .search-res-box {
     &::before {
@@ -117,7 +166,7 @@ export default {
 
   .search-res {
     position: absolute;
-    top: 44px;
+    top: 45px;
     left: 10px;
     width: 530px;
     height: 530px;
@@ -126,6 +175,7 @@ export default {
     border: @border;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     z-index: 5;
+    transition: 0.3s;
 
     .suggest-order {
       font-size: 12px;
@@ -134,18 +184,17 @@ export default {
       i {
         position: relative;
         right: 0;
+        margin-left: 8px;
         color: #666;
       }
     }
     .suggest-li {
+      display: flex;
       padding: 5px 30px;
       font-size: 12px;
       cursor: pointer;
       &:hover {
         background: @lihover;
-      }
-      span {
-        font-size: 12px;
       }
     }
 
@@ -212,6 +261,11 @@ export default {
         }
       }
     }
+  }
+
+  .search-universal {
+    height: auto;
+    width: 450px;
   }
 }
 </style>

@@ -8,22 +8,21 @@
 <script>
 import Tab from 'components/common/Tab'
 import Personalized from 'views/home/personalized/personalized'
-import Playlist from './playlist/playlist'
-import Toplist from './toplist/toplist'
+import PlayList from './playlist/playlist'
+import TopList from './toplist/toplist'
 import Artist from './artist/artist'
-import Newsong from './newsong/newsong'
+import NewSong from './newsong/newsong'
 export default {
   components: {
-    Tab,Personalized,Playlist,Toplist,Artist,Newsong
+    Tab,Personalized,PlayList,TopList,Artist,NewSong
   },
   data() {
     return {
       items: ['个性推荐','歌单','主播电台','排行榜','歌手','最新音乐'],
-      homeTabComponent: ['Personalized','Playlist','radio','Toplist','Artist','newsong'],
+      homeTabComponent: ['Personalized','PlayList','radio','TopList','Artist','NewSong'],
       currentIndex: 0
     }
   },
-  
   computed: {
     homeComponent() {
       return this.homeTabComponent[this.currentIndex]

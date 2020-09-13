@@ -9,13 +9,13 @@
         <i class="iconfont icon-love"></i>
         <i class="iconfont icon-download"></i>
       </p>
-      <p class="img" v-if="img">
+      <p class="img" v-if="s.album.picUrl">
         <img :src="s.album.picUrl + '?param=50y50'" alt />
         <i class="iconfont icon-play"></i>
       </p>
       <p class="name text-ellipsis">
         <span>{{s.name}}</span>
-        <span>{{s.alias.length ? s.alias : ''}}</span>
+        <span>{{s.alias && s.alias.length ? s.alias : ''}}</span>
       </p>
       <p class="artist text-ellipsis" v-html="author(s.artists)"></p>
       <p class="album text-ellipsis" v-if="album">
@@ -68,8 +68,6 @@ export default {
 
 <style lang="less">
 .song-list-ul {
-  margin: 0 20px;
-  border: @border;
   li {
     display: flex;
     align-items: center;
@@ -97,18 +95,23 @@ export default {
       }
     }
 
-    p {
-      margin-right: 20px;
-    }
-
     .index {
       width: 5%;
-      text-align: center;
+      margin-right: 15px;
+      text-align: right;
       color: #999;
     }
 
     .icon {
-      width: 10%;
+      width: 5%;
+      i {
+        margin-right: 10px;
+        color: #999;
+
+        &:hover {
+          color: #333;
+        }
+      }
     }
 
     .img {
