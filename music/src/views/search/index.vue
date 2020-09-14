@@ -56,7 +56,6 @@ export default {
     },
     // 接受子组件传递过来的搜索信息
     searchPrompt(prompt) {
-      console.log(prompt);
       this.prompt = prompt;
     },
   },

@@ -3,7 +3,7 @@
     <!-- logo -->
     <div class="logo">
       <h2>
-        <a href="#">
+        <a href="/">
           <i class="iconfont icon-wangyiyun"></i>
           网易云音乐
         </a>

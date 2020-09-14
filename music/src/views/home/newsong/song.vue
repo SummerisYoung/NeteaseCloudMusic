@@ -1,16 +1,14 @@
 <template>
-<song-list-ul style="flex:1" :songs="songs" :icon="false">
-  <li>
-    <div class="newsong-operate">
+  <song-list-ul style="flex:1" :songs="songs" :icon="false">
+    <li class="newsong-operate">
       <p>
         <i class="iconfont icon-play"></i>播放全部
       </p>
       <p>
         <i class="iconfont icon-favority"></i>收藏全部
       </p>
-    </div>
-  </li>
-</song-list-ul>
+    </li>
+  </song-list-ul>
 </template>
 
 <script>
@@ -32,25 +30,25 @@ export default {
     };
   },
   created() {
-    this.getData(this.type[this.active])
+    this.getData(this.type[this.active]);
   },
   methods: {
     getData(type = 0) {
       // 加载loading
-      this.$store.commit('changeLoading',true)
+      this.$store.commit("changeLoading", true);
       // 请求数据
       this.$axios.get("/top/song?type=" + type).then((r) => {
         this.songs = r.data;
         // 取消loading
-        this.$store.commit('changeLoading',false)
+        this.$store.commit("changeLoading", false);
       });
-    }
+    },
   },
   watch: {
     active(val) {
-      this.getData(this.type[this.active])
-    }
-  }
+      this.getData(this.type[this.active]);
+    },
+  },
 };
 </script>
 
@@ -60,8 +58,11 @@ export default {
   justify-content: space-between;
   width: 100%;
   height: 50px;
-  padding: 5px 20px;
+  padding: 15px 20px !important;
   font-size: 12px;
+  &:hover {
+    background: none !important;
+  }
   p:first-child {
     display: flex;
     align-items: center;

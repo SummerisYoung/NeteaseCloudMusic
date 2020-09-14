@@ -6,15 +6,29 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading: false,  //加载loading
+    songDetail: '',  // 正在播放的歌曲detail
+    songUrl: '',     //正在播放的歌曲url
   },
   mutations: {
     // 修改loding状态
-    changeLoading(state, payload) {
-      state.loading = payload;
+    changeLoading(state, isLoading) {
+      state.loading = isLoading;
+    },
+    // 修改正在播放的歌曲
+    changeSongDetail(state,songDetail) {
+      state.songDetail = songDetail
+    },
+    changeSongUrl(state,songUrl) {
+      state.songUrl = songUrl
     }
   },
   actions: {
-
+    changeSongDetail(context,songDetail) {
+      context.commit('changeSongDetail',songDetail)
+    },
+    changeSongUrl(context,songUrl) {
+      context.commit('changeSongUrl',songUrl)
+    }
   },
   modules: {
   }

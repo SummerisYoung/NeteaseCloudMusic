@@ -110,6 +110,7 @@ export default {
       return name + ' - ' + alias + artists + artist
     },
     goSearch() {
+      this.isSearch = false
       if(this.iptValue) {
         this.$router.push({path:'/search/:keyword',query: {keyword: this.iptValue}})
       }

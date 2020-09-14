@@ -8,7 +8,7 @@
       <li style="width:28%">专辑</li>
       <li style="width:5%">时长</li>
     </ul>
-    <song-list-ul :songs="songs"></song-list-ul>
+    <song-list-ul :songs="songs" :highlightKeyword="keyword"></song-list-ul>
   </div>
 </template>
 

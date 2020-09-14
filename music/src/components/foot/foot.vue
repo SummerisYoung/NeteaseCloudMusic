@@ -49,8 +49,6 @@
             </div>
         </div>
     </div>
-
-    <audio src=""></audio>
 </div>
 </template>
 

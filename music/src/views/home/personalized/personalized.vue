@@ -1,5 +1,7 @@
 <template>
-  <div>
+<div>
+  <loading v-if="personalizedLoading"/>
+  <div v-else>
     <swiper :swipers="banners"/>
     <play-list :playlists="playlists"/>
     <private-content :privatecontents="privatecontents" />
@@ -7,9 +9,11 @@
     <mv :mvs="mvs" />
     <dj-program :djprograms="djprograms" />
   </div>
+</div>
 </template>
 
 <script>
+import Loading from 'components/common/Loading' 
 import Swiper from 'components/common/Swiper'
 import PlayList from './playlist'
 import PrivateContent from './privatecontent'
@@ -18,7 +22,7 @@ import Mv from './mv'
 import DjProgram from './djprogram'
 export default {
   components: {
-    Swiper,PlayList,PrivateContent,NewSong,Mv,DjProgram
+    Loading,Swiper,PlayList,PrivateContent,NewSong,Mv,DjProgram
   },
   data() {
     return {
@@ -27,11 +31,14 @@ export default {
       privatecontents: [],  // 独家放送
       newsongs: [],         // 最新音乐
       mvs: [],              // 推荐MV
-      djprograms: []        // 主播电台
+      djprograms: [],       // 主播电台
+      personalizedLoading: false // 是否开启loading
     }
   },
   created() {
+    this.personalizedLoading = true
     this.getData()
+    this.personalizedLoading = false
   },
   methods: {
     // 并发获取数据
