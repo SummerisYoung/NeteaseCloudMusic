@@ -1,8 +1,8 @@
 <template>
-  <div id="song-detail">
+  <el-scrollbar id="song-detail">
     <div class="song-box">
-      <div class="bg-img"></div>
       <div class="song-top">
+        <div class="bg-img" :style="bgImg"></div>
         <div class="song-left">
           <div class="song-image">
             <img width="400" height="400" src alt />
@@ -39,12 +39,16 @@
               <span class="keyword-highlight">搜索页</span>
             </li>
           </ul>
-          <div class="lyric-box">
-            <ul class="lyric"></ul>
-          </div>
+          <el-scrollbar class="lyric-box">
+            <ul class="lyric">
+              <li v-for="(l,i) in lyricsArr" :key="i">
+                {{l}}
+              </li>
+            </ul>
+          </el-scrollbar>
         </div>
 
-        <div class="close-detail">
+        <div class="close-detail" @click="closeDetail">
           <i class="iconfont icon-narrow"></i>
         </div>
       </div>
@@ -69,16 +73,67 @@
         <div class="comment-right"></div>
       </div>
     </div>
-    <song-audio />
-  </div>
+  </el-scrollbar>
 </template>
 
 <script>
-import SongAudio from './SongAudio'
 export default {
-  components: {
-    SongAudio
-  }
+  props: {
+    isDetail: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      lyrics: "", //歌词
+      lyricsArr: [],//歌词数组
+      lyricTime: [], //歌词时间数组
+    };
+  },
+  created() {
+    // 获取歌词
+    this.getLyric();
+  },
+  computed: {
+    bgImg() {
+      return {'background-image':`url(${this.$store.state.songDetail.al.picUrl})`}
+    }
+  },
+  watch: {
+    // 歌词处理
+    lyrics(val) {
+      val.split("\n").forEach((l, i) => {
+        let time = ''
+        let lrc = ''
+        // a是匹配到的整个字符串
+        // $1是第一个小括号内的字符串,即分钟
+        // $2是第二个小括号内的字符串,即秒钟和毫秒
+        // 如a:[05:30.123],$1:05,$2:30.123
+        // 用*把字符串转为数字
+        lrc = l.replace(/\[(\d\d):(\d\d\.\d{2,3})\]/g, function (a, $1, $2) {
+          time = $1 * 60 + $2.substring(0, 6) * 1;
+          return "";
+        });
+        this.lyricsArr.push(lrc)
+        this.lyricTime.push(time)
+      });
+    },
+  },
+  methods: {
+    // 获取歌词
+    getLyric() {
+      this.$axios
+        .get("/lyric?id=" + this.$store.state.songDetail.id)
+        .then((r) => {
+          this.lyrics = r.lrc.lyric;
+        });
+    },
+    // 关闭歌曲详情页
+    closeDetail() {
+      this.$emit('closeDetail')
+    },
+  },
 };
 </script>
 
@@ -87,16 +142,15 @@ export default {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 0;
-  height: 0;
-  padding: 0 140px;
   z-index: 5;
+  width: 100vw;
+  height: 100%;
   background: rgb(250, 250, 250);
   transition: 0.5s;
-  overflow-y: scroll;
 
   .song-box {
     position: relative;
+    padding: 0 140px;
 
     .bg-img {
       position: absolute;
@@ -206,7 +260,7 @@ export default {
           flex: 1;
           border-right: @border;
           .lyric {
-            position: absolute;
+            position: relative;
 
             li {
               color: #000;

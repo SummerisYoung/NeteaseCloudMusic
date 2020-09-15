@@ -51,7 +51,7 @@
 
     <transition name="fade">
       <div class="footer-song" v-if="song">
-        <div class="footer-img">
+        <div class="footer-img" @click="openDetail()">
           <img class="tiny-img" :src="song.al.picUrl + '?param=50y50'" />
           <i class="iconfont icon-full"></i>
         </div>
@@ -65,8 +65,9 @@
         </div>
       </div>
     </transition>
-
-    <song-detail />
+    <transition name="enlarge">
+      <song-detail v-if="isDetail" :isDetail="isDetail" @closeDetail="closeDetail"/>
+    </transition>
   </div>
 </template>
 
@@ -76,6 +77,11 @@ import { mapState } from "vuex";
 export default {
   components: {
     SongDetail,
+  },
+  data() {
+    return {
+      isDetail:false // 是否打开歌曲详情页
+    }
   },
   computed: {
     songTitle() {
@@ -90,6 +96,16 @@ export default {
       song: "songDetail",
     }),
   },
+  methods: {
+    // 打开歌曲详情页
+    openDetail() {
+      this.isDetail = true
+    },
+    // 关闭歌曲详情页
+    closeDetail() {
+      this.isDetail = false
+    }
+  }
 };
 </script>
 
@@ -211,6 +227,14 @@ export default {
         margin-left: auto;
       }
     }
+  }
+
+  .enlarge-enter-active, .enlarge-leave-active {
+    transition: all 0.5s;
+  }
+  .enlarge-enter, .enlarge-leave-to{
+    width: 0;
+    height: 0;
   }
 }
 </style>

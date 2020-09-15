@@ -112,7 +112,7 @@ export default {
     goSearch() {
       this.isSearch = false
       if(this.iptValue) {
-        this.$router.push({path:'/search/:keyword',query: {keyword: this.iptValue}})
+        this.$router.push({path:'/search',query: {keyword: this.iptValue}})
       }
     }
   },
