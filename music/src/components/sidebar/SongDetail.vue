@@ -4,8 +4,9 @@
       <div class="song-top">
         <div class="bg-img" :style="bgImg"></div>
         <div class="song-left">
+          <div class="needle" ref="needle"></div>
           <div class="song-image">
-            <img width="400" height="400" src alt />
+            <img :src="songDetail.al.picUrl + '?param=260y260'" :style="rotateImg" />
           </div>
           <ul>
             <li>
@@ -24,26 +25,28 @@
         </div>
 
         <div class="song-right">
-          <h2></h2>
+          <h2>{{songDetail.name}}</h2>
           <ul class="song-subtitle">
             <li>
               专辑：
-              <span class="keyword-highlight"></span>
+              <span class="keyword-highlight">{{songDetail.al.name}}</span>
             </li>
             <li>
               歌手：
-              <span class="keyword-highlight"></span>
+              <span class="keyword-highlight" v-html="author(songDetail.ar)"></span>
             </li>
             <li>
               来源：
               <span class="keyword-highlight">搜索页</span>
             </li>
           </ul>
-          <el-scrollbar class="lyric-box">
-            <ul class="lyric">
-              <li v-for="(l,i) in lyricsArr" :key="i">
-                {{l}}
-              </li>
+          <el-scrollbar class="lyric-box" ref="scroll">
+            <ul class="lyric" ref="lyricUl">
+              <li
+                :class="[i == lyricHighLight ? 'lyric-highlight' : '']"
+                v-for="(l,i) in lyricsArr"
+                :key="i"
+              >{{l}}</li>
             </ul>
           </el-scrollbar>
         </div>
@@ -57,6 +60,7 @@
         <div class="comment-left">
           <div class="comment-head">
             <h2>听友评论</h2>
+            <span>(已有{{comments.total}}条评论)</span>
           </div>
           <div class="comment-input">
             <div>
@@ -65,73 +69,249 @@
             </div>
             <div>
               <i class="iconfont icon-smile"></i>
-              <span class="aite">@</span>
+              <i class="iconfont icon-aite"></i>
             </div>
           </div>
-          <div class="comment-middle"></div>
+          <div class="comment-middle">
+            <div class="hot-comment">
+              <p class="comment-section">精彩评论</p>
+              <ul>
+                <li v-for="h in comments.hotComments" :key="h.id">
+                  <img class="tiny-img-radius" :src="h.user.avatarUrl  + '?param=50y50'" />
+                  <div class="comment-content">
+                    <div>
+                      <span class="keyword-highlight">{{h.user.nickname}}</span>
+                      ：{{h.content}}
+                    </div>
+
+                    <div class="be-replied" v-if="h.beReplied.length">
+                      <div v-if="h.beReplied[0].content">
+                        <span class="keyword-highlight">@{{h.beReplied[0].user.nickname}}</span>
+                        {{h.beReplied[0].content}}
+                      </div>
+                      <p style="text-align:center;" v-else>该评论已删除</p>
+                    </div>
+
+                    <div class="comment-other">
+                      <p>{{stampToTime(h.time)}}</p>
+                      <div class="comment-operate">
+                        <p class="report">举报</p>
+                        <p>
+                          <i class="iconfont icon-like"></i>
+                          <span v-if="h.likedCount">({{h.likedCount}})</span>
+                        </p>
+                        <p>分享</p>
+                        <p>回复</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <p class="read-more">查看更多精彩评论></p>
+            </div>
+
+            <div class="new-comment">
+              <p class="comment-section">最新评论</p>
+              <span>({{comments.total}})</span>
+              <ul>
+                <li v-for="h in comments.comments" :key="h.id">
+                  <img class="tiny-img-radius" :src="h.user.avatarUrl  + '?param=50y50'" />
+                  <div class="comment-content">
+                    <div>
+                      <span class="keyword-highlight">{{h.user.nickname}}</span>
+                      ：{{h.content}}
+                    </div>
+
+                    <div class="be-replied" v-if="h.beReplied.length">
+                      <div v-if="h.beReplied[0].content">
+                        <span class="keyword-highlight">@{{h.beReplied[0].user.nickname}}</span>
+                        {{h.beReplied[0].content}}
+                      </div>
+                      <p style="text-align:center;" v-else>该评论已删除</p>
+                    </div>
+
+                    <div class="comment-other">
+                      <p>{{stampToTime(h.time)}}</p>
+                      <div class="comment-operate">
+                        <p class="report">举报</p>
+                        <p>
+                          <i class="iconfont icon-like"></i>
+                          <span v-if="h.likedCount">({{h.likedCount}})</span>
+                        </p>
+                        <p>分享</p>
+                        <p>回复</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <p class="read-more">查看更多精彩评论></p>
+            </div>
+          </div>
         </div>
-        <div class="comment-right"></div>
+        <div class="comment-right">
+          <div class="recommend-section">
+            <h2>相似歌曲</h2>
+            <ul>
+              <li v-for="r in recommends" :key="r.id">
+                <img class="tiny-img" :src="r.album.picUrl  + '?param=50y50'" />
+                <div class="recommend-content">
+                  <p class="text-ellipsis">
+                    {{r.name}}
+                    <span style="color:#999" v-if="r.alias.length">({{r.alias[0]}})</span>
+                  </p>
+                  <p class="text-ellipsis" v-html="author(r.artists)"></p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </el-scrollbar>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-  props: {
-    isDetail: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
-      lyrics: "", //歌词
-      lyricsArr: [],//歌词数组
-      lyricTime: [], //歌词时间数组
+      lyricsArr: [], // 歌词数组
+      lyricTime: [], // 歌词时间数组
+      audio: null, // audio标签
+      lyricHighLight: 0, // 高亮歌词项
+      lyricNum: 0, // 比较歌词项
+      lyricTop: 0, //歌词滚动长度
+      rotate: 0, //旋转歌曲图片角度
+      comments: {}, //歌曲评论
+      recommends: {}, //相关推荐
     };
   },
   created() {
+    // 从vuex获取audio标签
+    this.audio = this.$store.state.audio;
     // 获取歌词
     this.getLyric();
+    // 获取评论
+    this.getComment();
+    // 获取相关推荐
+    this.getRecommend()
+  },
+  mounted() {
+    this.audio.ontimeupdate = this.lyricScroll;
   },
   computed: {
+    // 背景虚化图
     bgImg() {
-      return {'background-image':`url(${this.$store.state.songDetail.al.picUrl})`}
-    }
-  },
-  watch: {
-    // 歌词处理
-    lyrics(val) {
-      val.split("\n").forEach((l, i) => {
-        let time = ''
-        let lrc = ''
-        // a是匹配到的整个字符串
-        // $1是第一个小括号内的字符串,即分钟
-        // $2是第二个小括号内的字符串,即秒钟和毫秒
-        // 如a:[05:30.123],$1:05,$2:30.123
-        // 用*把字符串转为数字
-        lrc = l.replace(/\[(\d\d):(\d\d\.\d{2,3})\]/g, function (a, $1, $2) {
-          time = $1 * 60 + $2.substring(0, 6) * 1;
-          return "";
-        });
-        this.lyricsArr.push(lrc)
-        this.lyricTime.push(time)
-      });
+      return {
+        "background-image": `url(${this.songDetail.al.picUrl})`,
+      };
     },
+    // 歌曲图片旋转
+    rotateImg() {
+      return {
+        transform: `rotate(${this.rotate}deg)`,
+      };
+    },
+    ...mapState(["songDetail"]),
   },
   methods: {
     // 获取歌词
     getLyric() {
-      this.$axios
-        .get("/lyric?id=" + this.$store.state.songDetail.id)
-        .then((r) => {
-          this.lyrics = r.lrc.lyric;
-        });
+      this.$axios.get("/lyric?id=" + this.songDetail.id).then((r) => {
+        this.makeLyrics(r.lrc.lyric);
+      });
+    },
+    // 获取评论
+    getComment() {
+      this.$axios.get("/comment/music?id=" + this.songDetail.id).then((r) => {
+        this.comments = r;
+      });
+    },
+    // 获取相关推荐
+    getRecommend() {
+      this.$axios.get("/simi/song?id=" + this.songDetail.id).then((r) => {
+        this.recommends = r.songs;
+      });
+    },
+    // 歌词处理
+    makeLyrics(val) {
+      val.split("\n").forEach((l, i) => {
+        // 时间为空的句子不要
+        if (l.length) {
+          let time = "";
+          let lrc = "";
+          // a是匹配到的整个字符串
+          // $1是第一个小括号内的字符串,即分钟
+          // $2是第二个小括号内的字符串,即秒钟和毫秒
+          // 如a:[05:30.123],$1:05,$2:30.123
+          // 用*把字符串转为数字
+          lrc = l.replace(/\[(\d\d):(\d\d\.\d{2,3})\]/g, function (a, $1, $2) {
+            time = $1 * 60 + $2.substring(0, 6) * 1;
+            return "";
+          });
+          this.lyricsArr.push(lrc);
+          this.lyricTime.push(time);
+        }
+      });
+      // 处理一下时间数组,主要针对歌词最后存在一些混音编曲之类的作者的,这些的时间相同的情况,手动延迟一点时间
+      for (let i = this.lyricTime.length - 15; i < this.lyricTime.length; i++) {
+        // 如果前面的加了,那么可能出现前一项的时间大于后一项,所以判断这里是>=
+        if (this.lyricTime[i - 1] >= this.lyricTime[i]) {
+          this.lyricTime[i] = this.lyricTime[i - 1] + 0.5;
+        }
+      }
+    },
+    // 歌词滚动
+    lyricScroll() {
+      // 获取滚动条标签
+      let resize = this.$refs.scroll.$refs.resize;
+      let wrap = this.$refs.scroll.$refs.wrap;
+      if (this.audio.currentTime > this.lyricTime[this.lyricNum]) {
+        // 比较当前歌曲播放进度时间  大于 歌词时间列表的哪一项
+        while (this.audio.currentTime > this.lyricTime[this.lyricNum]) {
+          // 一直找
+          this.lyricNum++;
+        }
+        // 退出寻找循环，说明有一项比当前歌曲进度快了，那么播放的歌词就是这一项的上一项
+        this.lyricHighLight = this.lyricNum - 1;
+        // 前四条歌词无需滚动
+        if (this.lyricNum > 4) {
+          // 歌词滚动
+          let scrollTop =
+            ((this.lyricNum - 4) / this.lyricTime.length) * resize.offsetHeight;
+          wrap.scrollTo({ behavior: "smooth", top: scrollTop });
+          // 滚动比例 = 滚动条父级高度-滚动条高度 / 滚动条
+        }
+      }
+      // 避免比较歌词项越界导致this.lyricTime[this.lyricNum]为undefined的问题
+      this.lyricNum = Math.min(this.lyricTime.length - 1, this.lyricNum);
+      // 做完上述操作，要把num变为比歌曲播放的时间小一项，否则用户把歌曲往回拖动时，高亮无法回滚
+      while (this.audio.currentTime < this.lyricTime[this.lyricNum]) {
+        this.lyricNum--;
+        // 避免比较歌词项越界导致this.lyricNum = -1的问题
+        this.lyricNum = Math.max(this.lyricNum, 0);
+      }
+
+      // 歌曲结束,最后一句歌词取消高亮
+      if (this.audio.ended) {
+        this.lyricHighLight = 0;
+      }
+
+      // 暂停时变换图片上方的组件
+      if (this.audio.paused) {
+        this.$refs.needle.style.transform = "rotate(-35deg)";
+      } else {
+        // 播放时歌曲图片旋转
+        this.$refs.needle.style.transform = "rotate(0deg)";
+        this.rotate++;
+      }
     },
     // 关闭歌曲详情页
     closeDetail() {
-      this.$emit('closeDetail')
+      // 关闭歌词滚动事件
+      this.audio.ontimeupdate = null;
+      this.$emit("closeDetail");
     },
   },
 };
@@ -175,8 +355,7 @@ export default {
         width: 50%;
         height: 100%;
 
-        &::before {
-          content: "";
+        .needle {
           position: absolute;
           left: calc(50% - 17.5px);
           top: -20px;
@@ -186,6 +365,7 @@ export default {
           transform-origin: 20px 17.5px;
           background: url(/img/needle.png) no-repeat;
           background-size: contain;
+          transition: 0.5s;
         }
 
         .song-image {
@@ -198,7 +378,7 @@ export default {
           background-size: 105%;
           border: 10px solid rgba(218, 214, 215, 0.5);
           border-radius: 50%;
-          transition: 0.5s;
+
           img {
             position: absolute;
             top: 0;
@@ -208,6 +388,7 @@ export default {
             margin: auto;
             width: 260px;
             border-radius: 50%;
+            transition: 0.5s;
           }
         }
         ul {
@@ -234,10 +415,11 @@ export default {
       }
 
       .song-right {
-        margin-left: 150px;
-        flex: 1;
         display: flex;
         flex-direction: column;
+        z-index: 5;
+        margin-left: 150px;
+        flex: 1;
 
         h2 {
           width: 500px;
@@ -251,6 +433,8 @@ export default {
 
           li {
             display: inline-block;
+            width: 33%;
+            font-size: 12px;
           }
         }
         .lyric-box {
@@ -265,7 +449,8 @@ export default {
             li {
               color: #000;
               font-size: 14px;
-              padding: 10px 0;
+              height: 60px;
+              line-height: 60px;
               transition: 0.5s;
             }
 
@@ -375,7 +560,7 @@ export default {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                font-size: 14px;
+                font-size: 12px;
                 div {
                   margin-bottom: 20px;
 

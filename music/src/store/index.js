@@ -5,9 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    loading: false,  //加载loading
+    loading: false,  // 加载loading
     songDetail: '',  // 正在播放的歌曲detail
     songUrl: '',     //正在播放的歌曲url
+    audio: null,    // 音频标签
   },
   mutations: {
     // 修改loding状态
@@ -20,6 +21,10 @@ export default new Vuex.Store({
     },
     changeSongUrl(state,songUrl) {
       state.songUrl = songUrl
+    },
+    // 保存音频标签
+    getAudio(state,audio) {
+      state.audio = audio
     }
   },
   actions: {

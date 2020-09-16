@@ -32,13 +32,11 @@ export default {
       newsongs: [],         // 最新音乐
       mvs: [],              // 推荐MV
       djprograms: [],       // 主播电台
-      personalizedLoading: false // 是否开启loading
+      personalizedLoading: true // 是否开启loading
     }
   },
   created() {
-    this.personalizedLoading = true
     this.getData()
-    this.personalizedLoading = false
   },
   methods: {
     // 并发获取数据
@@ -57,6 +55,7 @@ export default {
         this.getMVs(),
         this.getDjPrograms()
       ])
+      this.personalizedLoading = false
     },
     // 获取banners
     getBanners() {

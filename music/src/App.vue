@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style lang="less">
-@import url(//at.alicdn.com/t/font_2019206_g4ku65roskt.css);
+@import url(//at.alicdn.com/t/font_2019206_we4zfqw804o.css);
 
 /* 全局样式 */
 // 最小宽度

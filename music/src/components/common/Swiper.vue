@@ -20,7 +20,10 @@
 <script>
 export default {
   props: {
-    swipers: Array
+    swipers: {
+      type: Array,
+      required:true
+    }
   },
   data() {
     return {
@@ -28,6 +31,9 @@ export default {
       index: 0,     // 轮播图片当前下标
       timer: null,  // 轮播图定时器
     }
+  },
+  created() {
+    this.initSwipers()
   },
   methods: {
     // 轮播图初始化
@@ -94,13 +100,6 @@ export default {
       this.timer = setInterval(this.nextimg,3000)
     }
   },
-  watch: {
-    // 监听父组件是否传递过来轮播图数据
-    swipers(newVal) {
-      // 如果传递过来了数据,就调用初始化方法
-      newVal && this.initSwipers();
-    }
-  }
 }
 </script>
 

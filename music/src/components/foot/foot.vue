@@ -97,6 +97,8 @@ export default {
       this.$refs.volumeProgress.offsetWidth / 2;
     // 初始化音量背景条位置
     this.volumePassed = this.$refs.volume.offsetWidth / 2;
+    // vuex保存audio标签
+    this.$store.commit('getAudio',this.$refs.audio)
   },
   watch: {
     "$store.state.songUrl"() {
@@ -208,7 +210,7 @@ export default {
       document.onmousemove = (e) => {
         let x2 = e.pageX - x1 + left;
         // 限定边界
-        x2 = Math.max(x2, -this.$refs.volumeProgress.offsetWidth / 2);
+        x2 = Math.max(x2,0);
         x2 = Math.min(
           x2,
           this.$refs.volume.offsetWidth -

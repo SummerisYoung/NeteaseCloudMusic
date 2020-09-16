@@ -2,7 +2,7 @@
   <div id="searchList">
     <p class="search-prompt" v-html="prompt"></p>
     <tab class="search-tab" :items="items" :currentIndex="currentIndex" @changeTab="changeTab" />
-    <component class="main" :is="searchComponent" :keyword="keyword" @searchPrompt="searchPrompt"></component>
+    <component class="main" :is="searchComponent" @searchPrompt="searchPrompt"></component>
   </div>
 </template>
 
@@ -40,9 +40,6 @@ export default {
       keyword: "",
       prompt: "",
     };
-  },
-  created() {
-    this.keyword = this.$route.query.keyword;
   },
   computed: {
     searchComponent() {
