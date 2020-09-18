@@ -38,7 +38,8 @@
           >></p>
           <div v-for="o in searchRes.order" :key="o">
             <p class="suggest-order">
-              <i class="iconfont" :class="searchIcon[o]"></i>{{searchName[o]}}
+              <i class="iconfont" :class="searchIcon[o]"></i>
+              {{searchName[o]}}
             </p>
             <ul v-if="searchRes[o]">
               <li
@@ -46,8 +47,7 @@
                 v-for="s in searchRes[o]"
                 :key="s.id"
                 v-html="searchLi(s)"
-              >
-              </li>
+              ></li>
             </ul>
           </div>
         </div>
@@ -75,7 +75,7 @@ export default {
         songs: "单曲",
         albums: "专辑",
         playlists: "歌单",
-      }// 搜索结果对应名称
+      }, // 搜索结果对应名称
     };
   },
   mounted() {
@@ -88,33 +88,34 @@ export default {
     openSearchBox() {
       this.isSearch = true;
     },
-    getSearchHot() {
-      this.$axios.get("/search/hot/detail").then((r) => {
-        this.hotRes = r.data;
-      });
+    async getSearchHot() {
+      this.hotRes = await this.get("/search/hot/detail").then((r) => r.data);
     },
-    getInputChange() {
+    async getInputChange() {
       if (this.iptValue) {
-        this.$axios
-          .get("/search/suggest?keywords=" + this.iptValue)
-          .then((r) => {
-            this.searchRes = r.result;
-          });
+        this.searchRes = await this.get(
+          "/search/suggest?keywords=" + this.iptValue
+        ).then((r) => r.result);
       }
     },
     searchLi(s) {
-      let name = this.highlight(s.name,this.iptValue)
-      let alias = s.alias && s.alias.length ? '(' + s.alias + ')' : ''
-      let artists = s.artists ? this.highlight(this.author(s.artists),this.iptValue) : ''
-      let artist = s.artist ? this.highlight(s.artist.name,this.iptValue) : ''
-      return name + ' - ' + alias + artists + artist
+      let name = this.highlight(s.name, this.iptValue);
+      let alias = s.alias && s.alias.length ? "(" + s.alias + ")" : "";
+      let artists = s.artists
+        ? this.highlight(this.author(s.artists), this.iptValue)
+        : "";
+      let artist = s.artist ? this.highlight(s.artist.name, this.iptValue) : "";
+      return name + " - " + alias + artists + artist;
     },
     goSearch() {
-      this.isSearch = false
-      if(this.iptValue) {
-        this.$router.push({path:'/search',query: {keyword: this.iptValue}})
+      this.isSearch = false;
+      if (this.iptValue) {
+        this.$router.push({
+          path: "/search",
+          query: { keyword: this.iptValue },
+        });
       }
-    }
+    },
   },
 };
 </script>

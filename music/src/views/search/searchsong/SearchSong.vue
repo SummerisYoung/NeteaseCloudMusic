@@ -41,23 +41,18 @@ export default {
   methods: {
     // 获取数据
     getData() {
-      // 加载loading
-      this.$store.commit("changeLoading", true);
       // 请求数据
-      this.$axios
-        .get("/search?keywords=" + this.keyword + "&type=1&limit=100")
-        .then((r) => {
-          this.songs = r.result.songs;
-          // 把搜索统计返给父级
-          this.$emit(
-            "searchPrompt",
-            `搜索"${this.highlight("", this.keyword)}"，${
-              r.result.songCount
-            }首单曲`
-          );
-          // 取消loading
-          this.$store.commit("changeLoading", false);
-        });
+      this.showLoading(async () => {
+        let res = await this.get(
+          "/search?keywords=" + this.keyword + "&type=1&limit=100"
+        ).then((r) => r.result);
+        this.songs = res.songs;
+        // 把搜索统计返给父级
+        this.$emit(
+          "searchPrompt",
+          `搜索"${this.highlight("", this.keyword)}"，${res.songCount}首单曲`
+        );
+      });
     },
   },
 };

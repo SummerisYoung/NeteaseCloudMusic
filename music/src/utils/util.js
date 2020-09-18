@@ -69,5 +69,15 @@ export default {
       // 当前点击的变色
       that.classList.add('deep-color')
     };
+
+    // 加载loading
+    Vue.prototype.showLoading = async function(fn) {
+      // 添加loading
+      this.$store.commit('changeLoading',true)
+      // 执行函数
+      await fn()
+      // 关闭loading
+      this.$store.commit('changeLoading',false)
+    }
   }
 }

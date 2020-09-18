@@ -7,25 +7,25 @@
     <div class="menu-before" v-show="isOpen">
       <div class="catlist-main">
         <el-scrollbar>
-        <h6>添加标签</h6>
-        <div class="catlist-menu">
-          <p id="all" class="choose" @click="changeCat('全部歌单')">
-            <span>全部歌单</span>
-          </p>
-
-          <div class="category" v-for="(value,key) in category" :key="key">
-            <p>
-              <i class="iconfont" :class="'icon-' + key"></i>
-              <span>{{categoryCh[key]}}</span>
+          <h6>添加标签</h6>
+          <div class="catlist-menu">
+            <p id="all" class="choose" @click="changeCat('全部歌单')">
+              <span>全部歌单</span>
             </p>
-            <ul>
-              <li v-for="v in value" :key="v.name" @click="changeCat(v.name)">
-                {{v.name}}
-                <span v-if="v.hot" class="hot">HOT</span>
-              </li>
-            </ul>
+
+            <div class="category" v-for="(value,key) in category" :key="key">
+              <p>
+                <i class="iconfont" :class="'icon-' + key"></i>
+                <span>{{categoryCh[key]}}</span>
+              </p>
+              <ul>
+                <li v-for="v in value" :key="v.name" @click="changeCat(v.name)">
+                  {{v.name}}
+                  <span v-if="v.hot" class="hot">HOT</span>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
         </el-scrollbar>
       </div>
     </div>
@@ -58,11 +58,12 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/playlist/catlist').then(r => this.classify(r))
+    this.classify()
   },
   methods: {
-    classify(r) {
-      r.sub.forEach(c => {
+    async classify() {
+      let res = await this.get('/playlist/catlist')
+      res.sub.forEach(c => {
         switch(c.category) {
           case 0: {
             this.category.language.push(c)

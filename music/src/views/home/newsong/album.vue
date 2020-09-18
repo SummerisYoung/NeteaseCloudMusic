@@ -1,15 +1,17 @@
 <template>
   <div class="new-album">
     <h2>本周新碟</h2>
-    <play-list-ul :playlists="albums" />
+    <loading v-if="$store.state.loading" />
+    <play-list-ul :playlists="albums" v-else/>
   </div>
 </template>
 
 <script>
+import Loading from "components/common/Loading";
 import PlayListUl from "components/common/PlayListUl";
 export default {
   components: {
-    PlayListUl,
+    Loading,PlayListUl
   },
   props: {
     active: {
@@ -28,14 +30,10 @@ export default {
   },
   methods: {
     getData(area = "ALL") {
-      // 加载loading
-      this.$store.commit("changeLoading", true);
       // 请求数据
-      this.$axios.get("/top/album?area=" + area).then((r) => {
-        this.albums = r.monthData;
-        // 取消loading
-        this.$store.commit("changeLoading", false);
-      });
+      this.showLoading(async () => {
+        this.albums = await this.get("/top/album?area=" + area).then((r) => r.monthData);
+      })
     },
   },
   watch: {

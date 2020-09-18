@@ -1,5 +1,6 @@
 <template>
-  <song-list-ul style="flex:1" :songs="songs" :icon="false">
+  <loading v-if="$store.state.loading" />
+  <song-list-ul style="flex:1" :songs="songs" :icon="false" v-else>
     <li class="newsong-operate">
       <p>
         <i class="iconfont icon-play"></i>播放全部
@@ -12,10 +13,11 @@
 </template>
 
 <script>
+import Loading from "components/common/Loading";
 import SongListUl from "components/common/SongListUl";
 export default {
   components: {
-    SongListUl,
+    Loading,SongListUl
   },
   props: {
     active: {
@@ -34,14 +36,10 @@ export default {
   },
   methods: {
     getData(type = 0) {
-      // 加载loading
-      this.$store.commit("changeLoading", true);
       // 请求数据
-      this.$axios.get("/top/song?type=" + type).then((r) => {
-        this.songs = r.data;
-        // 取消loading
-        this.$store.commit("changeLoading", false);
-      });
+      this.showLoading(async () => {
+        this.songs = await this.get("/top/song?type=" + type).then((r) => r.data);
+      })
     },
   },
   watch: {

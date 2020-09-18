@@ -22,7 +22,8 @@ export default {
   props: {
     swipers: {
       type: Array,
-      required:true
+      required:true,
+      default: []
     }
   },
   data() {
@@ -33,7 +34,14 @@ export default {
     }
   },
   created() {
-    this.initSwipers()
+    if(this.swipers) {
+      this.initSwipers()
+    }
+  },
+  watch: {
+    swipers(val) {
+      this.initSwipers()
+    }
   },
   methods: {
     // 轮播图初始化

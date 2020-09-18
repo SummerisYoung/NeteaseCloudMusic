@@ -12,6 +12,10 @@ Vue.use(VueRouter)
     path: '/search',
     component: () => import('views/search/index.vue')
   },
+  {
+    path: '/playlist',
+    component: () => import('views/playlist/index.vue')
+  },
 ]
 
 const router = new VueRouter({

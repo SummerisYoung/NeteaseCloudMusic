@@ -190,12 +190,14 @@ export default {
   created() {
     // 从vuex获取audio标签
     this.audio = this.$store.state.audio;
-    // 获取歌词
-    this.getLyric();
-    // 获取评论
-    this.getComment();
-    // 获取相关推荐
-    this.getRecommend()
+    this.showLoading(() => {
+      // 获取歌词
+      this.getLyric();
+      // 获取评论
+      this.getComment();
+      // 获取相关推荐
+      this.getRecommend();
+    });
   },
   mounted() {
     this.audio.ontimeupdate = this.lyricScroll;
@@ -217,22 +219,21 @@ export default {
   },
   methods: {
     // 获取歌词
-    getLyric() {
-      this.$axios.get("/lyric?id=" + this.songDetail.id).then((r) => {
-        this.makeLyrics(r.lrc.lyric);
-      });
+    async getLyric() {
+      let res = await this.get("/lyric?id=" + this.songDetail.id).then(
+        (r) => r.lrc.lyric
+      );
+      this.makeLyrics(res);
     },
     // 获取评论
-    getComment() {
-      this.$axios.get("/comment/music?id=" + this.songDetail.id).then((r) => {
-        this.comments = r;
-      });
+    async getComment() {
+      this.comments = await this.get("/comment/music?id=" + this.songDetail.id);
     },
     // 获取相关推荐
-    getRecommend() {
-      this.$axios.get("/simi/song?id=" + this.songDetail.id).then((r) => {
-        this.recommends = r.songs;
-      });
+    async getRecommend() {
+      this.recommends = await this.get(
+        "/simi/song?id=" + this.songDetail.id
+      ).then((r) => r.songs);
     },
     // 歌词处理
     makeLyrics(val) {
@@ -281,7 +282,6 @@ export default {
           let scrollTop =
             ((this.lyricNum - 4) / this.lyricTime.length) * resize.offsetHeight;
           wrap.scrollTo({ behavior: "smooth", top: scrollTop });
-          // 滚动比例 = 滚动条父级高度-滚动条高度 / 滚动条
         }
       }
       // 避免比较歌词项越界导致this.lyricTime[this.lyricNum]为undefined的问题

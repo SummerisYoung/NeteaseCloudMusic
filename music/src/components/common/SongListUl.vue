@@ -1,50 +1,39 @@
 <template>
-  <div>
-    <loading v-if="this.$store.state.loading" />
-    <ul class="song-list-ul" v-else>
-      <slot></slot>
-      <li
-        v-for="(s,i) in songs"
-        :key="s.id"
-        :style="{alignItems : highlightKeyword ? 'flex-start' : ''}"
-        @dblclick="getSong(s.id)"
-      >
-        <p class="index" v-if="index">{{(i + 1 + '').padStart(2, '0')}}</p>
-        <p class="icon" v-if="icon">
-          <i class="iconfont icon-love"></i>
-          <i class="iconfont icon-download"></i>
-        </p>
-        <p class="img" v-if="s.album.picUrl">
-          <img :src="s.album.picUrl + '?param=50y50'" alt />
-          <i class="iconfont icon-play"></i>
-        </p>
-        <p class="name text-ellipsis">
-          <span v-html="highlight(s.name,highlightKeyword)">{{s.name}}</span>
-          <span class="alias" v-if="s.alias && s.alias.length">{{s.alias[0]}}</span>
-        </p>
-        <p class="artist text-ellipsis" v-html="author(s.artists)"></p>
-        <p
-          class="album text-ellipsis"
-          v-if="album"
-          v-html="highlight(s.album.name,highlightKeyword)"
-        >
-          <span>{{s.album.name}}</span>
-        </p>
-        <p class="time" v-if="time">
-          <span>{{timeConvert(s.duration / 1000)}}</span>
-        </p>
-      </li>
-    </ul>
-  </div>
+  <ul class="song-list-ul">
+    <slot></slot>
+    <li
+      v-for="(s,i) in songs"
+      :key="s.id"
+      :style="{alignItems : highlightKeyword ? 'flex-start' : ''}"
+      @dblclick="getSong(s.id)"
+    >
+      <p class="index" v-if="index">{{(i + 1 + '').padStart(2, '0')}}</p>
+      <p class="icon" v-if="icon">
+        <i class="iconfont icon-love"></i>
+        <i class="iconfont icon-download"></i>
+      </p>
+      <p class="img" v-if="s.album.picUrl">
+        <img :src="s.album.picUrl + '?param=50y50'" alt />
+        <i class="iconfont icon-play"></i>
+      </p>
+      <p class="name text-ellipsis">
+        <span v-html="highlight(s.name,highlightKeyword)">{{s.name}}</span>
+        <span class="alias" v-if="s.alias && s.alias.length">{{s.alias[0]}}</span>
+      </p>
+      <p class="artist text-ellipsis" v-html="author(s.artists)"></p>
+      <p class="album text-ellipsis" v-if="album" v-html="highlight(s.album.name,highlightKeyword)">
+        <span>{{s.album.name}}</span>
+      </p>
+      <p class="time" v-if="time">
+        <span>{{timeConvert(s.duration / 1000)}}</span>
+      </p>
+    </li>
+  </ul>
 </template>
 
 <script>
 import songVue from "../../views/home/newsong/song.vue";
-import Loading from "./Loading";
 export default {
-  components: {
-    Loading,
-  },
   props: {
     songs: Array,
     highlightKeyword: {
@@ -79,15 +68,13 @@ export default {
   methods: {
     getSong(id) {
       // 请求歌曲详细信息
-      this.$axios
-        .all([
-          this.$axios.get("/song/detail?ids=" + id),
-          this.$axios.get("/song/url?id=" + id),
-        ])
-        .then((r) => {
-          this.$store.dispatch("changeSongDetail", r[0].songs[0]);
-          this.$store.dispatch("changeSongUrl", r[1].data[0]);
-        });
+      this.all([
+        this.get("/song/detail?ids=" + id),
+        this.get("/song/url?id=" + id),
+      ]).then((r) => {
+        this.$store.dispatch("changeSongDetail", r[0].songs[0]);
+        this.$store.dispatch("changeSongUrl", r[1].data[0]);
+      });
     },
   },
 };

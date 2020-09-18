@@ -3,15 +3,18 @@
     <tag tagName="语种" :tags="area" :active="areaActive" @changeTag="changeTag" />
     <tag tagName="分类" :tags="type" :active="typeActive" @changeTag="changeTag" />
     <tag tagName="筛选" :tags="initial" :active="initialActive" @changeTag="changeTag" />
-    <artist-item :artists="artists" />
+    <loading v-if="$store.state.loading" />
+    <artist-item :artists="artists" v-else />
   </div>
 </template>
 
 <script>
+import Loading from "components/common/Loading";
 import Tag from "components/common/Tag";
 import ArtistItem from "./artistItem";
 export default {
   components: {
+    Loading,
     Tag,
     ArtistItem,
   },
@@ -72,29 +75,30 @@ export default {
   },
   methods: {
     getData(area = -1, type = -1, initial = -1) {
-      this.$axios.get("/artist/list?type=" + type + "&area=" + area + "&initial=" + initial)
-        .then((r) => {
-          this.artists = r.artists;
-        });
+      // 请求数据
+      this.showLoading(async () => {
+        this.artists = await this.get(
+          "/artist/list?type=" + type + "&area=" + area + "&initial=" + initial
+        ).then((r) => r.artists);
+      });
     },
     // 更改标签
     changeTag(tag) {
-      console.log(tag.name);
-      switch(tag.tagName) {
-        case '语种': {
-          this.areaActive = tag.value + ''
-          break
+      switch (tag.tagName) {
+        case "语种": {
+          this.areaActive = tag.value + "";
+          break;
         }
-        case '分类': {
-          this.typeActive = tag.value + ''
-          break
+        case "分类": {
+          this.typeActive = tag.value + "";
+          break;
         }
-        case '筛选': {
-          this.initialActive = tag.value + ''
+        case "筛选": {
+          this.initialActive = tag.value + "";
         }
       }
-      this.getData(this.areaActive, this.typeActive, this.initialActive)
-    }
+      this.getData(this.areaActive, this.typeActive, this.initialActive);
+    },
   },
 };
 </script>

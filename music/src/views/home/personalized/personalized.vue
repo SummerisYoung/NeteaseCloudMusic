@@ -1,6 +1,6 @@
 <template>
 <div>
-  <loading v-if="personalizedLoading"/>
+  <loading v-if="$store.state.loading"/>
   <div v-else>
     <swiper :swipers="banners"/>
     <play-list :playlists="playlists"/>
@@ -31,23 +31,23 @@ export default {
       privatecontents: [],  // 独家放送
       newsongs: [],         // 最新音乐
       mvs: [],              // 推荐MV
-      djprograms: [],       // 主播电台
-      personalizedLoading: true // 是否开启loading
+      djprograms: []       // 主播电台
     }
   },
   created() {
-    this.getData()
+    this.showLoading(this.getData)
   },
   methods: {
-    // 并发获取数据
-    async getData() {[
+    async getData() {
+      // 并发获取数据
+      [
       this.banners,
       this.playlists,
       this.privatecontents,
       this.newsongs,
       this.mvs,
       this.djprograms
-      ] = await Promise.all([
+      ] = await this.all([
         this.getBanners(),
         this.getPlayLists(),
         this.getPrivateContents(),
@@ -55,31 +55,31 @@ export default {
         this.getMVs(),
         this.getDjPrograms()
       ])
-      this.personalizedLoading = false
+      
     },
     // 获取banners
     getBanners() {
-      return this.$axios.get('/banner?type=0').then(r => r.banners)
+      return this.get('/banner?type=0').then(r => r.banners)
     },
     // 获取推荐歌单
     getPlayLists() {
-      return this.$axios.get('/personalized?limit=10').then(r => r.result)
+      return this.get('/personalized?limit=10').then(r => r.result)
     },
     // 获取独家放送
     getPrivateContents() {
-      return this.$axios.get('/personalized/privatecontent').then(r => r.result)
+      return this.get('/personalized/privatecontent').then(r => r.result)
     },
     // 获取最新音乐
     getNewSongs() {
-      return this.$axios.get('/personalized/newsong').then(r => r.result)
+      return this.get('/personalized/newsong').then(r => r.result)
     },
     // 获取推荐MV
     getMVs() {
-      return this.$axios.get('/personalized/mv').then(r => r.result)
+      return this.get('/personalized/mv').then(r => r.result)
     },
     // 获取主播电台
     getDjPrograms() {
-      return this.$axios.get('/personalized/djprogram').then(r => r.result)
+      return this.get('/personalized/djprogram').then(r => r.result)
     }
   }
 }

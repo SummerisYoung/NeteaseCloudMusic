@@ -1,7 +1,6 @@
 <template>
   <div class="playlist">
-    <loading v-if="this.$store.state.loading"/>
-    <ul v-else>
+    <ul>
       <li v-for="p in playlists" :key="p.id">
         <div class="bg-img"></div>
         <div class="playlist-img">
@@ -28,11 +27,7 @@
 </template>
 
 <script>
-import Loading from './Loading'
 export default {
-  components: {
-    Loading
-  },
   props: {
     playlists: Array
   }
