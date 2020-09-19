@@ -38,7 +38,7 @@ export default {
   border-bottom: @border;
 
   li {
-    width: 80px;
+    width: 90px;
     height: 100%;
     line-height: 55px;
     box-sizing: content-box;

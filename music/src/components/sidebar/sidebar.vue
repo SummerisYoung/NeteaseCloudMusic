@@ -66,17 +66,17 @@
       </div>
     </transition>
     <transition name="enlarge">
-      <song-detail v-if="isDetail" :isDetail="isDetail" @closeDetail="closeDetail"/>
+      <song v-if="isDetail" :isDetail="isDetail" @closeDetail="closeDetail"/>
     </transition>
   </div>
 </template>
 
 <script>
-import SongDetail from "./SongDetail";
+import Song from "components/song/Song";
 import { mapState } from "vuex";
 export default {
   components: {
-    SongDetail,
+    Song,
   },
   data() {
     return {
