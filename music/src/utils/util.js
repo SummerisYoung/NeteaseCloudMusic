@@ -70,6 +70,18 @@ export default {
       that.classList.add('deep-color')
     };
 
+    // 加载歌曲
+    Vue.prototype.getSong = function(id) {
+      // 请求歌曲详细信息
+      this.all([
+        this.get("/song/detail?ids=" + id),
+        this.get("/song/url?id=" + id),
+      ]).then((r) => {
+        this.$store.dispatch("changeSongDetail", r[0].songs[0]);
+        this.$store.dispatch("changeSongUrl", r[1].data[0]);
+      });
+    }
+
     // 加载loading
     Vue.prototype.showLoading = async function(fn) {
       // 添加loading
@@ -78,6 +90,6 @@ export default {
       await fn()
       // 关闭loading
       this.$store.commit('changeLoading',false)
-    }
+    };
   }
 }

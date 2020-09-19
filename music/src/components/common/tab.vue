@@ -1,7 +1,8 @@
 <template>
-  <ul class="sub-nav-ul">
+  <ul class="sub-nav-ul" :style="tabUlStyle">
     <li
-      :class="[index == currentIndex ? activeClass : '']"
+      :class="[index == currentIndex ? 'active' : '']"
+      :style="tabLiStyle"
       v-for="(item,index) in items"
       :key="item"
       @click="changeActive(index)"
@@ -12,17 +13,13 @@
 <script>
 export default {
   props: {
-    items: {
-      type: Array,
-    },
+    items: Array,
     currentIndex: {
       type: Number,
       default: 0,
     },
-    activeClass: {
-      type: String,
-      default: 'active-red'
-    }
+    tabLiStyle: String,
+    tabUlStyle: String
   },
   methods: {
     // 更改tab下标,并将点击的下标值传递给父级
@@ -50,13 +47,9 @@ export default {
     user-select: none;
   }
 
-  .active-red {
+  .active {
     color: @red;
     border-bottom: 2px solid @red;
-  }
-
-  .active-grey {
-    border-bottom: 2px solid grey;
   }
 }
 </style>

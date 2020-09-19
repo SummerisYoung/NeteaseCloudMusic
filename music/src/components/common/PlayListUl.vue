@@ -1,10 +1,10 @@
 <template>
   <div class="playlist">
     <ul>
-      <li v-for="p in playlists" :key="p.id">
+      <li v-for="p in playlists" :key="p.id" @click="goPlayList(p.id)">
         <div class="bg-img"></div>
         <div class="playlist-img">
-          <img class="mid-img" :src="(p.coverImgUrl ? p.coverImgUrl : p.picUrl) + '?param=180y180'">
+          <img class="mid-img" :src="(p.coverImgUrl ? p.coverImgUrl : p.picUrl) + '?param=180y180'" />
           <p class="right-top" v-if="p.playCount">
             <i class="iconfont icon-headset"></i>
             <span>{{numConvert(p.playCount)}}</span>
@@ -17,7 +17,8 @@
             {{p.creator.nickname}}
           </p>
         </div>
-        <p class="text-ellipsis playlist-name">{{p.name}}
+        <p class="text-ellipsis playlist-name">
+          {{p.name}}
           <span class="alias" v-if="p.alias">({{p.alias[0]}})</span>
         </p>
         <p class="album-name text-ellipsis" v-if="p.artists" v-html="author(p.artists)"></p>
@@ -29,9 +30,15 @@
 <script>
 export default {
   props: {
-    playlists: Array
-  }
-}
+    playlists: Array,
+  },
+  methods: {
+    // 跳转到歌单页
+    goPlayList(id) {
+      this.$router.push({ path: "/playlist", query: { id } });
+    },
+  },
+};
 </script>
 
 <style lang="less">
@@ -44,7 +51,7 @@ export default {
     justify-content: space-between;
     flex-wrap: wrap;
     &::after {
-      content: '';
+      content: "";
       width: 240px;
     }
     li {
@@ -60,21 +67,25 @@ export default {
         width: 220px;
         height: 180px;
         background: url(/img/coverall.png);
-        background-position:0 -986px;
+        background-position: 0 -986px;
       }
 
       .playlist-img {
         position: relative;
         height: 180px;
         color: #fff;
-        
+
         .right-top {
           position: absolute;
           top: 0;
           right: 0;
           width: 50%;
           padding: 5px 10px;
-          background: linear-gradient(to right, rgba(255,255,255,0), rgba(0, 0, 0, 0.3));
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0),
+            rgba(0, 0, 0, 0.3)
+          );
           text-align: right;
         }
 
@@ -97,8 +108,12 @@ export default {
           left: 0;
           width: 70%;
           padding: 5px 10px;
-          background: linear-gradient(to left, rgba(255,255,255,0), rgba(0, 0, 0, 0.3));
-        
+          background: linear-gradient(
+            to left,
+            rgba(255, 255, 255, 0),
+            rgba(0, 0, 0, 0.3)
+          );
+
           .iconfont {
             font-size: 12px;
             margin-right: 2px;
@@ -112,11 +127,11 @@ export default {
 
       .playlist-name {
         margin: 5px 0;
-        overflow:hidden; 
-        text-overflow:ellipsis;
-        display:-webkit-box; 
-        -webkit-box-orient:vertical;
-        -webkit-line-clamp:2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
         white-space: initial;
 
         .alias {

@@ -14,7 +14,7 @@ Vue.use(VueRouter)
   },
   {
     path: '/playlist',
-    component: () => import('views/playlist/index.vue')
+    component: () => import('views/playlist/Index.vue')
   },
 ]
 

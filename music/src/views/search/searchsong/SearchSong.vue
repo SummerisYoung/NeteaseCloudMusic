@@ -21,7 +21,7 @@ import SongListUl from "components/common/SongListUl";
 export default {
   components: {
     Loading,
-    SongListUl,
+    SongListUl
   },
   data() {
     return {
