@@ -2,7 +2,7 @@
   <div>
     <div class="block-header">
       <h2>推荐歌单</h2>
-      <span>更多></span>
+      <span @click="changeTab()">更多></span>
     </div>
 
     <play-list-ul :playlists="playlists" :copywriter="true"/>
@@ -18,6 +18,11 @@ export default {
   props: {
     playlists: Array,
   },
+  methods: {
+    changeTab() {
+      this.$emit('changeTab',1)
+    }
+  }
 };
 </script>
 

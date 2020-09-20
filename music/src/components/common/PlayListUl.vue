@@ -20,7 +20,7 @@
         </div>
         <p class="text-ellipsis playlist-name">
           {{p.name}}
-          <span class="alias" v-if="p.alias">({{p.alias[0]}})</span>
+          <span class="alias" v-if="p.alias && p.alias.length">({{p.alias[0]}})</span>
         </p>
         <p class="album-name text-ellipsis" v-if="p.artists" v-html="author(p.artists)"></p>
       </li>
@@ -162,14 +162,13 @@ export default {
       .playlist-name {
         margin: 5px 0;
         overflow: hidden;
+        font-size: 12px;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         white-space: initial;
 
         .alias {
-          font-size: 16px;
           color: #999;
         }
       }

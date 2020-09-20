@@ -1,18 +1,22 @@
 <template>
-  <ul class="song-list-ul">
+  <ul class="song-list-ul" :style="oneUlStyle">
     <slot></slot>
     <li
+    :class="[i == clickIndex ? 'deep-color' : '']"
       v-for="(s,i) in songs"
       :key="s.id"
       :style="{alignItems : highlightKeyword ? 'flex-start' : ''}"
       @dblclick="getSong(s.id)"
+      @click="changeColor(i)"
     >
-      <p class="index" v-if="index">{{(i + 1 + '').padStart(2, '0')}}</p>
+      <p class="index" :style="indexStyle" v-if="index">
+        <span>{{(i + 1 + '').padStart(2, '0')}}</span>
+      </p>
       <p class="icon" v-if="icon">
         <i class="iconfont icon-love"></i>
         <i class="iconfont icon-download"></i>
       </p>
-      <p class="img" v-if="s.album.picUrl">
+      <p class="img" v-if="s.album.picUrl" @click="getSong(s.id)">
         <img :src="s.album.picUrl + '?param=50y50'" alt />
         <i class="iconfont icon-play"></i>
       </p>
@@ -61,6 +65,19 @@ export default {
       type: Boolean,
       default: true,
     },
+    oneUlStyle: {
+      type: String,
+      default: ''
+    },
+    indexStyle: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      clickIndex: -1
+    }
   },
   methods: {
     getSong(id) {
@@ -72,6 +89,9 @@ export default {
         this.$store.dispatch("changeSongDetail", r[0].songs[0]);
         this.$store.dispatch("changeSongUrl", r[1].data[0]);
       });
+    },
+    changeColor(i) {
+      this.clickIndex = i
     },
   },
 };
@@ -122,7 +142,8 @@ export default {
 
     .img {
       position: relative;
-
+      margin-right: 10px;
+      cursor: pointer;
       i {
         position: absolute;
         top: 0;

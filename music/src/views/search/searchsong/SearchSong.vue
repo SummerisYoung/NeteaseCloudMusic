@@ -10,18 +10,18 @@
         <li style="width:28%">专辑</li>
         <li style="width:5%">时长</li>
       </ul>
-      <song-list-ul :songs="songs" :highlightKeyword="keyword"></song-list-ul>
+      <song-list-one :songs="songs" :highlightKeyword="keyword"/>
     </div>
   </div>
 </template>
 
 <script>
 import Loading from "components/common/Loading";
-import SongListUl from "components/common/SongListUl";
+import SongListOne from "components/common/SongListOne";
 export default {
   components: {
     Loading,
-    SongListUl
+    SongListOne
   },
   data() {
     return {
@@ -50,7 +50,7 @@ export default {
         // 把搜索统计返给父级
         this.$emit(
           "searchPrompt",
-          `搜索"${this.highlight("", this.keyword)}"，${res.songCount}首单曲`
+          `搜索"${this.highlight("", this.keyword)}"，找到${res.songCount}首单曲`
         );
       });
     },

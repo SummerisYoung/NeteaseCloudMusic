@@ -1,7 +1,7 @@
 <template>
   <div id="searchList">
     <p class="search-prompt" v-html="prompt"></p>
-    <tab class="search-tab" :items="items" :currentIndex="currentIndex" @changeTab="changeTab" />
+    <tab class="search-tab" :items="items" :currentIndex="currentIndex" @changeTab="changeTab" tabLiStyle="border-bottom-width:4px" />
     <component class="main" :is="searchComponent" @searchPrompt="searchPrompt"></component>
   </div>
 </template>
@@ -68,14 +68,6 @@ export default {
   .search-tab {
     height: 30px;
     padding-left: 10px;
-
-    li {
-      height: 100%;
-      line-height: 100%;
-      box-sizing: content-box;
-      cursor: pointer;
-      user-select: none;
-    }
   }
 }
 </style>

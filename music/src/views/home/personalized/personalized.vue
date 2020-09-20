@@ -3,11 +3,11 @@
   <loading v-if="$store.state.loading"/>
   <div v-else>
     <swiper v-if="swipers.length" :swipers="swipers"/>
-    <play-list :playlists="playlists"/>
+    <play-list :playlists="playlists" @changeTab="changeTab"/>
     <private-content :privatecontents="privatecontents" />
-    <new-song :newsongs="newsongs" />
-    <mv :mvs="mvs" />
-    <dj-program :djprograms="djprograms" />
+    <new-song :newsongs="newsongs" @changeTab="changeTab"/>
+    <mv :mvs="mvs" @changeTab="changeTab"/>
+    <dj-program :djprograms="djprograms" @changeTab="changeTab"/>
   </div>
 </div>
 </template>
@@ -80,6 +80,10 @@ export default {
     // 获取主播电台
     getDjPrograms() {
       return this.get('/personalized/djprogram').then(r => r.result)
+    },
+    changeTab(index) {  // 点击了更多
+      console.log(index);
+      this.$emit('changeTab',index)
     }
   }
 }
@@ -99,9 +103,8 @@ export default {
       font-weight: 500;
   }
 
-  span {
-      font-size: 12px;
-      font-weight: 300;
+  &>span {
+    cursor: pointer;
   }
 }
 .block-list {

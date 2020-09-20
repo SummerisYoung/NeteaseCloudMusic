@@ -2,7 +2,7 @@
   <div>
     <div class="block-header">
       <h2>主播电台</h2>
-      <span>更多></span>
+      <span @click="changeTab()">更多></span>
     </div>
 
     <div class="block-list block-mv">
@@ -19,6 +19,11 @@ export default {
   props: {
     djprograms: Array,
   },
+  methods: {
+    changeTab() {
+      this.$emit('changeTab',2)
+    }
+  }
 };
 </script>
 

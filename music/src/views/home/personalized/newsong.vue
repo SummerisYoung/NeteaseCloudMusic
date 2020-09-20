@@ -2,14 +2,14 @@
   <div class="block">
     <div class="block-header">
       <h2>最新音乐</h2>
-      <span>更多></span>
+      <span @click="changeTab()">更多></span>
     </div>
 
     <div class="block-list block-newsong">
       <ul class="ul-newsong">
-        <li v-for="(n,i) in newsongs.slice(0,newsongs.length / 2)" :key="n.id">
+        <li :class="[i == clickIndex ? 'deep-color' : '']" v-for="(n,i) in newsongs.slice(0,newsongs.length / 2)" :key="n.id" @dblclick="getSong(n.id)" @click="changeColor(i)">
           <div>{{(i + 1 + '').padStart(2,'0')}}</div>
-          <div class="newsong-img">
+          <div class="newsong-img" @click="getSong(n.id)">
             <img :src="n.picUrl + '?param=50y50'" alt />
             <i class="iconfont icon-play"></i>
           </div>
@@ -21,10 +21,10 @@
       </ul>
 
       <ul class="ul-newsong">
-        <li v-for="(n,i) in newsongs.slice(newsongs.length / 2)" :key="n.id">
+        <li :class="[i == clickIndex ? 'deep-color' : '']" v-for="(n,i) in newsongs.slice(0,newsongs.length / 2)" :key="n.id" @dblclick="getSong(n.id)" @click="changeColor(i)">
           <div>{{(i + 1 + '').padStart(2,'0')}}</div>
-          <div class="newsong-img">
-            <img class="tiny-img" :src="n.picUrl + '?param=50y50'" alt />
+          <div class="newsong-img" @click="getSong(n.id)">
+            <img :src="n.picUrl + '?param=50y50'" alt />
             <i class="iconfont icon-play"></i>
           </div>
           <div>
@@ -42,6 +42,19 @@ export default {
   props: {
     newsongs: Array,
   },
+  data() {
+    return {
+      clickIndex: -1
+    }
+  },
+  methods: {
+    changeColor(i) {
+      this.clickIndex = i
+    },
+    changeTab() {
+      this.$emit('changeTab',5)
+    }
+  }
 };
 </script>
 

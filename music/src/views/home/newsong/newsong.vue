@@ -13,6 +13,7 @@
         :items="items"
         :currentIndex="tabIndex"
         activeClass="active-grey"
+        tabLiStyle="color:#666"
         @changeTab="changeTab"
       />
     </div>

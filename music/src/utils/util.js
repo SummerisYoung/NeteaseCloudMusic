@@ -59,17 +59,6 @@ export default {
       return (Math.floor(second / 60) + '').padStart(2, '0') + ':' + (Math.floor(second % 60) + '').padStart(2, '0')
     };
 
-    // 点击歌曲,这一行变色
-    Vue.prototype.changeColor = function (that) {
-      // 先把之前点击的每一项的颜色去掉
-      let prev = [...document.getElementsByClassName('deep-color')]
-      prev.forEach(p => {
-        p.classList.remove('deep-color')
-      })
-      // 当前点击的变色
-      that.classList.add('deep-color')
-    };
-
     // 加载歌曲
     Vue.prototype.getSong = function(id) {
       // 请求歌曲详细信息

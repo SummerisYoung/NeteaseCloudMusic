@@ -16,7 +16,7 @@
           </div>
         </div>
         <ul class="offcial-item">
-          <li v-for="(t,j) in o.tracks.slice(0,8)" :key="t.id">
+          <li :class="[i == clickItem && j == clickIndex ? 'deep-color' : '']" v-for="(t,j) in o.tracks.slice(0,8)" :key="t.id" @dblclick="getSong(t.id)" @click="changeColor(i,j)">
             <div class="text-ellipsis">
               <span>{{j + 1}}</span>
               <span>-</span>
@@ -46,7 +46,15 @@ export default {
         "rgb(200,95,67)",
         "rgb(145,67,200)"
       ],
+      clickItem: -1,
+      clickIndex: -1
     };
+  },
+  methods: {
+    changeColor(i,j) {
+      this.clickItem = i
+      this.clickIndex = j
+    }
   }
 };
 </script>

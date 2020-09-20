@@ -1,6 +1,13 @@
 <template>
   <loading v-if="$store.state.loading" />
-  <song-list-ul style="flex:1" :songs="songs" :icon="false" v-else>
+  <song-list-one
+    style="flex:1"
+    :songs="songs"
+    :icon="false"
+    oneUlStyle="margin: 0 20px;border: 1px solid rgb(225,225,226)"
+    indexStyle="text-align: center;margin: none"
+    v-else
+  >
     <li class="newsong-operate">
       <p>
         <i class="iconfont icon-play"></i>播放全部
@@ -9,15 +16,16 @@
         <i class="iconfont icon-favority"></i>收藏全部
       </p>
     </li>
-  </song-list-ul>
+  </song-list-one>
 </template>
 
 <script>
 import Loading from "components/common/Loading";
-import SongListUl from "components/common/SongListUl";
+import SongListOne from "components/common/SongListOne";
 export default {
   components: {
-    Loading,SongListUl
+    Loading,
+    SongListOne,
   },
   props: {
     active: {
@@ -28,7 +36,7 @@ export default {
   data() {
     return {
       songs: [],
-      type: { 全部: 0, 华语: 7, 欧美: 96, 日本: 8, 韩国: 16 },
+      type: { 全部: 0, 华语: 7, 欧美: 96, 日本: 8, 韩国: 16 }
     };
   },
   created() {
@@ -38,8 +46,10 @@ export default {
     getData(type = 0) {
       // 请求数据
       this.showLoading(async () => {
-        this.songs = await this.get("/top/song?type=" + type).then((r) => r.data);
-      })
+        this.songs = await this.get("/top/song?type=" + type).then(
+          (r) => r.data
+        );
+      });
     },
   },
   watch: {

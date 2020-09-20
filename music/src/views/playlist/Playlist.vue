@@ -38,11 +38,9 @@
 
 <script>
 import Loading from "components/common/Loading";
-import SongListUl from "components/common/SongListUl";
 export default {
   components: {
-    Loading,
-    SongListUl,
+    Loading
   },
   props: {
     songs: Array,

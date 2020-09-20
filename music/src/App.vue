@@ -97,18 +97,6 @@ body {
 // 点击这一行颜色变深
 .deep-color {
   background: rgb(227, 227, 229) !important;
-  td {
-    color: #000;
-  }
-  td:nth-child(1),
-  td:nth-child(6) {
-    color: #000;
-  }
-  td:nth-child(3) {
-    p {
-      color: #000 !important;
-    }
-  }
   span {
     color: #000;
   }

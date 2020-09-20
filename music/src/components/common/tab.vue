@@ -1,7 +1,7 @@
 <template>
   <ul class="sub-nav-ul" :style="tabUlStyle">
     <li
-      :class="[index == currentIndex ? 'active' : '']"
+      :class="[index == currentIndex ? activeClass : '']"
       :style="tabLiStyle"
       v-for="(item,index) in items"
       :key="item"
@@ -19,7 +19,11 @@ export default {
       default: 0,
     },
     tabLiStyle: String,
-    tabUlStyle: String
+    tabUlStyle: String,
+    activeClass: {
+      type: String,
+      default: 'active'
+    }
   },
   methods: {
     // 更改tab下标,并将点击的下标值传递给父级
@@ -34,12 +38,9 @@ export default {
 .sub-nav-ul {
   display: flex;
   justify-content: space-around;
-  border-bottom: @border;
 
   li {
     width: 90px;
-    height: 100%;
-    line-height: 55px;
     text-align: center;
     cursor: pointer;
     user-select: none;
@@ -47,7 +48,11 @@ export default {
 
   .active {
     color: @red;
-    border-bottom: 1px solid @red;
+    border-bottom: 2px solid @red;
+  }
+  .active-grey {
+    color: #000 !important;
+    border-bottom: 2px solid rgb(153,153,153);
   }
 }
 </style>
