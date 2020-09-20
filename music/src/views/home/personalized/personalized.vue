@@ -2,7 +2,7 @@
 <div>
   <loading v-if="$store.state.loading"/>
   <div v-else>
-    <swiper :swipers="banners"/>
+    <swiper v-if="swipers.length" :swipers="swipers"/>
     <play-list :playlists="playlists"/>
     <private-content :privatecontents="privatecontents" />
     <new-song :newsongs="newsongs" />
@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      banners: [],          // banners
+      swipers: [],          // swipers
       playlists: [],        // 推荐歌单
       privatecontents: [],  // 独家放送
       newsongs: [],         // 最新音乐
@@ -41,14 +41,14 @@ export default {
     async getData() {
       // 并发获取数据
       [
-      this.banners,
+      this.swipers,
       this.playlists,
       this.privatecontents,
       this.newsongs,
       this.mvs,
       this.djprograms
       ] = await this.all([
-        this.getBanners(),
+        this.getSwipers(),
         this.getPlayLists(),
         this.getPrivateContents(),
         this.getNewSongs(),
@@ -57,8 +57,8 @@ export default {
       ])
       
     },
-    // 获取banners
-    getBanners() {
+    // 获取swipers
+    getSwipers() {
       return this.get('/banner?type=0').then(r => r.banners)
     },
     // 获取推荐歌单
@@ -103,5 +103,11 @@ export default {
       font-size: 12px;
       font-weight: 300;
   }
+}
+.block-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 20px;
 }
 </style>

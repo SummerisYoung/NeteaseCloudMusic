@@ -115,7 +115,7 @@ export default {
 
       div:last-child {
         display: flex;
-
+        align-items: center;
         p {
           display: flex;
           flex-direction: column;

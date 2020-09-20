@@ -2,7 +2,7 @@
   <div class="new-album">
     <h2>本周新碟</h2>
     <loading v-if="$store.state.loading" />
-    <play-list-ul :playlists="albums" v-else/>
+    <play-list-ul :playlists="albums" :albumImg="true" v-else/>
   </div>
 </template>
 

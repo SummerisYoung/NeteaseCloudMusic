@@ -2,8 +2,9 @@
   <div class="playlist">
     <ul>
       <li v-for="p in playlists" :key="p.id" @click="goPlayList(p.id)">
-        <div class="bg-img"></div>
+        <div class="bg-img" v-if="albumImg"></div>
         <div class="playlist-img">
+          <div class="copywriter" v-if="copywriter">{{p.copywriter}}</div>
           <img class="mid-img" :src="(p.coverImgUrl ? p.coverImgUrl : p.picUrl) + '?param=180y180'" />
           <p class="right-top" v-if="p.playCount">
             <i class="iconfont icon-headset"></i>
@@ -31,6 +32,14 @@
 export default {
   props: {
     playlists: Array,
+    albumImg: { // 是否开启专辑背景图片
+      type: Boolean,
+      default: false,
+    },
+    copywriter: { // 是否开启个性推荐介绍
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     // 跳转到歌单页
@@ -74,6 +83,30 @@ export default {
         position: relative;
         height: 180px;
         color: #fff;
+        overflow: hidden;
+
+        &:hover {
+          .copywriter {
+            top: 0;
+          }
+          .right-top {
+            opacity: 0;
+          }
+        }
+
+        .copywriter {
+          position: absolute;
+          top: -60px;
+          display: -webkit-box;
+          width: 100%;
+          padding: 10px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          -webkit-line-clamp: 2;
+          color: #fff;
+          background: rgba(0, 0, 0, 0.3);
+          transition: 0.3s 0.5s;
+        }
 
         .right-top {
           position: absolute;
@@ -87,6 +120,7 @@ export default {
             rgba(0, 0, 0, 0.3)
           );
           text-align: right;
+          transition: 0.1s 0.5s;
         }
 
         .right-bottom {
@@ -97,7 +131,7 @@ export default {
           padding: 3px 5px;
           border: @border;
           border-radius: 50%;
-          background: rgba(0, 0, 0, 0.5);
+          background: rgba(0, 0, 0, 0.3);
           opacity: 0;
           transition: 0.3s;
         }

@@ -203,10 +203,11 @@ export default {
     position: relative;
     width: 50%;
     height: 100%;
+    padding-left: 40px;
 
     .needle {
       position: absolute;
-      left: calc(50% - 17.5px);
+      left: calc(50% - 37.5px);
       top: -20px;
       width: 110px;
       height: 157px;
@@ -219,7 +220,7 @@ export default {
 
     .song-image {
       position: relative;
-      margin: 60px auto;
+      margin: 60px 0;
       width: 400px;
       height: 400px;
       background: url(/img/singlecover.png) no-repeat;
@@ -242,10 +243,9 @@ export default {
     }
     ul {
       position: absolute;
-      left: 0;
+      left: 40px;
       right: 0;
       bottom: 0;
-      margin: auto;
       display: flex;
       justify-content: space-between;
       width: 400px;

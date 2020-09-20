@@ -62,9 +62,6 @@ export default {
       default: true,
     },
   },
-  watch: {
-    songs(val) {},
-  },
   methods: {
     getSong(id) {
       // 请求歌曲详细信息

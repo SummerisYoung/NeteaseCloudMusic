@@ -8,7 +8,7 @@
       <song-top :songDetail="songDetail"/>
 
       <div class="song-bottom">
-        <song-comment :songDetail="songDetail"/>
+        <comment v-if="comments" :comments="comments" commentWidth="800px"/>
         <song-recommend :songDetail="songDetail"/>
       </div>
     </div>
@@ -18,16 +18,28 @@
 <script>
 import { mapState } from "vuex";
 import SongTop from './SongTop'
-import SongComment from './SongComment'
+import Comment from 'components/common/Comment'
 import SongRecommend from './SongRecommend'
 export default {
   components: {
-    SongTop,SongComment,SongRecommend
+    SongTop,Comment,SongRecommend
+  },
+  data() {
+    return {
+      comments: {}, //歌曲评论
+    };
   },
   computed: {
     ...mapState(["songDetail"]),
   },
+  created() {
+    this.getComment();
+  },
   methods: {
+    // 获取评论
+    async getComment() {
+      this.comments = await this.get("/comment/music?id=" + this.songDetail.id);
+    },
     // 关闭歌曲详情页
     closeDetail() {
       // 关闭歌词滚动事件

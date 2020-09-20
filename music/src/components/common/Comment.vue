@@ -1,6 +1,6 @@
 <template>
-  <div class="comment-left">
-    <div class="comment-head">
+  <div class="comment" :style="{width: commentWidth}">
+    <div class="comment-head" v-if="head">
       <h2>听友评论</h2>
       <span>(已有{{comments.total}}条评论)</span>
     </div>
@@ -15,8 +15,8 @@
       </div>
     </div>
     <div class="comment-middle">
-      <div class="hot-comment">
-        <p class="comment-section">精彩评论</p>
+      <div class="hot-comment" v-if="comments.hotComments && comments.hotComments.length">
+        <span>精彩评论</span>
         <ul>
           <li v-for="h in comments.hotComments" :key="h.id">
             <img class="tiny-img-radius" :src="h.user.avatarUrl  + '?param=50y50'" />
@@ -53,7 +53,7 @@
       </div>
 
       <div class="new-comment">
-        <p class="comment-section">最新评论</p>
+        <span>最新评论</span>
         <span>({{comments.total}})</span>
         <ul>
           <li v-for="h in comments.comments" :key="h.id">
@@ -87,7 +87,6 @@
             </div>
           </li>
         </ul>
-        <p class="read-more">查看更多精彩评论></p>
       </div>
     </div>
   </div>
@@ -96,30 +95,22 @@
 <script>
 export default {
   props: {
-    songDetail: Object,
-  },
-  data() {
-    return {
-      comments: {}, //歌曲评论
-    };
-  },
-  created() {
-    this.getComment();
-  },
-  methods: {
-    // 获取评论
-    async getComment() {
-      this.comments = await this.get("/comment/music?id=" + this.songDetail.id);
+    comments: Object,
+    head: {
+      type: Boolean,
+      default: true
+    },
+    commentWidth: {
+      type: String,
+      default: ''
     }
   }
 };
 </script>
 
 <style lang="less">
-.comment-left {
-  margin-right: 100px;
-  width: 700px;
-
+.comment {
+  padding: 0 40px;
   .comment-head {
     display: flex;
     align-items: flex-end;
@@ -161,9 +152,6 @@ export default {
   }
 
   .comment-middle {
-    .comment-section {
-      font-size: 14px;
-    }
     ul {
       margin: 20px 0;
       li {

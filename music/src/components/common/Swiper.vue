@@ -1,16 +1,16 @@
 <template>
 <div class="banner" @mouseenter="swiperPause()" @mouseleave="swiperBegin()">
   <ul class="banner-ul">
-    <li :class="picClass[i]" v-for="(b,i) in swipers" :key="b.imageUrl" @click="swiperPic(picClass[i])">
-      <img :src="b.imageUrl">
-      <span class="bg-r">独家</span>
+    <li :class="picClass[i]" v-for="(s,i) in swipers" :key="s.imageUrl" @click="swiperPic(picClass[i],s)">
+      <img :src="s.imageUrl">
+      <span :class="titleColor(s.typeTitle)">{{s.typeTitle}}</span>
     </li>
   </ul>
   <a href="javascript:;" class="prev btn" @click="previmg()">&lt;</a>
   <a href="javascript:;" class="next btn" @click="nextimg()">&gt;</a>
 
   <ul class="banner-btn">
-    <li v-for="(b,i) in swipers" :key="b.imageUrl" @mouseenter="swiperBtn(i)">
+    <li v-for="(s,i) in swipers" :key="s.imageUrl" @mouseenter="swiperBtn(i)">
       <span :class="i == index ? 'red':''"></span>
     </li>
   </ul>
@@ -34,18 +34,19 @@ export default {
     }
   },
   created() {
-    if(this.swipers) {
-      this.initSwipers()
-    }
-  },
-  watch: {
-    swipers(val) {
-      this.initSwipers()
-    }
+    this.initSwipers()
   },
   methods: {
-    // 轮播图初始化
-    initSwipers() {
+    titleColor(title) {  // 右侧title变色
+      let color = 'bg-b'; 
+      switch(title) {
+        case '独家':
+        case '新歌首发':
+          color = 'bg-r'
+      }
+      return color
+    },
+    initSwipers() { // 轮播图初始化
       // 根据banner数量生成图片样式数组
       for(let i = 0; i < this.swipers.length;i++) {
         this.picClass.push(`p${i}`)
@@ -53,15 +54,31 @@ export default {
       // 定时器开始自动轮播
       this.timer = setInterval(this.nextimg,3000);
     },
-    // 点击左右两边的图片触发上一张或下一张函数
-    swiperPic(classIndex) {
-      // 点击class为p1的元素触发上一张照片的函数
+    swiperPic(classIndex,swiper) {  // 点击图片相应事件
+    console.log(swiper);
+      // 点击左边的图片触发上一张照片的函数
       if(classIndex == 'p1') {
         this.previmg()
       }
-      // 点击class为p3的元素触发下一张照片的函数
+      // 点击右边的图片触发下一张照片的函数
       if(classIndex == 'p3') {
         this.nextimg()
+      }
+      // 点击中间的图片
+      if(classIndex == 'p2') {
+        switch(swiper.targetType) {
+          case 1: { // 播放音乐
+            this.getSong(swiper.targetId)
+            break
+          }
+          case 10: {  // 跳转歌单
+            this.$router.push({ path: "/album", query: { id: swiper.targetId } })
+            break
+          }
+          case 3000: {  // 打开网页
+            window.open(swiper.url,'_blank')
+          }
+        }
       }
     },
     // 上一张

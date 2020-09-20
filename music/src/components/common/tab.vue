@@ -34,14 +34,12 @@ export default {
 .sub-nav-ul {
   display: flex;
   justify-content: space-around;
-  align-items: center;
   border-bottom: @border;
 
   li {
     width: 90px;
     height: 100%;
     line-height: 55px;
-    box-sizing: content-box;
     text-align: center;
     cursor: pointer;
     user-select: none;
@@ -49,7 +47,7 @@ export default {
 
   .active {
     color: @red;
-    border-bottom: 2px solid @red;
+    border-bottom: 1px solid @red;
   }
 }
 </style>

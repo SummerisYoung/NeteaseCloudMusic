@@ -45,27 +45,8 @@ export default {
     SongListUl,
   },
   props: {
-    playlist: Object,
-  },
-  data() {
-    return {
-      songs: [],
-    };
-  },
-  created() {
-    this.showLoading(this.getSongs);
-  },
-  methods: {
-    async getSongs() {
-      let songsArr = [];
-      this.playlist.trackIds.forEach((p) => {
-        songsArr.push(p.id);
-      });
-      this.songs = await this.get(
-        "/song/detail?ids=" + songsArr.join(",")
-      ).then((r) => r.songs);
-    },
-  },
+    songs: Array,
+  }
 };
 </script>
 

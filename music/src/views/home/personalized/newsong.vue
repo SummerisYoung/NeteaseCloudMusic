@@ -9,7 +9,10 @@
       <ul class="ul-newsong">
         <li v-for="(n,i) in newsongs.slice(0,newsongs.length / 2)" :key="n.id">
           <div>{{(i + 1 + '').padStart(2,'0')}}</div>
-          <img class="tiny-img" :src="n.picUrl  + '?param=50y50'" />
+          <div class="newsong-img">
+            <img :src="n.picUrl + '?param=50y50'" alt />
+            <i class="iconfont icon-play"></i>
+          </div>
           <div>
             <p class="text-ellipsis">{{n.name}}</p>
             <p class="text-ellipsis" v-html="author(n.song.artists)"></p>
@@ -20,7 +23,10 @@
       <ul class="ul-newsong">
         <li v-for="(n,i) in newsongs.slice(newsongs.length / 2)" :key="n.id">
           <div>{{(i + 1 + '').padStart(2,'0')}}</div>
-          <img class="tiny-img" :src="n.picUrl  + '?param=50y50'" />
+          <div class="newsong-img">
+            <img class="tiny-img" :src="n.picUrl + '?param=50y50'" alt />
+            <i class="iconfont icon-play"></i>
+          </div>
           <div>
             <p class="text-ellipsis">{{n.name}}</p>
             <p class="text-ellipsis" v-html="author(n.song.artists)"></p>
@@ -35,7 +41,7 @@
 export default {
   props: {
     newsongs: Array,
-  }
+  },
 };
 </script>
 
@@ -45,6 +51,31 @@ export default {
     margin: 10px 0 30px 0;
     width: 50%;
     border: @border;
+
+    .newsong-img {
+      position: relative;
+
+      i {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 17px;
+        color: #fff;
+        border: @border;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.4);
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.8);
+        }
+      }
+    }
 
     li {
       display: flex;

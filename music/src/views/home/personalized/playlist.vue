@@ -5,7 +5,7 @@
       <span>更多></span>
     </div>
 
-    <play-list-ul :playlists="playlists" />
+    <play-list-ul :playlists="playlists" :copywriter="true"/>
   </div>
 </template>
 
@@ -23,10 +23,6 @@ export default {
 
 <style lang="less">
 .block-list {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
   .block-item {
     margin-bottom: 30px;
     img {
