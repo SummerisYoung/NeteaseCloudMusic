@@ -1,15 +1,15 @@
 <template>
   <div class="global playlist">
     <h2>全球榜</h2>
-    <play-list-ul :playlists="globalList"/>
+    <cover-list :covers="globalList"/>
   </div>
 </template>
 
 <script>
-import PlayListUl from "components/common/PlayListUl"
+import CoverList from "components/common/CoverList"
 export default {
   components: {
-    PlayListUl
+    CoverList
   },
   props: {
     globalList: Array,

@@ -1,28 +1,28 @@
 <template>
   <div class="playlist">
     <ul>
-      <li v-for="p in playlists" :key="p.id" @click="goPlayList(p.id)">
+      <li v-for="c in covers" :key="c.id" @click="goPlayList(c.id)">
         <div class="bg-img" v-if="albumImg"></div>
         <div class="playlist-img">
-          <div class="copywriter" v-if="copywriter">{{p.copywriter}}</div>
-          <img class="mid-img" :src="(p.coverImgUrl ? p.coverImgUrl : p.picUrl) + '?param=180y180'" />
-          <p class="right-top" v-if="p.playCount">
+          <div class="copywriter" v-if="copywriter">{{c.copywriter}}</div>
+          <img class="mid-img" :src="(c.coverImgUrl ? c.coverImgUrl : c.picUrl) + '?param=180y180'" />
+          <p class="right-top" v-if="c.playCount">
             <i class="iconfont icon-headset"></i>
-            <span>{{numConvert(p.playCount)}}</span>
+            <span>{{numConvert(c.playCount)}}</span>
           </p>
           <p class="right-bottom">
             <i class="iconfont icon-play"></i>
           </p>
-          <p v-if="p.creator" class="left-bottom text-ellipsis">
+          <p v-if="c.creator && leftBottom" class="left-bottom text-ellipsis">
             <i class="iconfont icon-user"></i>
-            {{p.creator.nickname}}
+            {{c.creator.nickname}}
           </p>
         </div>
         <p class="text-ellipsis playlist-name">
-          {{p.name}}
-          <span class="alias" v-if="p.alias && p.alias.length">({{p.alias[0]}})</span>
+          {{c.name}}
+          <span class="alias" v-if="c.alias && c.alias.length">({{c.alias[0]}})</span>
         </p>
-        <p class="album-name text-ellipsis" v-if="p.artists" v-html="author(p.artists)"></p>
+        <p class="album-name text-ellipsis" v-if="c.artists" v-html="author(c.artists)"></p>
       </li>
     </ul>
   </div>
@@ -31,20 +31,36 @@
 <script>
 export default {
   props: {
-    playlists: Array,
-    albumImg: { // 是否开启专辑背景图片
+    covers: Array,
+    type: {
+      // 父组件类型(歌单&专辑)
+      type: String,
+      default: "playlist",
+    },
+    albumImg: {
+      // 是否开启专辑背景图片
       type: Boolean,
       default: false,
     },
-    copywriter: { // 是否开启个性推荐介绍
+    copywriter: {
+      // 是否开启个性推荐介绍
       type: Boolean,
       default: false,
     },
+    leftBottom: {
+      // 是否开启左下角创作者
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
-    // 跳转到歌单页
+    // 跳转到歌单&专辑页
     goPlayList(id) {
-      this.$router.push({ path: "/playlist", query: { id } });
+      if (this.type == "playlist") {
+        this.$router.push({ path: "/playlist", query: { id } });
+      } else {
+        this.$router.push({ path: "/album", query: { id } });
+      }
     },
   },
 };
@@ -112,7 +128,7 @@ export default {
           position: absolute;
           top: 0;
           right: 0;
-          width: 50%;
+          width: 70%;
           padding: 5px 10px;
           background: linear-gradient(
             to right,
@@ -121,6 +137,10 @@ export default {
           );
           text-align: right;
           transition: 0.1s 0.5s;
+          i {
+            font-size: 12px;
+            margin-right: 5px;
+          }
         }
 
         .right-bottom {
@@ -140,18 +160,13 @@ export default {
           position: absolute;
           bottom: 0;
           left: 0;
-          width: 70%;
+          width: 100%;
           padding: 5px 10px;
           background: linear-gradient(
-            to left,
+            to bottom,
             rgba(255, 255, 255, 0),
             rgba(0, 0, 0, 0.3)
           );
-
-          .iconfont {
-            font-size: 12px;
-            margin-right: 2px;
-          }
         }
 
         &:hover .right-bottom {

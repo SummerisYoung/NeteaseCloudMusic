@@ -2,16 +2,16 @@
   <div class="new-album">
     <h2>本周新碟</h2>
     <loading v-if="$store.state.loading" />
-    <play-list-ul :playlists="albums" :albumImg="true" v-else/>
+    <cover-list :covers="albums" type="album" :albumImg="true" v-else/>
   </div>
 </template>
 
 <script>
 import Loading from "components/common/Loading";
-import PlayListUl from "components/common/PlayListUl";
+import CoverList from "components/common/CoverList";
 export default {
   components: {
-    Loading,PlayListUl
+    Loading,CoverList
   },
   props: {
     active: {

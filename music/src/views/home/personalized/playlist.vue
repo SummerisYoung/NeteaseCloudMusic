@@ -5,15 +5,15 @@
       <span @click="changeTab()">更多></span>
     </div>
 
-    <play-list-ul :playlists="playlists" :copywriter="true"/>
+    <cover-list :covers="playlists" :copywriter="true"/>
   </div>
 </template>
 
 <script>
-import PlayListUl from "components/common/PlayListUl";
+import CoverList from "components/common/CoverList";
 export default {
   components: {
-    PlayListUl,
+    CoverList,
   },
   props: {
     playlists: Array,

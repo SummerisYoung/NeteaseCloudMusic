@@ -1,6 +1,6 @@
 <template>
   <div>
-    <playlist-top :playlist="playlist" v-if="this.playlist" />
+    <album-top :album="album.album"  v-if="this.album"/>
     <tab
       :items="items"
       tabLiStyle="margin-right:50px;border-bottom-width:5px; line-height: 30px"
@@ -12,7 +12,7 @@
     <div v-else>
       <song-list-two :songs="songs" v-if="this.currentIndex == 0" />
       <comment :head="false" :comments="comments" v-else-if="this.currentIndex == 1" />
-      <subscriber :subscribers="subscribers" v-else-if="this.currentIndex == 2" />
+      <description :description="description" v-else-if="this.currentIndex == 2" />
     </div>
   </div>
 </template>
@@ -22,29 +22,29 @@ import Tab from "components/common/Tab";
 import Loading from "components/common/Loading";
 import SongListTwo from "components/common/SongListTwo";
 import Comment from "components/common/Comment";
-import PlaylistTop from "./PlaylistTop";
-import Subscriber from "./Subscriber";
+import AlbumTop from "./AlbumTop";
+import Description from './Description'
 export default {
   components: {
     Tab,
     Loading,
     SongListTwo,
+    AlbumTop,
     Comment,
-    PlaylistTop,
-    Subscriber,
+    Description
   },
   data() {
     return {
-      playlist: {},
+      album: null,
       songs: [],
       comments: [],
-      subscribers: [],
+      description: [],
       items: [],
       currentIndex: -1
-    };
+    }
   },
   created() {
-    this.getData();
+    this.getData()
   },
   watch: {
     currentIndex(val) {
@@ -58,73 +58,41 @@ export default {
           break;
         }
         case 2: {
-          this.showLoading(this.getsubscribers);
+          this.showLoading(this.getDescription);
         }
       }
     },
   },
   methods: {
     async getData() {
-      // 请求歌单信息
-      this.playlist = await this.get(
-        "/playlist/detail?id=" + this.$route.query.id
-      ).then((r) => r.playlist);
+      this.album = await this.get('/album?id=' + this.$route.query.id)
       this.items = [
         "歌曲列表",
-        `评论(${this.playlist.commentCount})`,
-        "收藏者",
+        `评论(${this.album.album.info.commentCount})`,
+        "专辑详情",
       ];
       this.currentIndex = 0;
     },
-    async getSongs() {
-      // 请求歌曲列表
-      let songsArr = [];
-      this.playlist.trackIds.forEach((p) => {
-        songsArr.push(p.id);
-      });
-      this.songs = await this.get(
-        "/song/detail?ids=" + songsArr.join(",")
-      ).then((r) => r.songs);
+    getSongs() {
+      this.songs = this.album.songs
     },
     async getComments() {
       // 请求评论信息
       this.comments = await this.get(
-        "/comment/playlist?id=" + this.playlist.id
+        "/comment/album?id=" + this.$route.query.id
       );
     },
-    async getsubscribers() {
-      // 请求收藏者信息
-      this.subscribers = await this.get(
-        "/playlist/subscribers?id=" + this.playlist.id + "&limit=100"
-      ).then((r) => r.subscribers);
+    getDescription() {
+      this.description = this.album.album.description.split('\n')
     },
     changeTab(index) {
       // 接受子组件传递过来的index值,修改当前下标
       this.currentIndex = index;
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="less">
-.playlist-bottom {
-  .section {
-    display: flex;
-    height: 30px;
-    border-bottom: @border;
 
-    li {
-      margin-left: 100px;
-      line-height: 100%;
-      box-sizing: content-box;
-      cursor: pointer;
-    }
-
-    .active {
-      color: @red;
-      border-bottom: 5px solid @red;
-      box-sizing: border-box;
-    }
-  }
-}
 </style>

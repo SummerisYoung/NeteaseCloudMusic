@@ -24,10 +24,10 @@
             style="width:30px;height:30px"
             class="tiny-img-radius"
             :src="playlist.creator.avatarUrl"
-            onclick="goUser(this)"
+            @click="goUser(playlist.creator.userId)"
           />
-          <span class="creator" onclick="goUser(this)">{{playlist.creator.nickname}}</span>
-          <span class="create-time">{{stampToTime(playlist.createTime)}}创建</span>
+          <span class="creator" @click="goUser(playlist.creator.userId)">{{playlist.creator.nickname}}</span>
+          <span class="create-time">{{stampToTime(playlist.createTime).slice(0,10)}}创建</span>
         </div>
         <ul>
           <li>
@@ -58,12 +58,12 @@
         </ul>
       </div>
       <div class="content-bottom">
-        <p class="tag" v-if="playlist.tags && playlist.tags.length">
-          标签：
+        <p v-if="playlist.tags && playlist.tags.length">
+          <span>标签：</span>
           <span class="keyword-highlight">{{playlist.tags.join(' / ')}}</span>
         </p>
         <div v-if="playlist.description">
-          <p class="description">{{playlist.description}}</p>
+          <p class="description">简介：{{playlist.description}}</p>
           <i class="iconfont icon-right"></i>
         </div>
       </div>
@@ -76,6 +76,11 @@ export default {
   props: {
     playlist: Object,
   },
+  methods: {
+    goUser(id) {
+      this.$router.push({path: 'user',query: {id}})
+    }
+  }
 };
 </script>
 
@@ -141,8 +146,8 @@ export default {
 
         .creator {
           margin: 0 20px 0 10px;
-          color: #333;
-          font-size: 20px;
+          color: #666;
+          font-size: 16px;
           cursor: pointer;
         }
 
@@ -191,6 +196,7 @@ export default {
 
           i {
             margin-right: 5px;
+            vertical-align: -2px;
           }
         }
       }
@@ -198,17 +204,13 @@ export default {
 
     .content-bottom {
       font-size: 14px;
-      .tag {
-        span {
-          padding: 5px;
-        }
-      }
       div {
         display: flex;
         justify-content: space-between;
 
         .description {
           margin: 10px 0;
+          font-size: 12px;
         }
 
         i {
