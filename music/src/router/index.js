@@ -21,8 +21,12 @@ Vue.use(VueRouter)
     component: () => import('views/album/Index.vue')
   },
   {
-    path: '/User',
-    component: () => import('views/User/Index.vue')
+    path: '/user',
+    component: () => import('views/user/Index.vue')
+  },
+  {
+    path: '/artist',
+    component: () => import('views/artist/Index.vue')
   }
 ]
 

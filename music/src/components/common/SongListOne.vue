@@ -1,8 +1,8 @@
 <template>
-  <ul class="song-list-ul" :style="oneUlStyle">
+  <ul class="song-list-ul-One" :style="oneUlStyle">
     <slot></slot>
     <li
-    :class="[i == clickIndex ? 'deep-color' : '']"
+      :class="[i == clickIndex ? 'deep-color' : '']"
       v-for="(s,i) in songs"
       :key="s.id"
       :style="{alignItems : highlightKeyword ? 'flex-start' : ''}"
@@ -67,17 +67,17 @@ export default {
     },
     oneUlStyle: {
       type: String,
-      default: ''
+      default: "",
     },
     indexStyle: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   data() {
     return {
-      clickIndex: -1
-    }
+      clickIndex: -1,
+    };
   },
   methods: {
     getSong(id) {
@@ -91,14 +91,14 @@ export default {
       });
     },
     changeColor(i) {
-      this.clickIndex = i
+      this.clickIndex = i;
     },
   },
 };
 </script>
 
 <style lang="less">
-.song-list-ul {
+.song-list-ul-One {
   li {
     display: flex;
     align-items: center;

@@ -41,7 +41,7 @@
         </div>
 
         <div class="user-data">
-          <h2 class="user-followeds">{{userInfo.profile.followeds}}</h2>
+          <h2 class="user-followeds">{{numConvert(userInfo.profile.followeds)}}</h2>
           <span>粉丝</span>
         </div>
       </div>
@@ -112,6 +112,7 @@ export default {
             border: 1px solid @red;
             color: @red;
             border-radius: 20px;
+            font-weight: 600;
           }
           .icon-man {
             color: #1296db;

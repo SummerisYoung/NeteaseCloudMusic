@@ -80,5 +80,20 @@ export default {
       // 关闭loading
       this.$store.commit('changeLoading',false)
     };
+
+    // 跳转到专辑页面
+    Vue.prototype.goAlbum = function(id) {
+      this.$router.push({path: '/album', query: {id}})
+    }
+ 
+    // 跳转到歌手页面
+    Vue.prototype.goArtist = function(id) {
+      this.$router.push({path: '/artist', query: {id}})
+    }
+
+    // 跳转到用户界面
+    Vue.prototype.goUser = function(id) {
+      this.$router.push({path: 'user',query: {id}})
+    }
   }
 }

@@ -75,11 +75,6 @@
 export default {
   props: {
     playlist: Object,
-  },
-  methods: {
-    goUser(id) {
-      this.$router.push({path: 'user',query: {id}})
-    }
   }
 };
 </script>

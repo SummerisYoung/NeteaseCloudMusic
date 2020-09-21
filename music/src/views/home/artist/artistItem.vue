@@ -1,6 +1,6 @@
 <template>
   <ul class="artists-ul">
-    <li v-for="a in artists" :key="a.id">
+    <li v-for="a in artists" :key="a.id" @click="goArtist(a.id)">
       <img class="mid-img" :src="a.picUrl  + '?param=180y180'" />
       <div>
         <span>{{a.name}}</span>
