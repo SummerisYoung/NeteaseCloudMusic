@@ -113,7 +113,7 @@ export default {
     }
 
     &:hover {
-      background: rgb(235, 236, 237);
+      background: @lihover;
 
       .artist,
       .album {

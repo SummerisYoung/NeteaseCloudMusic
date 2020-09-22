@@ -1,7 +1,11 @@
 <template>
   <div class="playlist">
     <ul>
-      <li v-for="c in covers" :key="c.id" @click="goPlayList(c.id)">
+      <li
+        v-for="c in covers"
+        :key="c.id"
+        @click="type == 'playlist' ? goPlayList(c.id) : goAlbum(c.id)"
+      >
         <div class="bg-img" v-if="albumImg"></div>
         <div class="playlist-img">
           <div class="copywriter" v-if="copywriter">{{c.copywriter}}</div>
@@ -50,19 +54,9 @@ export default {
     leftBottom: {
       // 是否开启左下角创作者
       type: Boolean,
-      default: true
-    }
-  },
-  methods: {
-    // 跳转到歌单&专辑页
-    goPlayList(id) {
-      if (this.type == "playlist") {
-        this.$router.push({ path: "/playlist", query: { id } });
-      } else {
-        this.$router.push({ path: "/album", query: { id } });
-      }
+      default: true,
     },
-  },
+  }
 };
 </script>
 
@@ -77,7 +71,7 @@ export default {
     flex-wrap: wrap;
     &::after {
       content: "";
-      width: 240px;
+      width: 850px;
     }
     li {
       position: relative;

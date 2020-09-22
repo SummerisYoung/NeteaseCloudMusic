@@ -81,6 +81,11 @@ export default {
       this.$store.commit('changeLoading',false)
     };
 
+    // 跳转到歌单页面
+    Vue.prototype.goPlayList = function(id) {
+      this.$router.push({path: '/playlist', query: {id}})
+    }
+
     // 跳转到专辑页面
     Vue.prototype.goAlbum = function(id) {
       this.$router.push({path: '/album', query: {id}})

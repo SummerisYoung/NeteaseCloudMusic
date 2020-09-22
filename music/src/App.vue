@@ -108,63 +108,6 @@ body {
   padding: 2px 5px;
   border-radius: 2px;
 }
-// 歌曲列表
-table {
-  width: 100%;
-  color: #666;
-  table-layout: fixed;
-  user-select: none;
-  thead {
-    th {
-      padding: 8px;
-      font-weight: normal;
-      border: @border;
-      border-left: none;
-
-      &:last-child {
-        border-right: none;
-      }
-    }
-  }
-
-  tbody {
-    td {
-      padding: 5px;
-    }
-
-    tr {
-      line-height: 25px;
-    }
-
-    tr > td:first-child {
-      vertical-align: top;
-      text-align: right;
-      color: #999;
-    }
-
-    tr > td:nth-child(2) {
-      display: flex;
-      justify-content: space-evenly;
-      color: #ccc;
-    }
-
-    tr > td:nth-child(3) {
-      color: #333;
-    }
-
-    tr > td:nth-child(n + 6) {
-      color: #999;
-    }
-
-    tr:nth-child(even) {
-      background: @dark-background;
-    }
-
-    tr:hover {
-      background: rgb(235, 236, 237);
-    }
-  }
-}
 // 所有图标都变成点击图标
 .iconfont {
   cursor: pointer;

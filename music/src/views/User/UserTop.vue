@@ -22,10 +22,9 @@
           </div>
         </div>
 
-        <div class="label">
+        <div class="label" v-if="computedLabel">
           <i class="iconfont icon-star"></i>
-          <span v-if="userInfo.profile.expertTags">音乐({{userInfo.profile.expertTags.join('、')}})</span>
-          <span v-if="userInfo.profile.experts">、{{userInfo.profile.experts[2]}}</span>
+          <span>{{computedLabel}}</span>
         </div>
       </div>
 
@@ -68,6 +67,18 @@ export default {
   props: {
     userInfo: Object,
   },
+  computed: {
+    computedLabel() {
+      let tags = []
+      if(this.userInfo.profile.expertTags) {
+        tags.push(`音乐(${this.userInfo.profile.expertTags.join('、')})`)
+      }
+      if(Object.keys(this.userInfo.profile.experts).length) {
+        tags.push(...Object.values(this.userInfo.profile.experts))
+      }
+      return tags.join('、')
+    }
+  }
 };
 </script>
 

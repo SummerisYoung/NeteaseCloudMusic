@@ -1,18 +1,39 @@
 <template>
   <div id="searchList">
     <p class="search-prompt" v-html="prompt"></p>
-    <tab class="search-tab" :items="items" :currentIndex="currentIndex" @changeTab="changeTab" tabLiStyle="border-bottom-width:4px" />
-    <component class="main" :is="searchComponent" @searchPrompt="searchPrompt"></component>
+    <tab
+      class="search-tab"
+      :items="items"
+      :currentIndex="currentIndex"
+      @changeTab="changeTab"
+      tabLiStyle="border-bottom-width:4px"
+      tabUlStyle="border-bottom: 1px solid rgb(225,225,226)"
+    />
+    <component :is="searchComponent" :keyword="$route.query.keyword" @searchPrompt="searchPrompt"></component>
   </div>
 </template>
 
 <script>
 import Tab from "components/common/Tab";
-import SearchSong from "./searchsong/SearchSong";
+import SearchSong from "./SearchSong";
+import SearchArtist from "./SearchArtist";
+import SearchAlbum from "./SearchAlbum";
+import SearchVideo from './SearchVideo';
+import SearchPlayList from './SearchPlayList';
+import SearchLyric from './SearchLyric';
+import SearchRadio from './SearchRadio';
+import SearchUser from './SearchUser'
 export default {
   components: {
     Tab,
     SearchSong,
+    SearchArtist,
+    SearchAlbum,
+    SearchVideo,
+    SearchPlayList,
+    SearchLyric,
+    SearchRadio,
+    SearchUser
   },
   data() {
     return {
@@ -37,7 +58,6 @@ export default {
         "SearchUser",
       ],
       currentIndex: 0,
-      keyword: "",
       prompt: "",
     };
   },
@@ -68,6 +88,40 @@ export default {
   .search-tab {
     height: 30px;
     padding-left: 10px;
+  }
+  .search-content {
+    border-top: @border;
+  }
+
+  .li-hover {
+    position: relative;
+    height: 100%;
+    li {
+      display: flex;
+      align-items: center;
+      padding: 10px 40px;
+      cursor: pointer;
+
+      &:nth-child(odd) {
+        background: @light-background;
+      }
+
+      &:nth-child(even) {
+        background: @dark-background;
+      }
+      
+      &:hover {
+        background: @lihover;
+      }
+
+      .search-item-name {
+        width: 50%;
+      }
+
+      .tiny-img {
+        margin-right: 20px;
+      }
+    }
   }
 }
 </style>

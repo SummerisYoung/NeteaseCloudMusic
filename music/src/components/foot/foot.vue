@@ -454,42 +454,6 @@ export default {
           text-decoration: underline;
         }
       }
-      .li-hover {
-        position: relative;
-        height: 100%;
-        li {
-          p {
-            &:nth-child(1) {
-              width: 5%;
-              text-align: center;
-              color: @red;
-              visibility: hidden;
-            }
-            &:nth-child(2) {
-              width: 60%;
-            }
-            &:nth-child(3) {
-              width: 20%;
-              color: #999;
-              cursor: pointer;
-            }
-            &:nth-child(4) {
-              width: 5%;
-              color: #999;
-              cursor: pointer;
-              text-align: left;
-            }
-            &:nth-child(5) {
-              width: 10%;
-              color: #666;
-            }
-          }
-
-          .visible {
-            visibility: visible !important;
-          }
-        }
-      }
     }
   }
 }
