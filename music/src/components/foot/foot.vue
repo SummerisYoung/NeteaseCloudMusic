@@ -1,9 +1,9 @@
 <template>
-  <div id="foot">
+  <div id="foot" ref="foot">
     <div class="foot-left">
-      <i class="iconfont icon-previous"></i>
+      <i class="iconfont icon-previous" @click="clickPrev()"></i>
       <i class="iconfont" :class="[isPlay ? 'icon-pause' : 'icon-play']" @click="p2p()"></i>
-      <i class="iconfont icon-next"></i>
+      <i class="iconfont icon-next" @click="clickNext()"></i>
     </div>
 
     <div class="foot-middle">
@@ -37,45 +37,21 @@
       <span>较高</span>
       <i class="iconfont icon-whale"></i>
       <i class="iconfont icon-ci"></i>
-      <i class="iconfont icon-playlist"></i>
+      <i class="iconfont icon-playlist" @click="openPlayList()"></i>
     </div>
 
-    <div class="list">
-      <div class="list-nav">
-        <p class="default">播放列表</p>
-        <p>历史记录</p>
-      </div>
-      <div class="list-operate">
-        <p>
-          总
-          <span id="list-count">0</span>首
-        </p>
-        <p>
-          <span>
-            <i class="iconfont icon-favority"></i>收藏全部
-          </span>
-          <span>
-            <i class="iconfont icon-trash"></i>清空
-          </span>
-        </p>
-      </div>
-      <div class="list-content">
-        <div class="none">
-          <p>你还没有添加任何歌曲！</p>
-          <p>
-            去首页
-            <a href="#">发现音乐</a>
-          </p>
-        </div>
-      </div>
-    </div>
+    <list v-show="isPlayList" :isPlay="isPlay" :isPlayList="isPlayList"/>
 
     <audio ref="audio" :src="$store.state.songUrl.url" @timeupdate="timeupdate" @ended="ended()"></audio>
   </div>
 </template>
 
 <script>
+import List from './List'
 export default {
+  components: {
+    List
+  },
   data() {
     return {
       current: 0, // 音乐播放时间
@@ -86,29 +62,39 @@ export default {
       volumePassed: 0, //音乐背景条
       isPlay: false, // 播放暂停
       isTimeUpDate: true, // 进度条事件是否开启
+      isPlayList: false, // 是否打开播放列表
     };
   },
   mounted() {
-    // 初始化进度条位置
-    this.songProgress = -this.$refs.songProgress.offsetWidth / 2
-    // 初始化音量条位置
-    this.volumeProgress =
-      this.$refs.volume.offsetWidth / 2 -
-      this.$refs.volumeProgress.offsetWidth / 2;
-    // 初始化音量背景条位置
-    this.volumePassed = this.$refs.volume.offsetWidth / 2;
-    // vuex保存audio标签
-    this.$store.commit('getAudio',this.$refs.audio)
+    this.init();
   },
   watch: {
     "$store.state.songUrl"() {
       this.$nextTick(() => {
         this.$refs.audio.play();
-        this.isPlay = true
+        this.isPlay = true;
       });
-    }
+    },
   },
   methods: {
+    // 初始化页面
+    init() {
+      // 初始化进度条位置
+      this.songProgress = -this.$refs.songProgress.offsetWidth / 2;
+      // 初始化音量条位置
+      this.volumeProgress =
+        this.$refs.volume.offsetWidth / 2 -
+        this.$refs.volumeProgress.offsetWidth / 2;
+      // 初始化音量背景条位置
+      this.volumePassed = this.$refs.volume.offsetWidth / 2;
+      // vuex保存audio标签
+      this.$store.commit("getAudio", this.$refs.audio);
+      // 添加点击页面播放列表关闭事件
+      document.addEventListener("click", (e) => {
+        if (this.isPlayList && !this.$refs.foot.contains(e.target))
+          this.isPlayList = false;
+      });
+    },
     // 播放音乐,调整进度条
     timeupdate() {
       if (this.isTimeUpDate) {
@@ -125,7 +111,7 @@ export default {
     },
     // 音乐播放完毕事件
     ended() {
-      this.isPlay = false
+      this.isPlay = false;
     },
     // play to pause,控制播放和暂停的icon
     p2p() {
@@ -136,14 +122,33 @@ export default {
       }
       this.isPlay = !this.isPlay;
     },
+    // 点击了上一个
+    clickPrev() {
+      let playing = this.$store.state.playing
+      if(--playing < 0) {
+        playing = this.$store.state.playlist.length - 1
+      }
+      this.$store.commit('changePlaying',playing)
+      this.getSong(this.$store.state.playlist[playing].id)
+    },
+    // 点击了下一个
+    clickNext() {
+      let playing = this.$store.state.playing
+      if(++playing > this.$store.state.playlist.length - 1) {
+        playing = 0
+      }
+      this.$store.commit('changePlaying',playing)
+      this.getSong(this.$store.state.playlist[playing].id)
+    },
     // 点击进度条
     clickBar(e) {
       // 关闭进度条事件
       this.isTimeUpDate = false;
       // 变化长度
-      let x = e.pageX - this.$refs.musicBar.offsetLeft
+      let x = e.pageX - this.$refs.musicBar.offsetLeft;
       // 改变播放时间
-      this.$refs.audio.currentTime = x / this.$refs.musicBar.offsetWidth * this.$refs.audio.duration
+      this.$refs.audio.currentTime =
+        (x / this.$refs.musicBar.offsetWidth) * this.$refs.audio.duration;
       // 开启进度条
       this.isTimeUpDate = true;
     },
@@ -189,13 +194,13 @@ export default {
     // 点击音量条
     clickVolmue(e) {
       // 变化长度
-      let x = e.pageX - this.$refs.volume.offsetLeft
+      let x = e.pageX - this.$refs.volume.offsetLeft;
       // 改变音量
-      this.$refs.audio.volume = x / this.$refs.volume.offsetWidth
+      this.$refs.audio.volume = x / this.$refs.volume.offsetWidth;
       // 改变音量进度条位置
       this.volumeProgress = x - this.$refs.volumeProgress.offsetWidth / 2;
       // 改变音量背景条位置
-      this.volumePassed = x
+      this.volumePassed = x;
     },
     // 拖动音量条
     dragVolumn(e) {
@@ -210,7 +215,7 @@ export default {
       document.onmousemove = (e) => {
         let x2 = e.pageX - x1 + left;
         // 限定边界
-        x2 = Math.max(x2,0);
+        x2 = Math.max(x2, 0);
         x2 = Math.min(
           x2,
           this.$refs.volume.offsetWidth -
@@ -222,7 +227,7 @@ export default {
         this.volumeProgress = x2;
 
         // 计算音量
-        audio.volume = x2 / this.$refs.volume.offsetWidth
+        audio.volume = x2 / this.$refs.volume.offsetWidth;
       };
 
       // 鼠标抬起
@@ -231,6 +236,10 @@ export default {
         document.onmousemove = null;
         document.onmouseup = null;
       };
+    },
+    // 打开播放列表
+    openPlayList() {
+      this.isPlayList = !this.isPlayList;
     },
   },
 };
@@ -374,86 +383,6 @@ export default {
       width: 30px;
       border: 1px solid grey;
       font-size: 12px;
-    }
-  }
-
-  .list {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    right: 0;
-    bottom: 65px;
-    z-index: 5;
-    width: 800px;
-    height: 70vh;
-    box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.2);
-    background: #fff;
-
-    .list-nav {
-      display: flex;
-      width: 300px;
-      margin: 20px auto;
-      p {
-        width: 80%;
-        height: 30px;
-        line-height: 30px;
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        border: @border;
-        &:first-child {
-          border-radius: 5px 0 0 5px;
-        }
-        &:last-child {
-          border-radius: 0 5px 5px 0;
-        }
-      }
-
-      .default {
-        padding: 0;
-        border-radius: 0;
-      }
-    }
-
-    .list-operate {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 40px;
-      color: #999;
-      border: @border;
-      p:last-child {
-        span {
-          i {
-            margin: 0 10px;
-          }
-          &:first-child {
-            border-right: @border;
-            padding: 0 10px;
-          }
-          &:hover {
-            color: #333;
-          }
-        }
-      }
-    }
-    .list-content {
-      flex: 1;
-      .none {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #999;
-
-        p:first-child {
-          font-size: 16px;
-          margin-bottom: 20px;
-        }
-        a {
-          color: #000;
-          text-decoration: underline;
-        }
-      }
     }
   }
 }

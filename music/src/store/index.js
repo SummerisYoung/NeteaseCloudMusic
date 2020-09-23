@@ -9,6 +9,8 @@ export default new Vuex.Store({
     songDetail: '',  // 正在播放的歌曲detail
     songUrl: '',     //正在播放的歌曲url
     audio: null,    // 音频标签
+    playlist: [],  // 播放列表
+    playing: -1,  // 当前播放的歌曲在播放列表中的位置
   },
   mutations: {
     // 修改loding状态
@@ -25,6 +27,14 @@ export default new Vuex.Store({
     // 保存音频标签
     getAudio(state,audio) {
       state.audio = audio
+    },
+    // 修改歌曲列表
+    changePlayList(state,list) {
+      state.playlist = list
+    },
+    // 修改正在播放的歌曲在播放列表中的位置
+    changePlaying(state,playing) {
+      state.playing = playing
     }
   },
   actions: {

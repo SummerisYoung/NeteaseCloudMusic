@@ -92,36 +92,5 @@ export default {
   .search-content {
     border-top: @border;
   }
-
-  .li-hover {
-    position: relative;
-    height: 100%;
-    li {
-      display: flex;
-      align-items: center;
-      padding: 10px 40px;
-      cursor: pointer;
-
-      &:nth-child(odd) {
-        background: @light-background;
-      }
-
-      &:nth-child(even) {
-        background: @dark-background;
-      }
-      
-      &:hover {
-        background: @lihover;
-      }
-
-      .search-item-name {
-        width: 50%;
-      }
-
-      .tiny-img {
-        margin-right: 20px;
-      }
-    }
-  }
 }
 </style>

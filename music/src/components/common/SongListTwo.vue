@@ -15,7 +15,7 @@
         :style="{liStyle}"
         v-for="(s,i) in songs"
         :key="s.id"
-        @dblclick="getSong(s.id)"
+        @dblclick="getSong(s.id,songs)"
         @click="changeColor(i)"
       >
         <p class="index" :style="indexStyle">{{(i + 1 + '').padStart(2, '0')}}</p>

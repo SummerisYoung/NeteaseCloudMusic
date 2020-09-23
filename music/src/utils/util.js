@@ -60,7 +60,7 @@ export default {
     };
 
     // 加载歌曲
-    Vue.prototype.getSong = function(id) {
+    Vue.prototype.getSong = function(id,list = []) {
       // 请求歌曲详细信息
       this.all([
         this.get("/song/detail?ids=" + id),
@@ -69,6 +69,11 @@ export default {
         this.$store.dispatch("changeSongDetail", r[0].songs[0]);
         this.$store.dispatch("changeSongUrl", r[1].data[0]);
       });
+      // 如果传进来的是个歌曲数组
+      if(list.length) {
+        // 放到全局播放列表
+        this.$store.commit('changePlayList',list)
+      }
     }
 
     // 加载loading

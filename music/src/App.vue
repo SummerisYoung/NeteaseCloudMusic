@@ -108,6 +108,37 @@ body {
   padding: 2px 5px;
   border-radius: 2px;
 }
+// li样式
+.li-hover {
+  position: relative;
+  height: 100%;
+  li {
+    display: flex;
+    align-items: center;
+    padding: 10px 40px;
+    cursor: pointer;
+
+    &:nth-child(odd) {
+      background: @light-background;
+    }
+
+    &:nth-child(even) {
+      background: @dark-background;
+    }
+
+    &:hover {
+      background: @lihover;
+    }
+
+    .search-item-name {
+      width: 50%;
+    }
+
+    .tiny-img {
+      margin-right: 20px;
+    }
+  }
+}
 // 所有图标都变成点击图标
 .iconfont {
   cursor: pointer;
