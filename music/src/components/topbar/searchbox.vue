@@ -16,7 +16,7 @@
         <div v-if="iptValue == ''">
           <h3>热搜榜</h3>
           <ul class="search-ul">
-            <li v-for="(h,i) in hotRes" :key="i">
+            <li v-for="(h,i) in hotRes" :key="i" @click="goSearch(h.searchWord)">
               <span>{{++i}}</span>
               <div class="search-li-text">
                 <p>
@@ -47,6 +47,7 @@
                 v-for="s in searchRes[o]"
                 :key="s.id"
                 v-html="searchLi(s)"
+                @click="goOrder(o,s)"
               ></li>
             </ul>
           </div>
@@ -107,7 +108,10 @@ export default {
       let artist = s.artist ? this.highlight(s.artist.name, this.iptValue) : "";
       return name + " - " + alias + artists + artist;
     },
-    goSearch() {
+    goSearch(hotSearch = '') {
+      if(hotSearch.length) {
+        this.iptValue = hotSearch
+      }
       this.isSearch = false;
       if (this.iptValue) {
         this.$router.push({
@@ -116,6 +120,15 @@ export default {
         });
       }
     },
+    goOrder(path,res) {
+      path = path.substring(0,path.length - 1)
+      if(path == 'song') {
+        this.getSong(res.id)
+      }else{
+        this.$router.push({path,query:{id:res.id}})
+      }
+      
+    }
   },
 };
 </script>

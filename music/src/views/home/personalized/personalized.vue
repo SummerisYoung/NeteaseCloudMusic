@@ -71,7 +71,7 @@ export default {
     },
     // 获取最新音乐
     getNewSongs() {
-      return this.get('/personalized/newsong').then(r => r.result)
+      return this.get('/personalized/newsong').then(r => r.result.map(n => n.song))
     },
     // 获取推荐MV
     getMVs() {

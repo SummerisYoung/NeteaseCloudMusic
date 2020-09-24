@@ -20,7 +20,7 @@ export default {
       let song_articles = ''
 
       artists.forEach((b, i) => {
-        song_articles += `<span onclick="goArtist(this)" data-id=${b.id}>${b.name}</span>`
+        song_articles += `<a href="/artist?id=${b.id}">${b.name}</a>`
         if (i < artists.length - 1) {
           song_articles += ' / '
         }
@@ -60,7 +60,7 @@ export default {
     };
 
     // 加载歌曲
-    Vue.prototype.getSong = function(id,list = []) {
+    Vue.prototype.getSong = function (id, list = []) {
       // 请求歌曲详细信息
       this.all([
         this.get("/song/detail?ids=" + id),
@@ -70,40 +70,51 @@ export default {
         this.$store.dispatch("changeSongUrl", r[1].data[0]);
       });
       // 如果传进来的是个歌曲数组
-      if(list.length) {
+      if (list.length) {
+        // 转换属性名
+        if (list[0].alias) {
+          for (let i = 0, len = list.length; i < len; i++) {
+            list[i].alia = list[i].alias
+            delete list[i].alias
+            list[i].ar = list[i].artists
+            delete list[i].artists
+            list[i].dt = list[i].duration
+            delete list[i].duration
+          }
+        }
         // 放到全局播放列表
-        this.$store.commit('changePlayList',list)
+        this.$store.commit('changePlayList', list)
       }
     }
 
     // 加载loading
-    Vue.prototype.showLoading = async function(fn) {
+    Vue.prototype.showLoading = async function (fn) {
       // 添加loading
-      this.$store.commit('changeLoading',true)
+      this.$store.commit('changeLoading', true)
       // 执行函数
       await fn()
       // 关闭loading
-      this.$store.commit('changeLoading',false)
+      this.$store.commit('changeLoading', false)
     };
 
     // 跳转到歌单页面
-    Vue.prototype.goPlayList = function(id) {
-      this.$router.push({path: '/playlist', query: {id}})
+    Vue.prototype.goPlayList = function (id) {
+      this.$router.push({ path: '/playlist', query: { id } })
     }
 
     // 跳转到专辑页面
-    Vue.prototype.goAlbum = function(id) {
-      this.$router.push({path: '/album', query: {id}})
+    Vue.prototype.goAlbum = function (id) {
+      this.$router.push({ path: '/album', query: { id } })
     }
- 
+
     // 跳转到歌手页面
-    Vue.prototype.goArtist = function(id) {
-      this.$router.push({path: '/artist', query: {id}})
+    Vue.prototype.goArtist = function (id) {
+      this.$router.push({ path: '/artist', query: { id } })
     }
 
     // 跳转到用户界面
-    Vue.prototype.goUser = function(id) {
-      this.$router.push({path: 'user',query: {id}})
+    Vue.prototype.goUser = function (id) {
+      this.$router.push({ path: 'user', query: { id } })
     }
   }
 }

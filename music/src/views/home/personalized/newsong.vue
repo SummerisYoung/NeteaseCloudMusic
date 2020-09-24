@@ -7,29 +7,29 @@
 
     <div class="block-list block-newsong">
       <ul class="ul-newsong">
-        <li :class="[i == clickIndex ? 'deep-color' : '']" v-for="(n,i) in newsongs.slice(0,newsongs.length / 2)" :key="n.id" @dblclick="getSong(n.id)" @click="changeColor(i)">
+        <li :class="[i == clickIndex ? 'deep-color' : '']" v-for="(n,i) in newsongs.slice(0,newsongs.length / 2)" :key="n.id" @dblclick="getSong(n.id,newsongs)" @click="changeColor(i)">
           <div>{{(i + 1 + '').padStart(2,'0')}}</div>
-          <div class="newsong-img" @click="getSong(n.id)">
-            <img :src="n.picUrl + '?param=50y50'" alt />
+          <div class="newsong-img" @click="getSong(n.id,newsongs)">
+            <img :src="n.album.picUrl + '?param=50y50'" alt />
             <i class="iconfont icon-play"></i>
           </div>
           <div>
             <p class="text-ellipsis">{{n.name}}</p>
-            <p class="text-ellipsis" v-html="author(n.song.artists)"></p>
+            <p class="text-ellipsis" v-html="author(n.artists)"></p>
           </div>
         </li>
       </ul>
 
       <ul class="ul-newsong">
-        <li :class="[i == clickIndex ? 'deep-color' : '']" v-for="(n,i) in newsongs.slice(0,newsongs.length / 2)" :key="n.id" @dblclick="getSong(n.id)" @click="changeColor(i)">
-          <div>{{(i + 1 + '').padStart(2,'0')}}</div>
-          <div class="newsong-img" @click="getSong(n.id)">
-            <img :src="n.picUrl + '?param=50y50'" alt />
+        <li :class="[i + 6 == clickIndex ? 'deep-color' : '']" v-for="(n,i) in newsongs.slice(newsongs.length / 2)" :key="n.id" @dblclick="getSong(n.id,newsongs)" @click="changeColor(i + 6)">
+          <div>{{(i + 6 + '').padStart(2,'0')}}</div>
+          <div class="newsong-img" @click="getSong(n.id,newsongs)">
+            <img :src="n.album.picUrl + '?param=50y50'" alt />
             <i class="iconfont icon-play"></i>
           </div>
           <div>
             <p class="text-ellipsis">{{n.name}}</p>
-            <p class="text-ellipsis" v-html="author(n.song.artists)"></p>
+            <p class="text-ellipsis" v-html="author(n.artists)"></p>
           </div>
         </li>
       </ul>

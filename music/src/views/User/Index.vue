@@ -4,7 +4,7 @@
     <div class="user-bottom">
       <dj-radio :djRadios="djRadios" v-if="djRadios.length"/>
       <p class="user-item">歌单({{covers.length}})</p>
-      <cover-list :covers="covers" :leftBottom="false"/>
+      <cover-list style="padding: 0 20px" :covers="covers" :leftBottom="false"/>
     </div>
   </div>
 </template>

@@ -4,30 +4,25 @@
     <div class="song-left">
       <div class="needle" ref="needle"></div>
       <div class="song-image">
-        <img :src="songDetail.al.picUrl + '?param=260y260'" :style="rotateImg" />
+        <img
+          :src="songDetail.al.picUrl + '?param=260y260'"
+          :style="rotateImg"
+        />
       </div>
       <ul>
-        <li>
-          <i class="iconfont icon-love"></i>喜欢
-        </li>
-        <li>
-          <i class="iconfont icon-favority"></i>收藏
-        </li>
-        <li>
-          <i class="iconfont icon-download"></i>VIP下载
-        </li>
-        <li>
-          <i class="iconfont icon-share"></i>分享
-        </li>
+        <li><i class="iconfont icon-love"></i>喜欢</li>
+        <li><i class="iconfont icon-favority"></i>收藏</li>
+        <li><i class="iconfont icon-download"></i>VIP下载</li>
+        <li><i class="iconfont icon-share"></i>分享</li>
       </ul>
     </div>
 
     <div class="song-right">
-      <h2>{{songDetail.name}}</h2>
+      <h2>{{ songDetail.name }}</h2>
       <ul class="song-subtitle">
         <li class="text-ellipsis">
           专辑：
-          <span class="keyword-highlight">{{songDetail.al.name}}</span>
+          <span class="keyword-highlight" @click="goAlbum(songDetail.al.id)">{{ songDetail.al.name }}</span>
         </li>
         <li class="text-ellipsis">
           歌手：
@@ -38,16 +33,20 @@
           <span class="keyword-highlight">搜索页</span>
         </li>
       </ul>
-      <p class="nolyric" v-if="lyricRes && lyricRes.nolyric">纯音乐，请您欣赏</p>
-      <p class="nolyric" v-else-if="lyricRes && lyricRes.nocollect"></p>
-      <el-scrollbar class="lyric-box" ref="scroll" v-else>
-        <p v-if="noScroll">*该歌词不支持自动滚动*</p>
-        <ul class="lyric" ref="lyricUl">
+      <el-scrollbar class="lyric-box" ref="scroll">
+        <p class="nolyric" v-if="lyricRes && lyricRes.nolyric">
+          纯音乐，请您欣赏
+        </p>
+        <p class="nolyric" v-else-if="lyricRes && lyricRes.nocollect"></p>
+        <p v-else-if="noScroll">*该歌词不支持自动滚动*</p>
+        <ul class="lyric" ref="lyricUl" v-else>
           <li
             :class="[i == lyricHighLight ? 'lyric-highlight' : '']"
-            v-for="(l,i) in lyricsArr"
+            v-for="(l, i) in lyricsArr"
             :key="i"
-          >{{l}}</li>
+          >
+            {{ l }}
+          </li>
         </ul>
       </el-scrollbar>
     </div>
@@ -101,7 +100,8 @@ export default {
     // 获取歌词
     async getLyric() {
       this.lyricRes = await this.get("/lyric?id=" + this.songDetail.id);
-      if (this.lyricRes.lrc) {
+      console.log(this.lyricRes);
+      if (this.lyricRes && this.lyricRes.lrc) {
         // 有歌词
         // 先看看可否支持滚动
         if (this.lyricRes.lrc.lyric.match(/该歌词不支持/) != null) {
@@ -163,7 +163,7 @@ export default {
       // 歌曲结束,最后一句歌词取消高亮
       if (this.audio.ended) {
         this.lyricHighLight = 0;
-        this.lyricNum = 0
+        this.lyricNum = 0;
       }
 
       // 暂停时变换图片上方的组件
@@ -207,7 +207,7 @@ export default {
 
     .needle {
       position: absolute;
-      left: calc(50% - 37.5px);
+      left: calc(50% - 70px);
       top: -20px;
       width: 110px;
       height: 157px;
@@ -264,11 +264,19 @@ export default {
   }
 
   .song-right {
+    position: relative;
     display: flex;
     flex-direction: column;
     z-index: 5;
     margin-left: 150px;
     flex: 1;
+
+    .nolyric {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
     h2 {
       width: 500px;
@@ -285,6 +293,9 @@ export default {
         width: 30%;
         margin-right: 10px;
         font-size: 12px;
+        span {
+          cursor: pointer;
+        }
       }
     }
     .lyric-box {

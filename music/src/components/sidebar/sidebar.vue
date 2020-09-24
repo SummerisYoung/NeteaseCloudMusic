@@ -4,7 +4,7 @@
       <p>推荐</p>
       <ul>
         <li class="active">
-          <i class="iconfont icon-findmusic"></i>发现音乐
+          <i class="iconfont icon-music"></i>发现音乐
         </li>
         <li>
           <i class="iconfont icon-hotpot"></i>私人FM

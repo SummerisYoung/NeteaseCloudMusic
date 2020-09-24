@@ -80,7 +80,7 @@ export default {
       }
     },
     isPlayList(val) {
-      if(val) {
+      if(this.playlist.length && val) {
         this.$refs.scroll.$refs.wrap.scrollTo({ behavior: "smooth", top: this.$refs.listLi[0].offsetHeight * this.playing });
       }
     }

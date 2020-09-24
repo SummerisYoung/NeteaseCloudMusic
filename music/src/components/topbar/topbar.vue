@@ -64,7 +64,9 @@ export default {
     width: 240px;
 
     h2 {
-      font-size: 20px;
+      a {
+        font-size: 20px;
+      }
     }
 
     i {
